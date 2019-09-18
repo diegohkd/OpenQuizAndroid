@@ -1,7 +1,8 @@
-package mobdao.com.openquiz
+package mobdao.com.openquiz.modules.main
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import mobdao.com.openquiz.R
 
 class MainActivity : AppCompatActivity() {
 
