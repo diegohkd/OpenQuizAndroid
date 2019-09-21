@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.google.gms.google-services'
+apply plugin: 'kotlin-kapt'
 
 def keystorePropertiesFile = rootProject.file("keys/keystore.properties")
 def keystoreProperties = new Properties()
@@ -71,6 +72,10 @@ dependencies {
 
     // Lifecycle extensions
     implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'
+
+    // Dagger
+    implementation "com.google.dagger:dagger:$dagger_version"
+    kapt "com.google.dagger:dagger-compiler:$dagger_version"
 }
 
 apply plugin: 'com.google.gms.google-services'
