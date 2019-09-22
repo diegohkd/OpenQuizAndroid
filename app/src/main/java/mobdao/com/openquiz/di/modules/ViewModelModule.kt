@@ -6,6 +6,7 @@ import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
 import mobdao.com.openquiz.di.keys.ViewModelKey
+import mobdao.com.openquiz.modules.home.HomeViewModel
 import mobdao.com.openquiz.modules.login.LoginViewModel
 import mobdao.com.openquiz.modules.splash.SplashViewModel
 import mobdao.com.openquiz.utils.factories.ViewModelFactory
@@ -26,4 +27,9 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(LoginViewModel::class)
     abstract fun bindLoginViewModel(loginViewModel: LoginViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(HomeViewModel::class)
+    abstract fun bindHomeViewModel(homeViewModel: HomeViewModel): ViewModel
 }
