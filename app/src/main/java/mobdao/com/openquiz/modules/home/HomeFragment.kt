@@ -33,5 +33,28 @@ class HomeFragment : BaseFragment() {
         return inflater.inflate(R.layout.fragment_home, container, false)
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        DaggerHomeComponent.create().inject(this)
+        setupView()
+        setupObservers()
+    }
+
+    //endregion
+
+    //region private
+
+    private fun setupObservers() = with(viewModel) {
+        setupSingleEventObserver(signOutEvent to {
+            findNavController().navigate(R.id.action_homeFragment_to_loginFragment)
+        })
+    }
+
+    private fun setupView() {
+        signOutButton.setOnClickListener {
+            viewModel.onSignOutClicked()
+        }
+    }
+
     //endregion
 }
