@@ -13,7 +13,6 @@ import javax.inject.Singleton
         UserAuthRepositoryModule::class
     ]
 )
-
 interface LoginComponent {
     fun inject(loginFragment: LoginFragment)
 }
