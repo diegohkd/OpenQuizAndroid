@@ -3,6 +3,7 @@ package mobdao.com.openquiz.di.components
 import dagger.Component
 import mobdao.com.openquiz.di.modules.FirebaseAuthModule
 import mobdao.com.openquiz.di.modules.HomeViewModelModule
+import mobdao.com.openquiz.di.modules.RetrofitModule
 import mobdao.com.openquiz.modules.home.HomeFragment
 import javax.inject.Singleton
 
@@ -11,7 +12,8 @@ import javax.inject.Singleton
 @Component(
     modules = [
         HomeViewModelModule::class,
-        FirebaseAuthModule::class
+        FirebaseAuthModule::class,
+        RetrofitModule::class
     ]
 )
 interface HomeComponent {
