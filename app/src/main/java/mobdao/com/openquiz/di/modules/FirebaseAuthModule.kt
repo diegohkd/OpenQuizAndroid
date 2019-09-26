@@ -6,14 +6,14 @@ import dagger.Provides
 import javax.inject.Singleton
 
 @Module
-abstract class UserAuthRepositoryModule {
+abstract class FirebaseAuthModule {
 
     @Module
     companion object {
+
         @JvmStatic
         @Provides
         @Singleton
-
         fun provideFirebaseAuth(): FirebaseAuth =
             FirebaseAuth.getInstance()
     }
