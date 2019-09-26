@@ -16,12 +16,10 @@ import javax.inject.Inject
 
 class HomeFragment : BaseFragment() {
 
+    @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
-        @Inject set
 
-    private val viewModel: HomeViewModel by viewModels {
-        viewModelFactory
-    }
+    private val viewModel: HomeViewModel by viewModels { viewModelFactory }
 
     //region Lifecycle
 
