@@ -2,17 +2,17 @@ package mobdao.com.openquiz.di.components
 
 import dagger.Component
 import mobdao.com.openquiz.di.modules.FirebaseAuthModule
-import mobdao.com.openquiz.di.modules.SplashViewModelModule
-import mobdao.com.openquiz.modules.splash.SplashActivity
+import mobdao.com.openquiz.di.modules.LoginViewModelModule
+import mobdao.com.openquiz.modules.login.LoginFragment
 import javax.inject.Singleton
 
 @Singleton
 @Component(
     modules = [
-        SplashViewModelModule::class,
+        LoginViewModelModule::class,
         FirebaseAuthModule::class
     ]
 )
-interface SplashComponent {
-    fun inject(splashActivity: SplashActivity)
+interface LoginComponent {
+    fun inject(loginFragment: LoginFragment)
 }
