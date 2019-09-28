@@ -20,12 +20,10 @@ import javax.inject.Inject
 
 class LoginFragment : BaseFragment() {
 
+    @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
-        @Inject set
 
-    private val viewModel: LoginViewModel by viewModels {
-        viewModelFactory
-    }
+    private val viewModel: LoginViewModel by viewModels { viewModelFactory }
 
     //region Lifecycle
 

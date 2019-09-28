@@ -1,16 +1,19 @@
 package mobdao.com.openquiz.di.components
 
 import dagger.Component
-import mobdao.com.openquiz.di.modules.UserAuthRepositoryModule
-import mobdao.com.openquiz.di.modules.ViewModelModule
+import mobdao.com.openquiz.di.modules.FirebaseAuthModule
+import mobdao.com.openquiz.di.modules.HomeViewModelModule
+import mobdao.com.openquiz.di.modules.RetrofitModule
 import mobdao.com.openquiz.modules.home.HomeFragment
 import javax.inject.Singleton
 
+// TODO will this make view model also singleton?
 @Singleton
 @Component(
     modules = [
-        ViewModelModule::class,
-        UserAuthRepositoryModule::class
+        HomeViewModelModule::class,
+        FirebaseAuthModule::class,
+        RetrofitModule::class
     ]
 )
 interface HomeComponent {

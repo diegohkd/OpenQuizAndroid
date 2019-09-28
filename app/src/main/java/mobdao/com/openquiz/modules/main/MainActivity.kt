@@ -13,12 +13,17 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
         val initialScreenType = intent.extras?.getSerializable(INITIAL_SCREEN) as? InitialScreenType
+        val navController = findNavController(R.id.nav_host_fragment)
+        if (navController.currentDestination?.id != R.id.mainFragment) {
+            return
+        }
 
         if (initialScreenType == HOME) {
-            findNavController(R.id.nav_host_fragment).navigate(R.id.action_mainFragment_to_homeFragment)
+            navController.navigate(R.id.action_mainFragment_to_homeFragment)
         } else {
-            findNavController(R.id.nav_host_fragment).navigate(R.id.action_mainFragment_to_loginFragment)
+            navController.navigate(R.id.action_mainFragment_to_loginFragment)
         }
     }
 
