@@ -26,5 +26,5 @@ fun <T> Call<T>.runService(
     })
 }
 
-fun <T> Call<T>.toSingle(): Single<T> =
-    Single(this)
+fun <T> Call<T>.toBaseSingle(): BaseSingle<T> =
+    Single(ActionCall(this))

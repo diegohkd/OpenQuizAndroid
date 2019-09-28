@@ -1,13 +1,14 @@
 package mobdao.com.openquiz.data.utils
 
-import retrofit2.Call
-
 open class Single<T>(
-    private var call: Call<T>
-) {
-    fun subscribeBy(
+    private var action: Action<T>
+) : BaseSingle<T>() {
+
+    override val actionBase: Action<T> = action
+
+    override fun subscribeBy(
         callback: Callback<T>
-    ): Disposable<T> {
+    ): DisposableInterface {
         lateinit var disposable: Disposable<T>
         val callbackRequest = object : Callback<T> {
             override fun onSuccess(result: T) {
@@ -20,8 +21,8 @@ open class Single<T>(
                 disposable.dispose()
             }
         }
-        disposable = Disposable(call, callbackRequest, callback)
-        call.runService(callbackRequest)
-        return disposable
+        disposable = Disposable(action, callbackRequest, callback)
+        action.run(callbackRequest)
+        return DisposableStrategy(disposable)
     }
 }
