@@ -33,4 +33,8 @@ class UserAuthRepository @Inject constructor(
                 }
             }
     }
+
+    fun logout() {
+        firebaseAuth.signOut()
+    }
 }
