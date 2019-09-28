@@ -16,12 +16,10 @@ import javax.inject.Inject
 
 class SplashActivity : AppCompatActivity() {
 
+    @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
-        @Inject set
 
-    private val viewModel: SplashViewModel by viewModels {
-        viewModelFactory
-    }
+    private val viewModel: SplashViewModel by viewModels { viewModelFactory }
 
     //region Lifecycle
 

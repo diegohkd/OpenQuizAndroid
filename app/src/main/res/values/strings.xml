@@ -3,4 +3,7 @@
     <!-- Errors -->
     <string name="ops">Ops</string>
     <string name="something_wrong">Something went wrong. Please try again later.</string>
+
+    <!-- Home -->
+    <string name="sign_out">Sign Out</string>
 </resources>
