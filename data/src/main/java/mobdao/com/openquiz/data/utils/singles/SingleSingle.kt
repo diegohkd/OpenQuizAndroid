@@ -1,15 +1,21 @@
-package mobdao.com.openquiz.data.utils
+package mobdao.com.openquiz.data.utils.singles
 
-open class Single<T>(
+import mobdao.com.openquiz.data.utils.callbacks.Callback
+import mobdao.com.openquiz.data.utils.actions.Action
+import mobdao.com.openquiz.data.utils.disposables.DisposableImpl
+import mobdao.com.openquiz.data.utils.disposables.Disposable
+import mobdao.com.openquiz.data.utils.disposables.DisposableStrategy
+
+internal class SingleSingle<T>(
     private var action: Action<T>
-) : BaseSingle<T>() {
+) : Single<T>() {
 
     override val actionBase: Action<T> = action
 
     override fun subscribeBy(
         callback: Callback<T>
-    ): DisposableInterface {
-        lateinit var disposable: Disposable<T>
+    ): Disposable {
+        lateinit var disposable: DisposableImpl<T>
         val callbackRequest = object : Callback<T> {
             override fun onSuccess(result: T) {
                 callback.onSuccess(result)
@@ -21,7 +27,8 @@ open class Single<T>(
                 disposable.dispose()
             }
         }
-        disposable = Disposable(action, callbackRequest, callback)
+        disposable =
+            DisposableImpl(action, callbackRequest, callback)
         action.run(callbackRequest)
         return DisposableStrategy(disposable)
     }

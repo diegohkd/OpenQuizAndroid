@@ -1,12 +1,15 @@
-package mobdao.com.openquiz.data.utils
+package mobdao.com.openquiz.data.utils.extensions
 
+import mobdao.com.openquiz.data.utils.actions.ActionCall
+import mobdao.com.openquiz.data.utils.singles.Single
+import mobdao.com.openquiz.data.utils.singles.SingleSingle
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.HttpException
 import retrofit2.Response
 
-fun <T> Call<T>.runService(
-    callback: mobdao.com.openquiz.data.utils.Callback<T>
+internal fun <T> Call<T>.runService(
+    callback: mobdao.com.openquiz.data.utils.callbacks.Callback<T>
 ) {
     enqueue(object : Callback<T> {
         override fun onFailure(call: Call<T>?, throwable: Throwable?) {
@@ -26,5 +29,5 @@ fun <T> Call<T>.runService(
     })
 }
 
-fun <T> Call<T>.toBaseSingle(): BaseSingle<T> =
-    Single(ActionCall(this))
+internal fun <T> Call<T>.toSingle(): Single<T> =
+    SingleSingle(ActionCall(this))

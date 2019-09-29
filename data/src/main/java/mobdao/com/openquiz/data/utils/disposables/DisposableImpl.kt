@@ -1,10 +1,13 @@
-package mobdao.com.openquiz.data.utils
+package mobdao.com.openquiz.data.utils.disposables
 
-class Disposable<T>(
+import mobdao.com.openquiz.data.utils.callbacks.Callback
+import mobdao.com.openquiz.data.utils.actions.Action
+
+internal class DisposableImpl<T>(
     private var action: Action<T>?,
     private var callbackRequest: Callback<T>? = null,
     private var callbackObserver: Callback<T>? = null
-): DisposableInterface {
+): Disposable {
     override fun dispose() {
         action?.cancel()
         callbackRequest = null

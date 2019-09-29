@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import mobdao.com.openquiz.data.repositories.OpenTriviaRepository
 import mobdao.com.openquiz.data.repositories.UserAuthRepository
-import mobdao.com.openquiz.data.utils.Callback
+import mobdao.com.openquiz.data.utils.callbacks.Callback
 import mobdao.com.openquiz.utils.livedata.SingleLiveEvent
 import javax.inject.Inject
 

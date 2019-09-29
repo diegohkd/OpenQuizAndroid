@@ -1,4 +1,4 @@
-package mobdao.com.openquiz.data.utils
+package mobdao.com.openquiz.data.utils.callbacks
 
 interface Callback<T> {
     fun onSuccess(result: T)
