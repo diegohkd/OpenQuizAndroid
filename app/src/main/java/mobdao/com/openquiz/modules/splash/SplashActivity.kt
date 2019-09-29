@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import mobdao.com.openquiz.data.di.components.DaggerDataComponent
 import mobdao.com.openquiz.di.components.DaggerSplashComponent
 import mobdao.com.openquiz.modules.main.MainActivity
 import mobdao.com.openquiz.utils.constants.IntentConstants.INITIAL_SCREEN
@@ -27,7 +28,11 @@ class SplashActivity : AppCompatActivity() {
         savedInstanceState: Bundle?
     ) {
         super.onCreate(savedInstanceState)
-        DaggerSplashComponent.create().inject(this)
+        DaggerSplashComponent
+            .builder()
+            .dataComponent(DaggerDataComponent.create())
+            .build()
+            .inject(this)
         setupObservers()
     }
 

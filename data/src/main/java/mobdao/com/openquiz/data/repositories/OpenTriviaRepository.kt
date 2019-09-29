@@ -1,13 +1,13 @@
 package mobdao.com.openquiz.data.repositories
 
+import mobdao.com.openquiz.data.di.scopes.DataSingleton
 import mobdao.com.openquiz.data.server.webservices.SessionTokenService
 import mobdao.com.openquiz.data.utils.BaseSingle
 import mobdao.com.openquiz.data.utils.toBaseSingle
 import retrofit2.Retrofit
 import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
+@DataSingleton
 class OpenTriviaRepository @Inject constructor(
     private val retrofit: Retrofit
 ) {
