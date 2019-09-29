@@ -1,6 +1,6 @@
 package mobdao.com.openquiz.data.utils.disposables
 
-import mobdao.com.openquiz.data.utils.Callback
+import mobdao.com.openquiz.data.utils.callbacks.Callback
 import mobdao.com.openquiz.data.utils.actions.Action
 
 internal class DisposableImpl<T>(

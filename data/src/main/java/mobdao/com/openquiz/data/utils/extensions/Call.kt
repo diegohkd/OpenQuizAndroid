@@ -9,7 +9,7 @@ import retrofit2.HttpException
 import retrofit2.Response
 
 internal fun <T> Call<T>.runService(
-    callback: mobdao.com.openquiz.data.utils.Callback<T>
+    callback: mobdao.com.openquiz.data.utils.callbacks.Callback<T>
 ) {
     enqueue(object : Callback<T> {
         override fun onFailure(call: Call<T>?, throwable: Throwable?) {

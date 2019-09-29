@@ -5,7 +5,7 @@ import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
 import mobdao.com.openquiz.data.di.scopes.DataSingleton
-import mobdao.com.openquiz.data.utils.Constants.BASE_OPEN_TRIVIA_URL
+import mobdao.com.openquiz.data.utils.constants.Constants.BASE_OPEN_TRIVIA_URL
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit

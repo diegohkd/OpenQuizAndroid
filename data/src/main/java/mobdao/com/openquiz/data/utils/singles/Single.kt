@@ -1,6 +1,6 @@
 package mobdao.com.openquiz.data.utils.singles
 
-import mobdao.com.openquiz.data.utils.Callback
+import mobdao.com.openquiz.data.utils.callbacks.Callback
 import mobdao.com.openquiz.data.utils.actions.Action
 import mobdao.com.openquiz.data.utils.actions.ActionJust
 import mobdao.com.openquiz.data.utils.disposables.Disposable

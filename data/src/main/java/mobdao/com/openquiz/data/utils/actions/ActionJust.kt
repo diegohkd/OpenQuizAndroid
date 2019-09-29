@@ -1,6 +1,6 @@
 package mobdao.com.openquiz.data.utils.actions
 
-import mobdao.com.openquiz.data.utils.Callback
+import mobdao.com.openquiz.data.utils.callbacks.Callback
 
 internal class ActionJust<T>(private val value: T) : Action<T> {
 
