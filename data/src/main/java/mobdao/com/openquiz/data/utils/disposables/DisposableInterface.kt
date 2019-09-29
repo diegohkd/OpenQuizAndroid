@@ -1,4 +1,4 @@
-package mobdao.com.openquiz.data.utils
+package mobdao.com.openquiz.data.utils.disposables
 
 interface DisposableInterface {
     fun dispose()

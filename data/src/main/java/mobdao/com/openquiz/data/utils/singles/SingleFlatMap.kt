@@ -1,9 +1,14 @@
-package mobdao.com.openquiz.data.utils
+package mobdao.com.openquiz.data.utils.singles
+
+import mobdao.com.openquiz.data.utils.Callback
+import mobdao.com.openquiz.data.utils.actions.Action
+import mobdao.com.openquiz.data.utils.disposables.DisposableInterface
+import mobdao.com.openquiz.data.utils.disposables.DisposableStrategy
 
 class SingleFlatMap<T, R>(
-    private val previousBaseSingle: BaseSingle<T>,
-    private val mapper: (T) -> BaseSingle<R>
-) : BaseSingle<R>() {
+    private val previousSingle: Single<T>,
+    private val mapper: (T) -> Single<R>
+) : Single<R>() {
 
     private lateinit var action: Action<R>
     override val actionBase: Action<R> get() = action
@@ -25,7 +30,9 @@ class SingleFlatMap<T, R>(
                 disposable.dispose()
             }
         }
-        disposable = DisposableStrategy(previousBaseSingle.subscribeBy(callbackRequest))
+        disposable = DisposableStrategy(
+            previousSingle.subscribeBy(callbackRequest)
+        )
         return disposable
     }
 }

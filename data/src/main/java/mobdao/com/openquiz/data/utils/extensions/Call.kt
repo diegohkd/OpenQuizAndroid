@@ -1,5 +1,8 @@
-package mobdao.com.openquiz.data.utils
+package mobdao.com.openquiz.data.utils.extensions
 
+import mobdao.com.openquiz.data.utils.actions.ActionCall
+import mobdao.com.openquiz.data.utils.singles.Single
+import mobdao.com.openquiz.data.utils.singles.SingleSingle
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.HttpException
@@ -26,5 +29,5 @@ fun <T> Call<T>.runService(
     })
 }
 
-fun <T> Call<T>.toBaseSingle(): BaseSingle<T> =
-    Single(ActionCall(this))
+fun <T> Call<T>.toBaseSingle(): Single<T> =
+    SingleSingle(ActionCall(this))

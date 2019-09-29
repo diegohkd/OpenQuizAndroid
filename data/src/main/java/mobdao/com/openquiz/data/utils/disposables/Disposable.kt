@@ -1,4 +1,7 @@
-package mobdao.com.openquiz.data.utils
+package mobdao.com.openquiz.data.utils.disposables
+
+import mobdao.com.openquiz.data.utils.Callback
+import mobdao.com.openquiz.data.utils.actions.Action
 
 class Disposable<T>(
     private var action: Action<T>?,
