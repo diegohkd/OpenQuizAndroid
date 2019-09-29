@@ -1,14 +1,12 @@
 package mobdao.com.openquiz.data.utils
 
-import retrofit2.Call
-
 class Disposable<T>(
-    private var call: Call<T>?,
+    private var action: Action<T>?,
     private var callbackRequest: Callback<T>? = null,
     private var callbackObserver: Callback<T>? = null
-) {
-    fun dispose() {
-        call?.cancel()
+): DisposableInterface {
+    override fun dispose() {
+        action?.cancel()
         callbackRequest = null
         callbackObserver = null
     }

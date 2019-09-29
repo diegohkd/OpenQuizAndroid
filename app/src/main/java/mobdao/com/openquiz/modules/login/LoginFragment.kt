@@ -12,6 +12,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import kotlinx.android.synthetic.main.fragment_login.*
 import mobdao.com.openquiz.R
+import mobdao.com.openquiz.data.di.components.DaggerDataComponent
 import mobdao.com.openquiz.di.components.DaggerLoginComponent
 import mobdao.com.openquiz.modules.base.BaseFragment
 import mobdao.com.openquiz.utils.constants.RequestCodeConstants.RC_SIGN_IN
@@ -37,7 +38,12 @@ class LoginFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        DaggerLoginComponent.create().inject(this)
+        DaggerLoginComponent
+            .builder()
+            .dataComponent(DaggerDataComponent.create())
+            .build()
+            .inject(this)
+        DaggerLoginComponent.builder()
         setupView()
         setupObservers()
     }
