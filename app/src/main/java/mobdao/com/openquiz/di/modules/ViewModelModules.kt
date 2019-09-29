@@ -9,7 +9,7 @@ import mobdao.com.openquiz.di.keys.ViewModelKey
 import mobdao.com.openquiz.modules.home.HomeViewModel
 import mobdao.com.openquiz.modules.login.LoginViewModel
 import mobdao.com.openquiz.modules.splash.SplashViewModel
-import mobdao.com.openquiz.utils.factories.ViewModelFactory
+import mobdao.com.openquiz.di.factories.ViewModelFactory
 
 @Module
 abstract class BaseViewModelModule {
