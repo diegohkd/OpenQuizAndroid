@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import kotlinx.android.synthetic.main.fragment_home.*
 import mobdao.com.openquiz.R
+import mobdao.com.openquiz.data.di.components.DaggerDataComponent
 import mobdao.com.openquiz.di.components.DaggerHomeComponent
 import mobdao.com.openquiz.modules.base.BaseFragment
 import mobdao.com.openquiz.utils.extensions.setupSingleEventObserver
@@ -33,7 +34,11 @@ class HomeFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        DaggerHomeComponent.create().inject(this)
+        DaggerHomeComponent
+            .builder()
+            .dataComponent(DaggerDataComponent.create())
+            .build()
+            .inject(this)
         setupView()
         setupObservers()
     }
