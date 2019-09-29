@@ -1,16 +1,16 @@
-package mobdao.com.openquiz.di.modules
+package mobdao.com.openquiz.data.di.modules
 
 import android.util.Log
 import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
-import mobdao.com.openquiz.utils.constants.AppConstants.BASE_OPEN_TRIVIA_URL
+import mobdao.com.openquiz.data.di.scopes.DataSingleton
+import mobdao.com.openquiz.data.utils.Constants.BASE_OPEN_TRIVIA_URL
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
-import javax.inject.Singleton
 
 @Module
 abstract class RetrofitModule {
@@ -20,7 +20,7 @@ abstract class RetrofitModule {
 
         @JvmStatic
         @Provides
-        @Singleton
+        @DataSingleton
         fun provideRetrofit(
             callAdapterFactory: RxJavaCallAdapterFactory,
             gsonConverterFactory: GsonConverterFactory,
@@ -35,19 +35,19 @@ abstract class RetrofitModule {
 
         @JvmStatic
         @Provides
-        @Singleton
+        @DataSingleton
         fun provideCallAdapterFactory(): RxJavaCallAdapterFactory =
             RxJavaCallAdapterFactory.create()
 
         @JvmStatic
         @Provides
-        @Singleton
+        @DataSingleton
         fun provideGsonConverterFactory(): GsonConverterFactory =
             GsonConverterFactory.create(GsonBuilder().create())
 
         @JvmStatic
         @Provides
-        @Singleton
+        @DataSingleton
         fun provideOkHttpClientBuilder(httpLoggingInterceptor: HttpLoggingInterceptor): OkHttpClient =
             OkHttpClient.Builder().run {
                 addNetworkInterceptor(httpLoggingInterceptor)
@@ -56,7 +56,7 @@ abstract class RetrofitModule {
 
         @JvmStatic
         @Provides
-        @Singleton
+        @DataSingleton
         fun provideHttpLoggingInterceptor(): HttpLoggingInterceptor =
             HttpLoggingInterceptor(object : HttpLoggingInterceptor.Logger {
                 override fun log(message: String) {

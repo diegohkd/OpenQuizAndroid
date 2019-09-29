@@ -5,10 +5,10 @@ import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import mobdao.com.openquiz.data.di.scopes.DataSingleton
 import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
+@DataSingleton
 class UserAuthRepository @Inject constructor(
     private val firebaseAuth: FirebaseAuth
 ) {
