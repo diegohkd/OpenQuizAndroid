@@ -8,7 +8,7 @@ import retrofit2.Callback
 import retrofit2.HttpException
 import retrofit2.Response
 
-fun <T> Call<T>.runService(
+internal fun <T> Call<T>.runService(
     callback: mobdao.com.openquiz.data.utils.Callback<T>
 ) {
     enqueue(object : Callback<T> {
@@ -29,5 +29,5 @@ fun <T> Call<T>.runService(
     })
 }
 
-fun <T> Call<T>.toSingle(): Single<T> =
+internal fun <T> Call<T>.toSingle(): Single<T> =
     SingleSingle(ActionCall(this))

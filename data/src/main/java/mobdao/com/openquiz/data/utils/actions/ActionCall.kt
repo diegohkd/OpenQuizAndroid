@@ -4,7 +4,7 @@ import mobdao.com.openquiz.data.utils.Callback
 import mobdao.com.openquiz.data.utils.extensions.runService
 import retrofit2.Call
 
-class ActionCall<T>(private val call: Call<T>) : Action<T> {
+internal class ActionCall<T>(private val call: Call<T>) : Action<T> {
 
     override fun run(callback: Callback<T>?) {
         callback?.let { call.runService(callback) }
