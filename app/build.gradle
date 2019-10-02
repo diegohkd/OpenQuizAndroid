@@ -1,7 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-apply plugin: 'com.google.gms.google-services'
 apply plugin: 'kotlin-kapt'
 
 def keystorePropertiesFile = rootProject.file("keys/keystore.properties")
@@ -61,5 +60,3 @@ dependencies {
     // Lifecycle extensions
     implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'
 }
-
-apply plugin: 'com.google.gms.google-services'
