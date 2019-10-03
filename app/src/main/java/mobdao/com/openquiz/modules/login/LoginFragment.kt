@@ -24,7 +24,7 @@ class LoginFragment : BaseFragment() {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
-    private val viewModel: LoginViewModel by viewModels { viewModelFactory }
+    override val viewModel: LoginViewModel by viewModels { viewModelFactory }
 
     //region Lifecycle
 
