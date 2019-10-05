@@ -27,7 +27,12 @@ internal class SingleSingle<T>(
             }
         )
         disposableStrategy = DisposableStrategy(DisposableImpl(action, callbackRequest, callback))
-        action.run(callbackRequest)
+
+        try {
+            action.run(callbackRequest)
+        } catch (exception: Exception) {
+            callbackRequest.failure?.invoke(exception)
+        }
         return disposableStrategy
     }
 }
