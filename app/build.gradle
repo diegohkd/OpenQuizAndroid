@@ -10,7 +10,6 @@ keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 android {
     compileSdkVersion 29
 
-
     signingConfigs {
         release {
             keyAlias keystoreProperties['keyAlias']
