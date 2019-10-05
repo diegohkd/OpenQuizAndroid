@@ -5,7 +5,7 @@ import mobdao.com.openquiz.data.utils.callbacks.Callback
 internal class ActionJust<T>(private val value: T) : Action<T> {
 
     override fun run(callback: Callback<T>?) {
-        callback?.onSuccess(value)
+        callback?.success?.invoke(value)
     }
 
     override fun cancel() {}

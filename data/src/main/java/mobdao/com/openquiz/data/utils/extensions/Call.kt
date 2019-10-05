@@ -15,15 +15,15 @@ internal fun <T> Call<T>.runService(
         override fun onFailure(call: Call<T>?, throwable: Throwable?) {
             if (call?.isCanceled == true) return
 
-            callback.onFailure(throwable)
+            callback.failure?.invoke(throwable)
         }
 
         override fun onResponse(call: Call<T>?, response: Response<T>?) {
             if (response?.isSuccessful == true) {
-                response.body()?.let { callback.onSuccess(it) }
+                response.body()?.let { callback.success?.invoke(it) }
             } else {
                 val exception = response?.let { HttpException(it) } ?: Exception()
-                callback.onFailure(exception)
+                callback.failure?.invoke(exception)
             }
         }
     })

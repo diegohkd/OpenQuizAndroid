@@ -24,7 +24,7 @@ class LoginFragment : BaseFragment() {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
-    private val viewModel: LoginViewModel by viewModels { viewModelFactory }
+    override val viewModel: LoginViewModel by viewModels { viewModelFactory }
 
     //region Lifecycle
 
@@ -38,12 +38,7 @@ class LoginFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        DaggerLoginComponent
-            .builder()
-            .dataComponent(DaggerDataComponent.create())
-            .build()
-            .inject(this)
-        DaggerLoginComponent.builder()
+        setupInjections()
         setupView()
         setupObservers()
     }
@@ -61,19 +56,33 @@ class LoginFragment : BaseFragment() {
 
     //region private
 
-    private fun setupObservers() = with(viewModel) {
-        setupSingleEventObserver(showHomeScreenEvent to {
-            findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
-        })
-        setupSingleEventObserver(errorEvent to {
-            showDefaultErrorDialog()
-        })
+    private fun setupInjections() {
+        DaggerLoginComponent
+            .builder()
+            .dataComponent(DaggerDataComponent.create())
+            .build()
+            .inject(this)
     }
 
     private fun setupView() {
         googleSignInButton.setOnClickListener {
-            showGoogleSignIn()
+            viewModel.onGoogleSignInClicked()
         }
+    }
+
+    private fun setupObservers() = with(viewModel) {
+        setupProgressBarObserver(progressBar)
+        setupSingleEventObserver(showHomeScreenEvent to {
+            findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
+        })
+
+        setupSingleEventObserver(errorEvent to {
+            showDefaultErrorDialog()
+        })
+
+        setupSingleEventObserver(showGoogleSignInEvent to {
+            showGoogleSignIn()
+        })
     }
 
     private fun showGoogleSignIn() {

@@ -1,7 +1,7 @@
 package mobdao.com.openquiz.data.utils.singles
 
-import mobdao.com.openquiz.data.utils.callbacks.Callback
 import mobdao.com.openquiz.data.utils.actions.Action
+import mobdao.com.openquiz.data.utils.callbacks.Callback
 import mobdao.com.openquiz.data.utils.disposables.Disposable
 import mobdao.com.openquiz.data.utils.disposables.DisposableStrategy
 
@@ -16,23 +16,28 @@ internal class SingleFlatMap<T, R>(
     override fun subscribeBy(
         callback: Callback<R>
     ): Disposable {
-        lateinit var disposable: DisposableStrategy
-        val callbackRequest = object : Callback<T> {
-            override fun onSuccess(result: T) {
-                mapper(result).apply {
+        lateinit var disposableStrategy: DisposableStrategy
+        lateinit var callbackRequest: Callback<T>
+        callbackRequest = Callback(
+            success = { result ->
+                try {
+                    mapper(result)
+                } catch (exception: Exception) {
+                    callbackRequest.failure?.invoke(exception)
+                    null
+                }?.run {
                     action = actionBase
-                    disposable.disposable = subscribeBy(callback)
+                    disposableStrategy.disposable = subscribeBy(callback)
                 }
+            },
+            failure = { exception ->
+                callback.failure?.invoke(exception)
+                disposableStrategy.dispose()
             }
-
-            override fun onFailure(exception: Throwable?) {
-                callback.onFailure(exception)
-                disposable.dispose()
-            }
-        }
-        disposable = DisposableStrategy(
+        )
+        disposableStrategy = DisposableStrategy(
             previousSingle.subscribeBy(callbackRequest)
         )
-        return disposable
+        return disposableStrategy
     }
 }
