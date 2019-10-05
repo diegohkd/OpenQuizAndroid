@@ -20,7 +20,7 @@ class HomeFragment : BaseFragment() {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
-    private val viewModel: HomeViewModel by viewModels { viewModelFactory }
+    override val viewModel: HomeViewModel by viewModels { viewModelFactory }
 
     //region Lifecycle
 
