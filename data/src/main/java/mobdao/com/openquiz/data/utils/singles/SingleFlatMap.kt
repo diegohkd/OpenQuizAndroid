@@ -17,9 +17,15 @@ internal class SingleFlatMap<T, R>(
         callback: Callback<R>
     ): Disposable {
         lateinit var disposableStrategy: DisposableStrategy
-        val callbackRequest = Callback<T>(
+        lateinit var callbackRequest: Callback<T>
+        callbackRequest = Callback(
             success = { result ->
-                mapper(result).apply {
+                try {
+                    mapper(result)
+                } catch (exception: Exception) {
+                    callbackRequest.failure?.invoke(exception)
+                    null
+                }?.run {
                     action = actionBase
                     disposableStrategy.disposable = subscribeBy(callback)
                 }
