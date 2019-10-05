@@ -1,2 +1,2 @@
-include ':app', ':data', ':utils'
+include ':app', ':data', ':utils', ':models'
 rootProject.name='Open Quiz'
