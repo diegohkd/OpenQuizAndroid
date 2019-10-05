@@ -4,10 +4,13 @@ import mobdao.com.openquiz.data.di.scopes.DataSingleton
 import mobdao.com.openquiz.data.server.mappers.QuestionServiceMapper
 import mobdao.com.openquiz.data.server.webservices.QuestionsService
 import mobdao.com.openquiz.data.server.webservices.SessionTokenService
+import mobdao.com.openquiz.data.utils.enums.QuestionsResponseCode
+import mobdao.com.openquiz.data.utils.exceptions.QuestionsException
 import mobdao.com.openquiz.data.utils.extensions.toSingle
 import mobdao.com.openquiz.data.utils.singles.Single
 import mobdao.com.openquiz.models.Question
 import retrofit2.Retrofit
+import rx.exceptions.Exceptions
 import javax.inject.Inject
 
 @DataSingleton
@@ -29,9 +32,14 @@ class OpenTriviaRepository @Inject constructor(
             .fetchQuestions(nOfQuestions)
             .toSingle()
             .flatMap { response ->
-                Single.just(
-                    // TODO handle response.response_code
-                    questionServiceMapper.questionResponseToModel(response)
-                )
+                if (response.response_code != QuestionsResponseCode.SUCCESS.code) {
+                    Exceptions.propagate(
+                        QuestionsException(
+                            "Failed to fetch questions",
+                            QuestionsResponseCode.from(response.response_code)
+                        )
+                    )
+                }
+                Single.just(questionServiceMapper.questionResponseToModel(response))
             }
 }
