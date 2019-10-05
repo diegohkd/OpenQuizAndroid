@@ -18,6 +18,12 @@ class LoginViewModel @Inject constructor(
 
     val showHomeScreenEvent: SingleLiveEvent<Unit> = SingleLiveEvent()
     val errorEvent: SingleLiveEvent<Unit> = SingleLiveEvent()
+    val showGoogleSignInEvent: SingleLiveEvent<Unit> = SingleLiveEvent()
+
+    fun onGoogleSignInClicked() {
+        showProgressBar()
+        showGoogleSignInEvent.call()
+    }
 
     fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == RequestCodeConstants.RC_SIGN_IN && resultCode == Activity.RESULT_OK) {
@@ -31,19 +37,23 @@ class LoginViewModel @Inject constructor(
         try {
             googleSignInTask.getResult(ApiException::class.java)
         } catch (exception: ApiException) {
+            hideProgressBar()
+            errorEvent.call()
             null
         }?.apply {
             loginOnFirebase(this)
-        } ?: errorEvent.call()
+        }
     }
 
     private fun loginOnFirebase(account: GoogleSignInAccount) {
         userAuthRepository.loginOnFirebase(
             account = account,
             success = {
+                hideProgressBar()
                 showHomeScreenEvent.call()
             },
             failure = { exception ->
+                hideProgressBar()
                 exception?.printStackTrace()
                 errorEvent.call()
             }
