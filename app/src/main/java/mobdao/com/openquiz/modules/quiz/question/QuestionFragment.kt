@@ -4,15 +4,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.text.HtmlCompat
-import androidx.core.text.HtmlCompat.FROM_HTML_MODE_LEGACY
 import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.fragment_question.*
 import mobdao.com.openquiz.R
 import mobdao.com.openquiz.di.components.DaggerQuestionComponent
 import mobdao.com.openquiz.models.Question
+import mobdao.com.openquiz.models.QuestionType.MULTIPLE_CHOICE
 import mobdao.com.openquiz.modules.base.BaseFragment
 import mobdao.com.openquiz.modules.quiz.QuizViewModel
+import mobdao.com.openquiz.uicomponents.customviews.question.MultipleChoiceQuestionView
+import mobdao.com.openquiz.uicomponents.customviews.question.TrueFalseQuestionView
 import mobdao.com.openquiz.utils.constants.IntentConstants.QUESTION
 import mobdao.com.openquiz.utils.extensions.sharedViewModel
 import javax.inject.Inject
@@ -51,11 +52,15 @@ class QuestionFragment : BaseFragment() {
     }
 
     private fun handleArguments() {
-        arguments?.takeIf { it.containsKey(QUESTION) }?.apply {
-            questionTextView.text = HtmlCompat.fromHtml(
-                getParcelable<Question>(QUESTION)?.question.orEmpty(),
-                FROM_HTML_MODE_LEGACY
-            )
+        arguments?.takeIf { it.containsKey(QUESTION) }?.getParcelable<Question>(QUESTION)?.apply {
+            val questionView =
+                if (type == MULTIPLE_CHOICE) MultipleChoiceQuestionView(requireContext())
+                else TrueFalseQuestionView(requireContext())
+            questionView.bind(this) {
+                confirmButton.isEnabled = true
+            }
+
+            questionContainer.addView(questionView)
         }
     }
 
