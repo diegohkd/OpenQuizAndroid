@@ -10,17 +10,20 @@ import kotlinx.android.synthetic.main.fragment_quiz.*
 import mobdao.com.openquiz.R
 import mobdao.com.openquiz.di.components.DaggerQuizComponent
 import mobdao.com.openquiz.modules.base.BaseFragment
-import mobdao.com.openquiz.modules.quiz.question.QuestionFragmentFactory
 import mobdao.com.openquiz.uicomponents.adapters.QuestionsPagerAdapter
 import mobdao.com.openquiz.utils.extensions.setupObserver
 import mobdao.com.openquiz.utils.extensions.setupSingleEventObserver
 import mobdao.com.openquiz.utils.extensions.sharedViewModel
+import mobdao.com.openquiz.utils.factories.FragmentFactory
 import javax.inject.Inject
 
 class QuizFragment : BaseFragment() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
+
+    @Inject
+    lateinit var fragmentFactory: FragmentFactory
 
     override val viewModel: QuizViewModel by sharedViewModel { viewModelFactory }
     private val args: QuizFragmentArgs by navArgs()
@@ -54,7 +57,8 @@ class QuizFragment : BaseFragment() {
     private fun setupObservers() = with(viewModel) {
         setupObserver(questionsLiveData to { questions ->
             fragmentManager?.let { fm ->
-                viewPager.adapter = QuestionsPagerAdapter(fm, QuestionFragmentFactory(), questions)
+                // TODO inject adapter
+                viewPager.adapter = QuestionsPagerAdapter(fm, fragmentFactory, questions)
             }
         })
 
