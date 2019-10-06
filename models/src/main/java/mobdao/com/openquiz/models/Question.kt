@@ -1,5 +1,9 @@
 package mobdao.com.openquiz.models
 
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+
+@Parcelize
 data class Question(
     val category: Category?,
     val type: QuestionType?,
@@ -7,4 +11,4 @@ data class Question(
     val question: String?,
     val correctAnswer: String?,
     val incorrectAnswers: List<String>?
-)
+) : Parcelable
