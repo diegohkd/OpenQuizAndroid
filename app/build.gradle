@@ -65,6 +65,7 @@ dependencies {
     implementation project(path: ':data')
     implementation project(path: ':utils')
     implementation project(path: ':uicomponents')
+    implementation project(path: ':models')
 
     // Dagger
     kapt "com.google.dagger:dagger-compiler:$dagger_version"
@@ -72,5 +73,4 @@ dependencies {
     // Navigation Component
     implementation "androidx.navigation:navigation-fragment-ktx:$navigation_version"
     implementation "androidx.navigation:navigation-ui-ktx:$navigation_version"
-    implementation project(path: ':models')
 }
