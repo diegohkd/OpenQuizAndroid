@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
+apply plugin: "androidx.navigation.safeargs.kotlin"
 
 def keystorePropertiesFile = rootProject.file("keys/keystore.properties")
 def keystoreProperties = new Properties()
@@ -9,7 +10,6 @@ keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 
 android {
     compileSdkVersion 29
-
 
     signingConfigs {
         release {
@@ -43,6 +43,19 @@ android {
             versionNameSuffix "-debug"
         }
     }
+
+    androidExtensions {
+        experimental = true
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
 }
 
 dependencies {
@@ -51,6 +64,8 @@ dependencies {
     // Modules dependencies
     implementation project(path: ':data')
     implementation project(path: ':utils')
+    implementation project(path: ':uicomponents')
+    implementation project(path: ':models')
 
     // Dagger
     kapt "com.google.dagger:dagger-compiler:$dagger_version"

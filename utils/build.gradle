@@ -1,10 +1,11 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+
 android {
+
     compileSdkVersion 29
     buildToolsVersion "29.0.0"
-
 
     defaultConfig {
         minSdkVersion 21
@@ -38,6 +39,7 @@ dependencies {
     // Lifecycle extensions
     api 'androidx.lifecycle:lifecycle-extensions:2.1.0'
 
-    api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    // Android
     api 'androidx.appcompat:appcompat:1.1.0'
+    api 'androidx.fragment:fragment-ktx:1.1.0'
 }

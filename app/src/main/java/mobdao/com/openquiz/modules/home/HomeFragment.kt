@@ -12,6 +12,7 @@ import mobdao.com.openquiz.R
 import mobdao.com.openquiz.data.di.components.DaggerDataComponent
 import mobdao.com.openquiz.di.components.DaggerHomeComponent
 import mobdao.com.openquiz.modules.base.BaseFragment
+import mobdao.com.openquiz.utils.extensions.setupObserver
 import mobdao.com.openquiz.utils.extensions.setupSingleEventObserver
 import javax.inject.Inject
 
@@ -34,11 +35,7 @@ class HomeFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        DaggerHomeComponent
-            .builder()
-            .dataComponent(DaggerDataComponent.create())
-            .build()
-            .inject(this)
+        setupInjections()
         setupView()
         setupObservers()
     }
@@ -47,15 +44,36 @@ class HomeFragment : BaseFragment() {
 
     //region private
 
-    private fun setupObservers() = with(viewModel) {
-        setupSingleEventObserver(signOutEvent to {
-            findNavController().navigate(R.id.action_homeFragment_to_loginFragment)
-        })
+    private fun setupInjections() {
+        DaggerHomeComponent
+            .builder()
+            .dataComponent(DaggerDataComponent.create())
+            .build()
+            .inject(this)
     }
 
     private fun setupView() {
+        startQuizButton.setOnClickListener {
+            viewModel.onStartQuizClicked()
+        }
+
         signOutButton.setOnClickListener {
             viewModel.onSignOutClicked()
+        }
+    }
+
+    private fun setupObservers() {
+        setupProgressBarObserver(progressBar)
+        viewModel.run {
+            setupSingleEventObserver(signOutEvent to {
+                findNavController().navigate(R.id.action_homeFragment_to_loginFragment)
+            })
+
+            setupObserver(startQuizEvent to { questions ->
+                val action =
+                    HomeFragmentDirections.actionHomeFragmentToQuizFragment(questions.toTypedArray())
+                findNavController().navigate(action)
+            })
         }
     }
 
