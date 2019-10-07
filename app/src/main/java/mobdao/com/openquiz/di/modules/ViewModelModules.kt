@@ -10,6 +10,7 @@ import mobdao.com.openquiz.modules.home.HomeViewModel
 import mobdao.com.openquiz.modules.login.LoginViewModel
 import mobdao.com.openquiz.modules.splash.SplashViewModel
 import mobdao.com.openquiz.di.factories.ViewModelFactory
+import mobdao.com.openquiz.modules.quiz.QuizViewModel
 
 @Module
 abstract class BaseViewModelModule {
@@ -45,4 +46,14 @@ abstract class HomeViewModelModule : BaseViewModelModule() {
     @IntoMap
     @ViewModelKey(HomeViewModel::class)
     abstract fun bindHomeViewModel(homeViewModel: HomeViewModel): ViewModel
+}
+
+@Suppress("unused")
+@Module
+abstract class QuizViewModelModule : BaseViewModelModule() {
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(QuizViewModel::class)
+    abstract fun bindQuizViewModel(quizViewModel: QuizViewModel): ViewModel
 }

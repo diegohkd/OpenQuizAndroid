@@ -6,4 +6,10 @@
 
     <!-- Home -->
     <string name="sign_out">Sign Out</string>
+    <string name="start_new_quiz">Start New Quiz</string>
+
+    <!-- Quiz -->
+    <string name="confirm">Confirm</string>
+    <string name="true_string">True</string>
+    <string name="false_string">False</string>
 </resources>
