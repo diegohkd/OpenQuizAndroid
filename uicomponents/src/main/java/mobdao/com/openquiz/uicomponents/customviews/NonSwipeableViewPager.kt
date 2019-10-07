@@ -1,4 +1,4 @@
-package mobdao.com.openquiz.uicomponents
+package mobdao.com.openquiz.uicomponents.customviews
 
 import android.annotation.SuppressLint
 import android.content.Context

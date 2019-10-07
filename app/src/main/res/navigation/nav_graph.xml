@@ -49,6 +49,25 @@
             app:popUpTo="@id/homeFragment"
             app:popUpToInclusive="true" />
 
+        <action
+            android:id="@+id/action_homeFragment_to_quizFragment"
+            app:destination="@id/quizFragment">
+
+            <argument
+                android:name="questions"
+                app:argType="mobdao.com.openquiz.models.Question[]" />
+
+        </action>
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/quizFragment"
+        android:name="mobdao.com.openquiz.modules.quiz.QuizFragment"
+        android:label="QuizFragment" >
+        <argument
+            android:name="questions"
+            app:argType="mobdao.com.openquiz.models.Question[]" />
     </fragment>
 
 </navigation>
