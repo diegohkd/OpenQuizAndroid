@@ -4,13 +4,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
 import kotlinx.android.synthetic.main.fragment_quiz.*
 import mobdao.com.openquiz.R
 import mobdao.com.openquiz.di.components.DaggerQuizComponent
 import mobdao.com.openquiz.modules.base.BaseFragment
+import mobdao.com.openquiz.uicomponents.adapters.QuestionsPagerAdapter
+import mobdao.com.openquiz.utils.extensions.setupObserver
+import mobdao.com.openquiz.utils.extensions.setupSingleEventObserver
+import mobdao.com.openquiz.utils.extensions.sharedViewModel
+import mobdao.com.openquiz.utils.factories.FragmentFactory
 import javax.inject.Inject
 
 class QuizFragment : BaseFragment() {
@@ -18,8 +22,11 @@ class QuizFragment : BaseFragment() {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
-    override val viewModel: QuizViewModel by viewModels { viewModelFactory }
-    val args: QuizFragmentArgs by navArgs()
+    @Inject
+    lateinit var fragmentFactory: FragmentFactory
+
+    override val viewModel: QuizViewModel by sharedViewModel { viewModelFactory }
+    private val args: QuizFragmentArgs by navArgs()
 
     //region Lifecycle
 
@@ -33,8 +40,7 @@ class QuizFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupInjections()
-        setupView()
-//        setupObservers()
+        setupObservers()
         viewModel.init(args.questions.toList())
     }
 
@@ -48,10 +54,17 @@ class QuizFragment : BaseFragment() {
             .inject(this)
     }
 
-    private fun setupView() {
-        confirmButton.setOnClickListener {
-            viewModel.onConfirmClicked()
-        }
+    private fun setupObservers() = with(viewModel) {
+        setupObserver(questionsLiveData to { questions ->
+            fragmentManager?.let { fm ->
+                // TODO inject adapter
+                viewPager.adapter = QuestionsPagerAdapter(fm, fragmentFactory, questions)
+            }
+        })
+
+        setupSingleEventObserver(showNextQuestionEvent to {
+            viewPager.setCurrentItem(viewPager.currentItem + 1, true)
+        })
     }
 
     //endregion
