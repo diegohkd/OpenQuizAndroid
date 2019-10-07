@@ -12,6 +12,7 @@ import mobdao.com.openquiz.models.Question
 import mobdao.com.openquiz.models.QuestionType.MULTIPLE_CHOICE
 import mobdao.com.openquiz.modules.base.BaseFragment
 import mobdao.com.openquiz.modules.quiz.QuizViewModel
+import mobdao.com.openquiz.uicomponents.customviews.question.BaseQuestionView
 import mobdao.com.openquiz.uicomponents.customviews.question.MultipleChoiceQuestionView
 import mobdao.com.openquiz.uicomponents.customviews.question.TrueFalseQuestionView
 import mobdao.com.openquiz.utils.constants.IntentConstants.QUESTION
@@ -24,6 +25,7 @@ class QuestionFragment : BaseFragment() {
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
     override val viewModel: QuizViewModel by sharedViewModel { viewModelFactory }
+    private var questionView: BaseQuestionView? = null
 
     //region Lifecycle
 
@@ -52,23 +54,33 @@ class QuestionFragment : BaseFragment() {
     }
 
     private fun handleArguments() {
-        arguments?.takeIf { it.containsKey(QUESTION) }?.getParcelable<Question>(QUESTION)?.apply {
-            val questionView =
-                if (type == MULTIPLE_CHOICE) MultipleChoiceQuestionView(requireContext())
-                else TrueFalseQuestionView(requireContext())
-            questionView.bind(this) {
-                confirmButton.isEnabled = true
-            }
-
-            questionContainer.addView(questionView)
+        arguments?.takeIf { it.containsKey(QUESTION) }?.getParcelable<Question>(QUESTION)?.let {
+            bindQuestion(it)
         }
     }
 
     private fun setupView() {
         confirmButton.setOnClickListener {
-            viewModel.onConfirmClicked()
+            questionView?.run {
+                val question = question ?: return@setOnClickListener
+                val answer = getSelectedAnswer()
+                viewModel.onConfirmClicked(question, answer)
+            }
+        }
+    }
+
+    private fun bindQuestion(question: Question) = with(question) {
+        questionView =
+            if (type == MULTIPLE_CHOICE) MultipleChoiceQuestionView(requireContext())
+            else TrueFalseQuestionView(requireContext())
+
+        questionContainer.addView(questionView)
+
+        questionView?.bind(this) {
+            confirmButton.isEnabled = true
         }
     }
 
     //endregion
+
 }

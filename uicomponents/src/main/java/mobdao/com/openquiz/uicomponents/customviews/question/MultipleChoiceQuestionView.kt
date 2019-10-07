@@ -9,6 +9,7 @@ import androidx.core.view.updateMargins
 import kotlinx.android.synthetic.main.view_multiple_choice_question.view.*
 import mobdao.com.openquiz.models.Question
 import mobdao.com.openquiz.uicomponents.R
+import mobdao.com.openquiz.utils.extensions.fromHtml
 import mobdao.com.openquiz.utils.helpers.DimensionHelper
 
 @Suppress("UNUSED_PARAMETER")
@@ -22,10 +23,10 @@ class MultipleChoiceQuestionView @JvmOverloads constructor(
         LayoutInflater.from(context).inflate(R.layout.view_multiple_choice_question, this, true)
     }
 
-    override fun bind(question: Question, answerCallback: (String) -> Unit) {
+    override fun bind(question: Question, answerSelected: () -> Unit) {
         this.question = question
 
-        questionTextView.text = getQuestionText()
+        questionTextView.text = question.question.orEmpty().fromHtml()
 
         answers.forEach { answer ->
             val radioButton = RadioButton(context)
@@ -40,12 +41,26 @@ class MultipleChoiceQuestionView @JvmOverloads constructor(
                     ).toInt()
                 )
             }
-            radioButton.text = answer
+            radioButton.text = answer.fromHtml()
             radioGroup.addView(radioButton)
         }
 
-        radioGroup.setOnCheckedChangeListener { _, id ->
-            findViewById<RadioButton>(id)?.text?.toString()?.let { answerCallback(it) }
+        handleAnswerSelection(answerSelected)
+    }
+
+    override fun getSelectedAnswer(): String {
+        val selectedRadioButton = findViewById<RadioButton>(radioGroup.checkedRadioButtonId)
+        val index = radioGroup.indexOfChild(selectedRadioButton)
+        return answers.getOrNull(index).orEmpty()
+    }
+
+    //region private
+
+    private fun handleAnswerSelection(answerSelected: () -> Unit) {
+        radioGroup.setOnCheckedChangeListener { _, _ ->
+            answerSelected()
         }
     }
+
+    //endregion
 }
