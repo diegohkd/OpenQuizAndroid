@@ -11,8 +11,8 @@ import mobdao.com.openquiz.R
 import mobdao.com.openquiz.di.components.DaggerQuizComponent
 import mobdao.com.openquiz.modules.base.BaseFragment
 import mobdao.com.openquiz.uicomponents.adapters.QuestionsPagerAdapter
+import mobdao.com.openquiz.utils.constants.BundleConstants.QUIZ_PAGE
 import mobdao.com.openquiz.utils.extensions.setupObserver
-import mobdao.com.openquiz.utils.extensions.setupSingleEventObserver
 import mobdao.com.openquiz.utils.extensions.sharedViewModel
 import mobdao.com.openquiz.utils.factories.FragmentFactory
 import javax.inject.Inject
@@ -44,6 +44,16 @@ class QuizFragment : BaseFragment() {
         viewModel.init(args.questions.toList())
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt(QUIZ_PAGE, viewPager.currentItem)
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        viewModel.onActivityCreated(savedInstanceState)
+    }
+
     //endregion
 
     //region private
@@ -62,8 +72,8 @@ class QuizFragment : BaseFragment() {
             }
         })
 
-        setupSingleEventObserver(showNextQuestionEvent to {
-            viewPager.setCurrentItem(viewPager.currentItem + 1, true)
+        setupObserver(questionNumberLiveData to { questionNumber ->
+            viewPager.setCurrentItem(questionNumber, true)
         })
     }
 
