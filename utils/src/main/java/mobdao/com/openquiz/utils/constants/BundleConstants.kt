@@ -1,5 +1,6 @@
 package mobdao.com.openquiz.utils.constants
 
-object BundleConstants{
-    const val QUIZ_PAGE = "QUIZ_PAGE"
+object BundleConstants {
+    const val QUESTIONS = "QUESTIONS"
+    const val SELECTED_ANSWER = "SELECTED_ANSWER"
 }

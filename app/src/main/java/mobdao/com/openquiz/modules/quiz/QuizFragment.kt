@@ -11,7 +11,6 @@ import mobdao.com.openquiz.R
 import mobdao.com.openquiz.di.components.DaggerQuizComponent
 import mobdao.com.openquiz.modules.base.BaseFragment
 import mobdao.com.openquiz.uicomponents.adapters.QuestionsPagerAdapter
-import mobdao.com.openquiz.utils.constants.BundleConstants.QUIZ_PAGE
 import mobdao.com.openquiz.utils.extensions.setupObserver
 import mobdao.com.openquiz.utils.extensions.sharedViewModel
 import mobdao.com.openquiz.utils.factories.FragmentFactory
@@ -27,6 +26,13 @@ class QuizFragment : BaseFragment() {
 
     override val viewModel: QuizViewModel by sharedViewModel { viewModelFactory }
     private val args: QuizFragmentArgs by navArgs()
+    private val adapter: QuestionsPagerAdapter by lazy {
+        // TODO inject adapter
+        QuestionsPagerAdapter(
+            childFragmentManager,
+            fragmentFactory
+        )
+    }
 
     //region Lifecycle
 
@@ -41,12 +47,13 @@ class QuizFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         setupInjections()
         setupObservers()
+        setupView()
         viewModel.init(args.questions.toList())
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putInt(QUIZ_PAGE, viewPager.currentItem)
+        viewModel.onSaveInstanceState(outState)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -66,15 +73,16 @@ class QuizFragment : BaseFragment() {
 
     private fun setupObservers() = with(viewModel) {
         setupObserver(questionsLiveData to { questions ->
-            fragmentManager?.let { fm ->
-                // TODO inject adapter
-                viewPager.adapter = QuestionsPagerAdapter(fm, fragmentFactory, questions)
-            }
+            adapter.questions = questions
         })
 
         setupObserver(questionNumberLiveData to { questionNumber ->
             viewPager.setCurrentItem(questionNumber, true)
         })
+    }
+
+    private fun setupView() {
+        viewPager.adapter = adapter
     }
 
     //endregion

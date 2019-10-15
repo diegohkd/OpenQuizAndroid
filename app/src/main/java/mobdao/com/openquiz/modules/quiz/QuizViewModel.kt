@@ -2,42 +2,44 @@ package mobdao.com.openquiz.modules.quiz
 
 import android.os.Bundle
 import android.util.Log
+import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.MutableLiveData
 import mobdao.com.openquiz.models.Question
 import mobdao.com.openquiz.modules.base.BaseViewModel
-import mobdao.com.openquiz.utils.constants.BundleConstants
+import mobdao.com.openquiz.utils.constants.BundleConstants.QUESTIONS
 import mobdao.com.openquiz.utils.extensions.orZero
 import javax.inject.Inject
 
-class QuizViewModel @Inject constructor() : BaseViewModel() {
+class QuizViewModel @Inject constructor() : BaseViewModel(), LifecycleObserver {
 
     var questionsLiveData: MutableLiveData<List<Question>> = MutableLiveData()
     var questionNumberLiveData: MutableLiveData<Int> = MutableLiveData()
 
-    private var answers: MutableList<String>? = null
-    private var currentPage = 0
+    private val answers: MutableList<String> by lazy {
+        MutableList(questionsLiveData.value?.size.orZero()) { "" }
+    }
 
     fun init(questions: List<Question>) {
-        questionsLiveData.postValue(questions)
-        questionNumberLiveData.postValue(currentPage)
-        answers = MutableList(questions.size) { "" }
+        questionsLiveData.value = questions
     }
 
     fun onConfirmClicked(question: Question, answer: String) {
         val index = questionsLiveData.value?.indexOf(question) ?: return
-        answers?.set(index, answer)
+        answers[index] = answer
 
         if (index + 1 == questionsLiveData.value?.size) {
             calculateFinalResult()
         } else {
-            questionNumberLiveData.postValue(questionNumberLiveData.value.orZero() + 1)
+            questionNumberLiveData.postValue(index + 1)
         }
     }
 
-    fun onActivityCreated(savedInstanceState: Bundle?) {
-        savedInstanceState?.getInt(BundleConstants.QUIZ_PAGE)?.let {
-            currentPage = it
-        }
+    fun onSaveInstanceState(outState: Bundle) = with(outState) {
+        putParcelableArrayList(QUESTIONS, ArrayList(questionsLiveData.value ?: return))
+    }
+
+    fun onActivityCreated(savedInstanceState: Bundle?) = savedInstanceState?.run {
+        questionsLiveData.value = getParcelableArrayList(QUESTIONS)
     }
 
     //region private

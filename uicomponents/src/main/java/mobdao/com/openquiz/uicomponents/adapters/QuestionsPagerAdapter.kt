@@ -9,9 +9,14 @@ import mobdao.com.openquiz.utils.factories.FragmentFactory
 
 class QuestionsPagerAdapter(
     fragmentManager: FragmentManager,
-    private val fragmentFactory: FragmentFactory,
-    private var questions: List<Question>
+    private val fragmentFactory: FragmentFactory
 ) : FragmentStatePagerAdapter(fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
+
+    var questions: List<Question> = listOf()
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
 
     override fun getItem(position: Int) =
         fragmentFactory.createFragment(Bundle().apply {
