@@ -16,7 +16,9 @@ import mobdao.com.openquiz.uicomponents.customviews.question.BaseQuestionView
 import mobdao.com.openquiz.uicomponents.customviews.question.MultipleChoiceQuestionView
 import mobdao.com.openquiz.uicomponents.customviews.question.TrueFalseQuestionView
 import mobdao.com.openquiz.utils.constants.IntentConstants.QUESTION
+import mobdao.com.openquiz.utils.extensions.gone
 import mobdao.com.openquiz.utils.extensions.sharedViewModel
+import mobdao.com.openquiz.utils.extensions.visible
 import javax.inject.Inject
 
 class QuestionFragment : BaseFragment() {
@@ -61,10 +63,16 @@ class QuestionFragment : BaseFragment() {
 
     private fun setupView() {
         confirmButton.setOnClickListener {
+            questionView?.showCorrectAnswer()
+            confirmButton.gone()
+            nextButton.visible()
+        }
+
+        nextButton.setOnClickListener {
             questionView?.run {
                 val question = question ?: return@setOnClickListener
                 val answer = getSelectedAnswer()
-                viewModel.onConfirmClicked(question, answer)
+                viewModel.onNextClicked(question, answer)
             }
         }
     }

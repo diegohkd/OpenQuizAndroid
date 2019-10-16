@@ -22,6 +22,7 @@ abstract class BaseQuestionView @JvmOverloads constructor(
             return field
         }
 
-    abstract fun bind(question: Question, answerSelected: () -> Unit)
+    abstract fun bind(question: Question, answerSelectedCallback: () -> Unit)
     abstract fun getSelectedAnswer(): String
+    abstract fun showCorrectAnswer()
 }

@@ -10,7 +10,7 @@ fun <T> Fragment.setupObserver(
 ) = pair.first.observe(viewLifecycleOwner, Observer { it?.let(pair.second) })
 
 fun Fragment.setupSingleEventObserver(
-    pair: Pair<MutableLiveData<Unit>, () -> Unit>
+    pair: Pair<MutableLiveData<Unit>, () -> Unit?>
 ) = pair.first.observe(viewLifecycleOwner, Observer { pair.second() })
 
 @MainThread

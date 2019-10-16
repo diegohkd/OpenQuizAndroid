@@ -19,7 +19,7 @@ class QuizViewModel @Inject constructor() : BaseViewModel() {
         answers = MutableList(questions.size) { "" }
     }
 
-    fun onConfirmClicked(question: Question, answer: String) {
+    fun onNextClicked(question: Question, answer: String) {
         val index = questionsLiveData.value?.indexOf(question) ?: return
         answers?.set(index, answer)
 
