@@ -17,7 +17,8 @@ abstract class BaseQuestionView @JvmOverloads constructor(
         get() {
             if (mutableAnswers.isEmpty()) {
                 question?.correctAnswer?.let { mutableAnswers.add(it) }
-                mutableAnswers.addAll(question?.incorrectAnswers.orEmpty().shuffled())
+                mutableAnswers.addAll(question?.incorrectAnswers.orEmpty())
+                mutableAnswers.shuffle()
             }
             return field
         }
