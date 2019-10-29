@@ -2,16 +2,10 @@ package mobdao.com.openquiz.data.utils.disposables
 
 import java.util.concurrent.locks.ReentrantLock
 
-// Strategy abstract class of Strategy pattern
-abstract class Disposable {
-
-    open fun dispose() {
-        isDisposed = true
-    }
-
+internal abstract class SyncedDispose {
     private val reentrantLock = ReentrantLock()
 
-    internal open var isDisposed: Boolean = false
+    var isDisposed: Boolean = false
         get() {
             reentrantLock.lock()
             try {
