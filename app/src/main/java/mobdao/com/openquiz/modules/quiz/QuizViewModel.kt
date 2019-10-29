@@ -1,16 +1,17 @@
 package mobdao.com.openquiz.modules.quiz
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import mobdao.com.openquiz.models.Question
 import mobdao.com.openquiz.modules.base.BaseViewModel
 import mobdao.com.openquiz.utils.livedata.SingleLiveEvent
+import mobdao.com.openquiz.utils.pokos.ResultsReport
 import javax.inject.Inject
 
 class QuizViewModel @Inject constructor() : BaseViewModel() {
 
     var questionsLiveData: MutableLiveData<List<Question>> = MutableLiveData()
     var showNextQuestionEvent: SingleLiveEvent<Unit> = SingleLiveEvent()
+    var showResultsReportEvent: SingleLiveEvent<ResultsReport> = SingleLiveEvent()
 
     private var answers: MutableList<String>? = null
 
@@ -41,7 +42,9 @@ class QuizViewModel @Inject constructor() : BaseViewModel() {
             else
                 wrongAnswers++
         }
-        Log.d("aaaa", "correctAnswers: $correctAnswers /n wrongAnswers: $wrongAnswers")
+        showResultsReportEvent.postValue(
+            ResultsReport(correctAnswers, wrongAnswers)
+        )
     }
 
     //endregion
