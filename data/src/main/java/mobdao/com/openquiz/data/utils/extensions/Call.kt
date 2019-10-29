@@ -1,6 +1,6 @@
 package mobdao.com.openquiz.data.utils.extensions
 
-import mobdao.com.openquiz.data.utils.actions.ActionCall
+import mobdao.com.openquiz.data.utils.actions.ActionCallAdapter
 import mobdao.com.openquiz.data.utils.singles.Single
 import mobdao.com.openquiz.data.utils.singles.SingleSingle
 import retrofit2.Call
@@ -30,4 +30,4 @@ internal fun <T> Call<T>.runService(
 }
 
 internal fun <T> Call<T>.toSingle(): Single<T> =
-    SingleSingle(ActionCall(this))
+    SingleSingle(ActionCallAdapter(this))

@@ -1,6 +1,7 @@
 package mobdao.com.openquiz.data.utils.disposables
 
-internal class DisposableStrategy(
+// Context of Strategy pattern
+internal class DisposableContext(
     var disposable: Disposable
 ) : Disposable {
     override fun dispose() {

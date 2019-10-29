@@ -4,7 +4,7 @@ import mobdao.com.openquiz.data.utils.actions.Action
 import mobdao.com.openquiz.data.utils.callbacks.Callback
 import mobdao.com.openquiz.data.utils.disposables.Disposable
 import mobdao.com.openquiz.data.utils.disposables.DisposableImpl
-import mobdao.com.openquiz.data.utils.disposables.DisposableStrategy
+import mobdao.com.openquiz.data.utils.disposables.DisposableContext
 
 internal class SingleSingle<T>(
     private var action: Action<T>
@@ -15,24 +15,24 @@ internal class SingleSingle<T>(
     override fun subscribeBy(
         callback: Callback<T>
     ): Disposable {
-        lateinit var disposableStrategy: DisposableStrategy
+        lateinit var disposableContext: DisposableContext
         val callbackRequest = Callback<T>(
             success = { result ->
                 callback.success?.invoke(result)
-                disposableStrategy.dispose()
+                disposableContext.dispose()
             },
             failure = { exception ->
                 callback.failure?.invoke(exception)
-                disposableStrategy.dispose()
+                disposableContext.dispose()
             }
         )
-        disposableStrategy = DisposableStrategy(DisposableImpl(action, callbackRequest, callback))
+        disposableContext = DisposableContext(DisposableImpl(action, callbackRequest, callback))
 
         try {
             action.run(callbackRequest)
         } catch (exception: Exception) {
             callbackRequest.failure?.invoke(exception)
         }
-        return disposableStrategy
+        return disposableContext
     }
 }

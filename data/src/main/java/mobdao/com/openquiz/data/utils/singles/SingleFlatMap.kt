@@ -3,7 +3,7 @@ package mobdao.com.openquiz.data.utils.singles
 import mobdao.com.openquiz.data.utils.actions.Action
 import mobdao.com.openquiz.data.utils.callbacks.Callback
 import mobdao.com.openquiz.data.utils.disposables.Disposable
-import mobdao.com.openquiz.data.utils.disposables.DisposableStrategy
+import mobdao.com.openquiz.data.utils.disposables.DisposableContext
 
 internal class SingleFlatMap<T, R>(
     private val previousSingle: Single<T>,
@@ -16,7 +16,7 @@ internal class SingleFlatMap<T, R>(
     override fun subscribeBy(
         callback: Callback<R>
     ): Disposable {
-        lateinit var disposableStrategy: DisposableStrategy
+        lateinit var disposableContext: DisposableContext
         lateinit var callbackRequest: Callback<T>
         callbackRequest = Callback(
             success = { result ->
@@ -27,17 +27,17 @@ internal class SingleFlatMap<T, R>(
                     null
                 }?.run {
                     action = actionBase
-                    disposableStrategy.disposable = subscribeBy(callback)
+                    disposableContext.disposable = subscribeBy(callback)
                 }
             },
             failure = { exception ->
                 callback.failure?.invoke(exception)
-                disposableStrategy.dispose()
+                disposableContext.dispose()
             }
         )
-        disposableStrategy = DisposableStrategy(
+        disposableContext = DisposableContext(
             previousSingle.subscribeBy(callbackRequest)
         )
-        return disposableStrategy
+        return disposableContext
     }
 }

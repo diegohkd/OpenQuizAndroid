@@ -5,11 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import kotlinx.android.synthetic.main.fragment_quiz.*
 import mobdao.com.openquiz.R
 import mobdao.com.openquiz.di.components.DaggerQuizComponent
 import mobdao.com.openquiz.modules.base.BaseFragment
+import mobdao.com.openquiz.modules.quiz.resultsreport.ResultsReportFragmentDirections
 import mobdao.com.openquiz.uicomponents.adapters.QuestionsPagerAdapter
 import mobdao.com.openquiz.utils.extensions.setupObserver
 import mobdao.com.openquiz.utils.extensions.setupSingleEventObserver
@@ -64,6 +66,11 @@ class QuizFragment : BaseFragment() {
 
         setupSingleEventObserver(showNextQuestionEvent to {
             viewPager.setCurrentItem(viewPager.currentItem + 1, true)
+        })
+
+        setupObserver(showResultsReportEvent to { resultsReport ->
+            val action = QuizFragmentDirections.actionQuizFragmentToResultsReportFragment(resultsReport)
+            findNavController().navigate(action)
         })
     }
 
