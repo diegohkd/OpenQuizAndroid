@@ -74,7 +74,6 @@ class QuestionServiceMapper @Inject constructor() {
             "boolean" -> TRUE_FALSE
             else -> null
         }
-
     }
 
     private fun getDifficulty(difficultyRaw: String?): Difficulty? {
@@ -84,7 +83,6 @@ class QuestionServiceMapper @Inject constructor() {
             "hard" -> HARD
             else -> null
         }
-
     }
 
     //endregion
