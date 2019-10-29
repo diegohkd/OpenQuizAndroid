@@ -14,7 +14,6 @@ import mobdao.com.openquiz.modules.base.BaseFragment
 import mobdao.com.openquiz.modules.quiz.resultsreport.ResultsReportFragmentDirections
 import mobdao.com.openquiz.uicomponents.adapters.QuestionsPagerAdapter
 import mobdao.com.openquiz.utils.extensions.setupObserver
-import mobdao.com.openquiz.utils.extensions.setupSingleEventObserver
 import mobdao.com.openquiz.utils.extensions.sharedViewModel
 import mobdao.com.openquiz.utils.factories.FragmentFactory
 import javax.inject.Inject
@@ -29,6 +28,13 @@ class QuizFragment : BaseFragment() {
 
     override val viewModel: QuizViewModel by sharedViewModel { viewModelFactory }
     private val args: QuizFragmentArgs by navArgs()
+    private val adapter: QuestionsPagerAdapter by lazy {
+        // TODO inject adapter
+        QuestionsPagerAdapter(
+            childFragmentManager,
+            fragmentFactory
+        )
+    }
 
     //region Lifecycle
 
@@ -43,7 +49,18 @@ class QuizFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         setupInjections()
         setupObservers()
+        setupView()
         viewModel.init(args.questions.toList())
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        viewModel.onSaveInstanceState(outState)
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        viewModel.onActivityCreated(savedInstanceState)
     }
 
     //endregion
@@ -58,20 +75,21 @@ class QuizFragment : BaseFragment() {
 
     private fun setupObservers() = with(viewModel) {
         setupObserver(questionsLiveData to { questions ->
-            fragmentManager?.let { fm ->
-                // TODO inject adapter
-                viewPager.adapter = QuestionsPagerAdapter(fm, fragmentFactory, questions)
-            }
+            adapter.questions = questions
         })
 
-        setupSingleEventObserver(showNextQuestionEvent to {
-            viewPager.setCurrentItem(viewPager.currentItem + 1, true)
+        setupObserver(questionNumberLiveData to { questionNumber ->
+            viewPager.setCurrentItem(questionNumber, true)
         })
 
         setupObserver(showResultsReportEvent to { resultsReport ->
             val action = QuizFragmentDirections.actionQuizFragmentToResultsReportFragment(resultsReport)
             findNavController().navigate(action)
         })
+    }
+
+    private fun setupView() {
+        viewPager.adapter = adapter
     }
 
     //endregion
