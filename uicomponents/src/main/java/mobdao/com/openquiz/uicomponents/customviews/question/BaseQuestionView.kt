@@ -17,11 +17,13 @@ abstract class BaseQuestionView @JvmOverloads constructor(
         get() {
             if (mutableAnswers.isEmpty()) {
                 question?.correctAnswer?.let { mutableAnswers.add(it) }
-                mutableAnswers.addAll(question?.incorrectAnswers.orEmpty().shuffled())
+                mutableAnswers.addAll(question?.incorrectAnswers.orEmpty())
+                mutableAnswers.shuffle()
             }
             return field
         }
 
-    abstract fun bind(question: Question, answerSelected: () -> Unit)
+    abstract fun bind(question: Question, answerSelectedCallback: () -> Unit)
     abstract fun getSelectedAnswer(): String
+    abstract fun showCorrectAnswer()
 }

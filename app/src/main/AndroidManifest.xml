@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="mobdao.com.openquiz">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -27,7 +27,8 @@
 
         <activity
             android:name=".modules.main.MainActivity"
-            android:parentActivityName=".modules.splash.SplashActivity" />
+            android:parentActivityName=".modules.splash.SplashActivity"
+            android:screenOrientation="portrait" />
 
     </application>
 
