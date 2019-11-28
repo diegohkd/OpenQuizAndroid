@@ -24,10 +24,14 @@ internal class SingleFlatMap<T, R>(
                     mapper(result)
                 } catch (exception: Exception) {
                     callbackRequest.failure?.invoke(exception)
+                    disposableContext.dispose()
                     null
                 }?.run {
                     action = actionBase
-                    disposableContext.disposable = subscribeBy(callback)
+                    if (!disposableContext.isDisposed)
+                        disposableContext.disposable = subscribeBy(callback)
+                    else
+                        disposableContext.dispose()
                 }
             },
             failure = { exception ->

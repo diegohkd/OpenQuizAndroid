@@ -3,8 +3,8 @@ package mobdao.com.openquiz.data.utils.singles
 import mobdao.com.openquiz.data.utils.actions.Action
 import mobdao.com.openquiz.data.utils.callbacks.Callback
 import mobdao.com.openquiz.data.utils.disposables.Disposable
-import mobdao.com.openquiz.data.utils.disposables.DisposableImpl
 import mobdao.com.openquiz.data.utils.disposables.DisposableContext
+import mobdao.com.openquiz.data.utils.disposables.DisposableImpl
 
 internal class SingleSingle<T>(
     private var action: Action<T>
