@@ -1,7 +1,7 @@
 package mobdao.com.openquiz.modules.home
 
 import mobdao.com.openquiz.data.repositories.OpenTriviaRepository
-import mobdao.com.openquiz.data.repositories.UserAuthRepository
+import mobdao.com.openquiz.data.repositories.userauthrepository.UserAuthRepository
 import mobdao.com.openquiz.data.utils.callbacks.Callback
 import mobdao.com.openquiz.data.utils.disposables.Disposable
 import mobdao.com.openquiz.models.Question
