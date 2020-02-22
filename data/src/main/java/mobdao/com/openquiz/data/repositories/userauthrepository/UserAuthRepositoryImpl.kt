@@ -3,8 +3,8 @@ package mobdao.com.openquiz.data.repositories.userauthrepository
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import com.google.firebase.auth.FirebaseAuth
 import mobdao.com.openquiz.data.di.scopes.DataSingleton
+import mobdao.com.openquiz.data.utils.wrappers.firebaseauth.FirebaseAuth
 import mobdao.com.openquiz.data.utils.wrappers.googleauthprovider.GoogleAuthProvider
 import javax.inject.Inject
 
@@ -16,7 +16,7 @@ class UserAuthRepositoryImpl @Inject constructor(
 
     override fun isUserLoggedIn(): LiveData<Boolean> =
         MutableLiveData<Boolean>().apply {
-            postValue(FirebaseAuth.getInstance().currentUser != null)
+            postValue(firebaseAuth.getCurrentUser() != null)
         }
 
     override fun loginOnFirebase(
