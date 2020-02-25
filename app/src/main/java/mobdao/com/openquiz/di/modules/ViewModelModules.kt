@@ -5,12 +5,12 @@ import androidx.lifecycle.ViewModelProvider
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
+import mobdao.com.openquiz.di.factories.ViewModelFactory
 import mobdao.com.openquiz.di.keys.ViewModelKey
 import mobdao.com.openquiz.modules.home.HomeViewModel
 import mobdao.com.openquiz.modules.login.LoginViewModel
-import mobdao.com.openquiz.modules.splash.SplashViewModel
-import mobdao.com.openquiz.di.factories.ViewModelFactory
 import mobdao.com.openquiz.modules.quiz.QuizViewModel
+import mobdao.com.openquiz.modules.splash.SplashViewModel
 
 @Module
 abstract class BaseViewModelModule {
