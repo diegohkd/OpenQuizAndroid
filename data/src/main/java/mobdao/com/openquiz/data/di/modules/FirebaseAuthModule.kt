@@ -1,9 +1,10 @@
 package mobdao.com.openquiz.data.di.modules
 
-import com.google.firebase.auth.FirebaseAuth
 import dagger.Module
 import dagger.Provides
 import mobdao.com.openquiz.data.di.scopes.DataSingleton
+import mobdao.com.openquiz.data.utils.wrappers.firebaseauth.FirebaseAuth
+import mobdao.com.openquiz.data.utils.wrappers.firebaseauth.FirebaseAuthImpl
 
 @Module
 abstract class FirebaseAuthModule {
@@ -13,8 +14,6 @@ abstract class FirebaseAuthModule {
         @JvmStatic
         @Provides
         @DataSingleton
-        fun provideFirebaseAuth(): FirebaseAuth =
-            FirebaseAuth.getInstance()
+        fun provideFirebaseAuth(): FirebaseAuth = FirebaseAuthImpl()
     }
-
 }
