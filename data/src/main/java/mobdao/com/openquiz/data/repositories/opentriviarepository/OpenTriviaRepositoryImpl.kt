@@ -2,7 +2,6 @@ package mobdao.com.openquiz.data.repositories.opentriviarepository
 
 import mobdao.com.openquiz.data.di.scopes.DataSingleton
 import mobdao.com.openquiz.data.server.mappers.QuestionServiceMapper
-import mobdao.com.openquiz.data.server.mappers.QuestionServiceMapperImpl
 import mobdao.com.openquiz.data.server.webservices.QuestionsService
 import mobdao.com.openquiz.data.server.webservices.SessionTokenService
 import mobdao.com.openquiz.data.utils.enums.QuestionsResponseCode
@@ -18,7 +17,7 @@ import javax.inject.Inject
 class OpenTriviaRepositoryImpl @Inject constructor(
     private val retrofit: Retrofit,
     private val questionServiceMapper: QuestionServiceMapper
-): OpenTriviaRepository {
+) : OpenTriviaRepository {
 
     override fun fetchSessionToken(): Single<String> =
         retrofit.create(SessionTokenService::class.java)
