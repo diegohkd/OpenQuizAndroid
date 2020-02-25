@@ -1,29 +1,30 @@
-package mobdao.com.openquiz.data.repositories
+package mobdao.com.openquiz.data.repositories.userauthrepository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.GoogleAuthProvider
 import mobdao.com.openquiz.data.di.scopes.DataSingleton
+import mobdao.com.openquiz.data.utils.wrappers.firebaseauth.FirebaseAuth
+import mobdao.com.openquiz.data.utils.wrappers.googleauthprovider.GoogleAuthProvider
 import javax.inject.Inject
 
 @DataSingleton
-class UserAuthRepository @Inject constructor(
-    private val firebaseAuth: FirebaseAuth
-) {
+class UserAuthRepositoryImpl @Inject constructor(
+    private val firebaseAuth: FirebaseAuth,
+    private val googleAuthProvider: GoogleAuthProvider
+) : UserAuthRepository {
 
-    fun isUserLoggedIn(): LiveData<Boolean> =
+    override fun isUserLoggedIn(): LiveData<Boolean> =
         MutableLiveData<Boolean>().apply {
-            postValue(FirebaseAuth.getInstance().currentUser != null)
+            postValue(firebaseAuth.getCurrentUser() != null)
         }
 
-    fun loginOnFirebase(
+    override fun loginOnFirebase(
         account: GoogleSignInAccount,
         success: () -> Unit,
         failure: (Exception?) -> Unit
     ) {
-        val credential = GoogleAuthProvider.getCredential(account.idToken, null)
+        val credential = googleAuthProvider.getCredential(account.idToken)
         firebaseAuth.signInWithCredential(credential)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
@@ -34,7 +35,7 @@ class UserAuthRepository @Inject constructor(
             }
     }
 
-    fun logout() {
+    override fun logout() {
         firebaseAuth.signOut()
     }
 }
