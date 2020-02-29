@@ -1,6 +1,6 @@
 package mobdao.com.openquiz.data.server.mappers
 
-import junit.framework.Assert.assertEquals
+import org.junit.Assert.assertEquals
 import mobdao.com.openquiz.data.server.responses.QuestionResponse
 import mobdao.com.openquiz.data.server.responses.QuestionsResponse
 import mobdao.com.openquiz.models.Category
