@@ -57,6 +57,14 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
+    // Test
+    testApi 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test:runner:1.2.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    testApi "com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0"
+    testApi 'androidx.arch.core:core-testing:2.1.0'
+    testApi "io.mockk:mockk:1.9.3"
+
     // Modules dependencies
     implementation project(path: ':data')
     implementation project(path: ':utils')
