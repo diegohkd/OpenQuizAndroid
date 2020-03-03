@@ -16,10 +16,11 @@ class QuizViewModel @Inject constructor() : BaseViewModel() {
     var showResultsReportEvent: SingleLiveEvent<ResultsReport> = SingleLiveEvent()
     private var showCorrectAnswerEvents = mutableMapOf<Question, SingleLiveEvent<Unit>>()
 
-    private var game: Game? = null
+    var game: Game? = null
+        private set
 
-    fun init(questions: List<Question>) {
-        game = Game(questions)
+    fun init(game: Game, questions: List<Question>) {
+        this.game = game
         setupCorrectAnswerEvents(questions)
         questionsLiveData.postValue(questions)
     }
@@ -39,21 +40,20 @@ class QuizViewModel @Inject constructor() : BaseViewModel() {
         }
     }
 
-    fun getShowCorrectAnswerEvent(question: Question): SingleLiveEvent<Unit>? {
-        return showCorrectAnswerEvents[question]
-    }
+    fun getShowCorrectAnswerEvent(question: Question): SingleLiveEvent<Unit>? =
+        showCorrectAnswerEvents[question]
 
     //region private
 
     private fun setupCorrectAnswerEvents(questions: List<Question>) {
         questions.forEach { question -> showCorrectAnswerEvents[question] = SingleLiveEvent() }
-
     }
 
     private fun showFinalResult() {
         val correctAnswers = game?.getNumberOfCorrectAnswers().orZero()
         val wrongAnswers = game?.getNumberOfIncorrectAnswers().orZero()
-        showResultsReportEvent.postValue(ResultsReport(correctAnswers, wrongAnswers))
+        val resultsReport = ResultsReport(correctAnswers, wrongAnswers)
+        showResultsReportEvent.postValue(resultsReport)
     }
 
     //endregion
