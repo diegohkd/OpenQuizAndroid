@@ -31,7 +31,7 @@ class TrueFalseQuestionView @JvmOverloads constructor(
     override fun bind(question: Question, answerSelectedCallback: () -> Unit) {
         this.question = question
 
-        questionTextView.text = question.question.orEmpty().fromHtml()
+        questionTextView.text = question.question.fromHtml()
         setupToggleButton(falseButton, trueButton, answerSelectedCallback)
         setupToggleButton(trueButton, falseButton, answerSelectedCallback)
     }

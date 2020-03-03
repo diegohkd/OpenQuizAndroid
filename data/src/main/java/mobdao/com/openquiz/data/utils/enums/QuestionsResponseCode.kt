@@ -1,5 +1,6 @@
 package mobdao.com.openquiz.data.utils.enums
 
+@Suppress("unused")
 enum class QuestionsResponseCode(val code: Int) {
     SUCCESS(0),
     NO_RESULTS(1),

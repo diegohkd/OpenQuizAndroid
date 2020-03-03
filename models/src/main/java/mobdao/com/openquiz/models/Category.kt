@@ -2,6 +2,7 @@ package mobdao.com.openquiz.models
 
 import com.google.gson.annotations.SerializedName
 
+@Suppress("unused")
 enum class Category(val id: Int) {
     @SerializedName("General Knowledge")
     GENERAL_KNOWLEDGE(9),
