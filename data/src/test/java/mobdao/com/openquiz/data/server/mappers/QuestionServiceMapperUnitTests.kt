@@ -15,7 +15,7 @@ import org.mockito.junit.MockitoJUnitRunner
 class QuestionServiceMapperUnitTests {
 
     private lateinit var questionServiceMapper: QuestionServiceMapper
-    private val questionResponse = QuestionResponse(
+    private val validQuestionResponse = QuestionResponse(
         Category.ANIMALS,
         QuestionType.MULTIPLE_CHOICE,
         Difficulty.EASY,
@@ -23,7 +23,7 @@ class QuestionServiceMapperUnitTests {
         "correct answer",
         listOf("incorrect 1", "incorrect 2")
     )
-    private val questionsResponse = QuestionsResponse(null, listOf(questionResponse))
+    private val questionsResponse = QuestionsResponse(null, listOf(validQuestionResponse))
 
     @Before
     fun setup() {
@@ -35,12 +35,96 @@ class QuestionServiceMapperUnitTests {
         val result = questionServiceMapper.questionResponseToModel(questionsResponse)
 
         with(result.first()) {
-            assertEquals(questionResponse.category, category)
-            assertEquals(questionResponse.type, type)
-            assertEquals(questionResponse.difficulty, difficulty)
-            assertEquals(questionResponse.question, question)
-            assertEquals(questionResponse.correct_answer, correctAnswer)
-            assertEquals(questionResponse.incorrect_answers, incorrectAnswers)
+            assertEquals(validQuestionResponse.category, category)
+            assertEquals(validQuestionResponse.type, type)
+            assertEquals(validQuestionResponse.difficulty, difficulty)
+            assertEquals(validQuestionResponse.question, question)
+            assertEquals(validQuestionResponse.correct_answer, correctAnswer)
+            assertEquals(validQuestionResponse.incorrect_answers, incorrectAnswers)
         }
+    }
+
+    @Test(expected = RuntimeException::class)
+    fun `Throw exception if response's category is null`() {
+        val invalidQuestionResponse = QuestionResponse(
+            null,
+            validQuestionResponse.type,
+            validQuestionResponse.difficulty,
+            validQuestionResponse.question,
+            validQuestionResponse.correct_answer,
+            validQuestionResponse.incorrect_answers
+        )
+        val invalidQuestionsResponse = QuestionsResponse(null, listOf(invalidQuestionResponse))
+        questionServiceMapper.questionResponseToModel(invalidQuestionsResponse)
+    }
+
+    @Test(expected = RuntimeException::class)
+    fun `Throw exception if response's type is null`() {
+        val invalidQuestionResponse = QuestionResponse(
+            validQuestionResponse.category,
+            null,
+            validQuestionResponse.difficulty,
+            validQuestionResponse.question,
+            validQuestionResponse.correct_answer,
+            validQuestionResponse.incorrect_answers
+        )
+        val invalidQuestionsResponse = QuestionsResponse(null, listOf(invalidQuestionResponse))
+        questionServiceMapper.questionResponseToModel(invalidQuestionsResponse)
+    }
+
+    @Test(expected = RuntimeException::class)
+    fun `Throw exception if response's difficulty is null`() {
+        val invalidQuestionResponse = QuestionResponse(
+            validQuestionResponse.category,
+            validQuestionResponse.type,
+            null,
+            validQuestionResponse.question,
+            validQuestionResponse.correct_answer,
+            validQuestionResponse.incorrect_answers
+        )
+        val invalidQuestionsResponse = QuestionsResponse(null, listOf(invalidQuestionResponse))
+        questionServiceMapper.questionResponseToModel(invalidQuestionsResponse)
+    }
+
+    @Test(expected = RuntimeException::class)
+    fun `Throw exception if response's question is null`() {
+        val invalidQuestionResponse = QuestionResponse(
+            validQuestionResponse.category,
+            validQuestionResponse.type,
+            validQuestionResponse.difficulty,
+            null,
+            validQuestionResponse.correct_answer,
+            validQuestionResponse.incorrect_answers
+        )
+        val invalidQuestionsResponse = QuestionsResponse(null, listOf(invalidQuestionResponse))
+        questionServiceMapper.questionResponseToModel(invalidQuestionsResponse)
+    }
+
+    @Test(expected = RuntimeException::class)
+    fun `Throw exception if response's correct_answer is null`() {
+        val invalidQuestionResponse = QuestionResponse(
+            validQuestionResponse.category,
+            validQuestionResponse.type,
+            validQuestionResponse.difficulty,
+            validQuestionResponse.question,
+            null,
+            validQuestionResponse.incorrect_answers
+        )
+        val invalidQuestionsResponse = QuestionsResponse(null, listOf(invalidQuestionResponse))
+        questionServiceMapper.questionResponseToModel(invalidQuestionsResponse)
+    }
+
+    @Test(expected = RuntimeException::class)
+    fun `Throw exception if response's incorrect_answers is null`() {
+        val invalidQuestionResponse = QuestionResponse(
+            validQuestionResponse.category,
+            validQuestionResponse.type,
+            validQuestionResponse.difficulty,
+            validQuestionResponse.question,
+            validQuestionResponse.correct_answer,
+            null
+        )
+        val invalidQuestionsResponse = QuestionsResponse(null, listOf(invalidQuestionResponse))
+        questionServiceMapper.questionResponseToModel(invalidQuestionsResponse)
     }
 }
