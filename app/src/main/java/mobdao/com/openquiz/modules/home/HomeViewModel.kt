@@ -7,18 +7,19 @@ import mobdao.com.openquiz.data.utils.disposables.Disposable
 import mobdao.com.openquiz.models.Question
 import mobdao.com.openquiz.modules.base.BaseViewModel
 import mobdao.com.openquiz.utils.livedata.SingleLiveEvent
+import org.jetbrains.annotations.TestOnly
 import javax.inject.Inject
 
 class HomeViewModel @Inject constructor(
     private val userAuthRepository: UserAuthRepository,
-    private val openTriviaRepository: OpenTriviaRepository
+    private val openTriviaRepository: OpenTriviaRepository,
+    private var disposable: Disposable? = null
 ) : BaseViewModel() {
 
     val startQuizEvent: SingleLiveEvent<List<Question>> = SingleLiveEvent()
     val signOutEvent: SingleLiveEvent<Unit> = SingleLiveEvent()
 
     private var nOfQuestions = 10
-    private var disposable: Disposable? = null
 
     fun onStartQuizClicked() {
         showProgressBar()
@@ -27,10 +28,9 @@ class HomeViewModel @Inject constructor(
                 Callback({ questions ->
                     hideProgressBar()
                     startQuizEvent.postValue(questions)
-                }, { exception ->
-                    // TODO handle error
-                    exception?.printStackTrace()
+                }, {
                     hideProgressBar()
+                    genericErrorEvent.call()
                 })
             )
     }
@@ -44,5 +44,10 @@ class HomeViewModel @Inject constructor(
     override fun onCleared() {
         super.onCleared()
         disposable?.dispose()
+    }
+
+    @TestOnly
+    fun clear() {
+        onCleared()
     }
 }

@@ -17,6 +17,12 @@ abstract class BaseFragment : Fragment() {
         })
     }
 
+    protected fun setupGenericErrorObserver() = viewModel?.run {
+        setupObserver(genericErrorEvent to { _ ->
+            showDefaultErrorDialog()
+        })
+    }
+
     fun showDefaultErrorDialog() {
         DialogHelper.buildDialog(
             context ?: return,
