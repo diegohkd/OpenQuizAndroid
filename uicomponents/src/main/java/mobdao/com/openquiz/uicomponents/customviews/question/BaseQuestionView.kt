@@ -12,16 +12,7 @@ abstract class BaseQuestionView @JvmOverloads constructor(
 
     abstract var question: Question?
 
-    private val mutableAnswers = mutableListOf<String>()
-    protected val answers: List<String> = mutableAnswers
-        get() {
-            if (mutableAnswers.isEmpty()) {
-                question?.correctAnswer?.let { mutableAnswers.add(it) }
-                mutableAnswers.addAll(question?.incorrectAnswers.orEmpty())
-                mutableAnswers.shuffle()
-            }
-            return field
-        }
+    protected val answersOptions: List<String> by lazy { question?.getOptions().orEmpty() }
 
     abstract fun bind(question: Question, answerSelectedCallback: () -> Unit)
     abstract fun getSelectedAnswer(): String
