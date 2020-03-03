@@ -16,7 +16,8 @@ data class Question(
 ) : Parcelable {
 
     @IgnoredOnParcel
-    private var answeredOption: String? = null
+    var answeredOption: String? = null
+        private set
 
     fun answer(option: String): Boolean {
         if (option != correctAnswer && !incorrectAnswers.contains(option))
