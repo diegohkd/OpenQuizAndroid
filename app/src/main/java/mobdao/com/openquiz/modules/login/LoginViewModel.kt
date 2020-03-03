@@ -16,7 +16,6 @@ class LoginViewModel @Inject constructor(
 ) : BaseViewModel() {
 
     val showHomeScreenEvent: SingleLiveEvent<Unit> = SingleLiveEvent()
-    val errorEvent: SingleLiveEvent<Unit> = SingleLiveEvent()
     val showGoogleSignInEvent: SingleLiveEvent<Unit> = SingleLiveEvent()
 
     fun onGoogleSignInClicked() {
@@ -60,7 +59,7 @@ class LoginViewModel @Inject constructor(
 
     private fun onError() {
         hideProgressBar()
-        errorEvent.call()
+        genericErrorEvent.call()
     }
 
     //endregion

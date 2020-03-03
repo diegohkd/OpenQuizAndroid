@@ -12,12 +12,12 @@ class QuestionServiceMapperImpl @Inject constructor(): QuestionServiceMapper {
         questionsResponse.results.map {
             with(it) {
                 Question(
-                    category = category,
-                    type = type,
-                    difficulty = difficulty,
-                    question = question,
-                    correctAnswer = correct_answer,
-                    incorrectAnswers = incorrect_answers
+                    category = category ?: throw RuntimeException("category can not be null"),
+                    type = type ?: throw RuntimeException("type can not be null"),
+                    difficulty = difficulty ?: throw RuntimeException("difficulty can not be null"),
+                    question = question ?: throw RuntimeException("question can not be null"),
+                    correctAnswer = correct_answer ?: throw RuntimeException("correctAnswer can not be null"),
+                    incorrectAnswers = incorrect_answers ?: throw RuntimeException("incorrectAnswers can not be null")
                 )
             }
         }

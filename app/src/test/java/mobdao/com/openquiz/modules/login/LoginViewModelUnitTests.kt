@@ -28,7 +28,7 @@ class LoginViewModelUnitTests {
     @MockK
     private lateinit var showProgressBarObserver: Observer<Boolean>
     @MockK
-    private lateinit var errorObserver: Observer<Unit>
+    private lateinit var genericErrorObserver: Observer<Unit>
     @MockK
     private lateinit var showHomeScreenObserver: Observer<Unit>
     @MockK
@@ -52,7 +52,7 @@ class LoginViewModelUnitTests {
 
         loginViewModel.showGoogleSignInEvent.observeForever(showGoogleSignInObserver)
         loginViewModel.showProgressBarEvent.observeForever(showProgressBarObserver)
-        loginViewModel.errorEvent.observeForever(errorObserver)
+        loginViewModel.genericErrorEvent.observeForever(genericErrorObserver)
         loginViewModel.showHomeScreenEvent.observeForever(showHomeScreenObserver)
     }
 
@@ -81,7 +81,7 @@ class LoginViewModelUnitTests {
     fun `Trigger error event when back from google sign in with unknown requestCode`() {
         loginViewModel.onActivityResult(unknownRequestCode, unexpectedResultCode, intent)
 
-        verify { errorObserver.onChanged(null) }
+        verify { genericErrorObserver.onChanged(null) }
     }
 
     @Test
@@ -95,7 +95,7 @@ class LoginViewModelUnitTests {
     fun `Trigger error event when back from google sign in with resultCode other than RESULT_OK`() {
         loginViewModel.onActivityResult(RC_SIGN_IN, unexpectedResultCode, intent)
 
-        verify { errorObserver.onChanged(null) }
+        verify { genericErrorObserver.onChanged(null) }
     }
 
     @Test

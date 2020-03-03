@@ -36,30 +36,14 @@ class MultipleChoiceQuestionView @JvmOverloads constructor(
     override fun bind(question: Question, answerSelectedCallback: () -> Unit) {
         this.question = question
 
-        questionTextView.text = question.question.orEmpty().fromHtml()
+        questionTextView.text = question.question.fromHtml()
+        bindAnswersOptions()
 
-        answers.forEach { answer ->
-            val radioButton = RadioButton(context)
-            radioButton.layoutParams = RadioGroup.LayoutParams(
-                RadioGroup.LayoutParams.MATCH_PARENT,
-                RadioGroup.LayoutParams.WRAP_CONTENT
-            ).apply {
-                updateMargins(
-                    top = DimensionHelper.convertDpToPixel(
-                        16f,
-                        context
-                    ).toInt()
-                )
-            }
-            radioButton.text = answer.fromHtml()
-            radioGroup.addView(radioButton)
-        }
-
-        handleAnswerSelection(answerSelectedCallback)
+        addAnswerSelectionListener(answerSelectedCallback)
     }
 
     override fun getSelectedAnswer(): String =
-        answers.getOrNull(selectedAnswerIndex()).orEmpty()
+        answersOptions.getOrNull(selectedAnswerIndex()).orEmpty()
 
     override fun showCorrectAnswer() {
         radioGroup.children.forEach {
@@ -69,14 +53,37 @@ class MultipleChoiceQuestionView @JvmOverloads constructor(
         selectedRadioButton?.setTextColor(RED)
 
         val correctAnswerIndex =
-            answers.indexOfFirstOrNull { it == question?.correctAnswer } ?: return
+            answersOptions.indexOfFirstOrNull { it == question?.correctAnswer } ?: return
         val correctRadioButton = radioGroup.getChildAt(correctAnswerIndex) as? RadioButton ?: return
         correctRadioButton.setTextColor(GREEN)
     }
 
     //region private
 
-    private fun handleAnswerSelection(answerSelectedCallback: () -> Unit) {
+    private fun bindAnswersOptions() {
+        answersOptions.forEach { answer ->
+            addRadioButtonForAnswerOption(answer)
+        }
+    }
+
+    private fun addRadioButtonForAnswerOption(option: String) {
+        val radioButton = RadioButton(context)
+        radioButton.layoutParams = RadioGroup.LayoutParams(
+            RadioGroup.LayoutParams.MATCH_PARENT,
+            RadioGroup.LayoutParams.WRAP_CONTENT
+        ).apply {
+            updateMargins(
+                top = DimensionHelper.convertDpToPixel(
+                    16f,
+                    context
+                ).toInt()
+            )
+        }
+        radioButton.text = option.fromHtml()
+        radioGroup.addView(radioButton)
+    }
+
+    private fun addAnswerSelectionListener(answerSelectedCallback: () -> Unit) {
         radioGroup.setOnCheckedChangeListener { _, _ ->
             answerSelectedCallback()
         }
