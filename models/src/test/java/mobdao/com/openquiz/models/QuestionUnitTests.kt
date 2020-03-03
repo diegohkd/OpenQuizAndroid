@@ -35,21 +35,21 @@ class QuestionUnitTests {
     }
 
     @Test
-    fun `when answering with correct option should return true`() {
+    fun `When answering with correct option should return true`() {
         val result = question.answer(correctAnswer)
 
         assertTrue(result)
     }
 
     @Test
-    fun `when answering with incorrect option should return false`() {
+    fun `When answering with incorrect option should return false`() {
         val result = question.answer(incorrectAnswer)
 
         assertFalse(result)
     }
 
     @Test(expected = IllegalArgumentException::class)
-    fun `when answering with invalid option should throw exception`() {
+    fun `When answering with invalid option should throw exception`() {
         question.answer("INVALID")
     }
 }
