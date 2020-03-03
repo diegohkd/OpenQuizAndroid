@@ -62,19 +62,19 @@ class HomeFragment : BaseFragment() {
         }
     }
 
-    private fun setupObservers() {
+    private fun setupObservers() = with(viewModel) {
         setupProgressBarObserver(progressBar)
-        viewModel.run {
-            setupSingleEventObserver(signOutEvent to {
-                findNavController().navigate(R.id.action_homeFragment_to_loginFragment)
-            })
+        setupGenericErrorObserver()
 
-            setupObserver(startQuizEvent to { questions ->
-                val action =
-                    HomeFragmentDirections.actionHomeFragmentToQuizFragment(questions.toTypedArray())
-                findNavController().navigate(action)
-            })
-        }
+        setupSingleEventObserver(signOutEvent to {
+            findNavController().navigate(R.id.action_homeFragment_to_loginFragment)
+        })
+
+        setupObserver(startQuizEvent to { questions ->
+            val action =
+                HomeFragmentDirections.actionHomeFragmentToQuizFragment(questions.toTypedArray())
+            findNavController().navigate(action)
+        })
     }
 
     //endregion

@@ -17,6 +17,7 @@ import mobdao.com.openquiz.uicomponents.customviews.question.MultipleChoiceQuest
 import mobdao.com.openquiz.uicomponents.customviews.question.TrueFalseQuestionView
 import mobdao.com.openquiz.utils.constants.IntentConstants.QUESTION
 import mobdao.com.openquiz.utils.extensions.gone
+import mobdao.com.openquiz.utils.extensions.setupSingleEventObserver
 import mobdao.com.openquiz.utils.extensions.sharedViewModel
 import mobdao.com.openquiz.utils.extensions.visible
 import javax.inject.Inject
@@ -43,6 +44,7 @@ class QuestionFragment : BaseFragment() {
         setupInjections()
         handleArguments()
         setupView()
+        setupObservers()
     }
 
     //endregion
@@ -63,17 +65,25 @@ class QuestionFragment : BaseFragment() {
 
     private fun setupView() {
         confirmButton.setOnClickListener {
-            questionView?.showCorrectAnswer()
-            confirmButton.gone()
-            nextButton.visible()
-        }
-
-        nextButton.setOnClickListener {
             questionView?.run {
                 val question = question ?: return@setOnClickListener
                 val answer = getSelectedAnswer()
-                viewModel.onNextClicked(question, answer)
+                viewModel.onConfirmAnswerClicked(question, answer)
             }
+        }
+
+        nextButton.setOnClickListener {
+            viewModel.onNextClicked()
+        }
+    }
+
+    private fun setupObservers() = with(viewModel) {
+        questionView?.question?.let(::getShowCorrectAnswerEvent)?.let { showCorrectAnswerEvent ->
+            setupSingleEventObserver(showCorrectAnswerEvent to {
+                confirmButton.gone()
+                nextButton.visible()
+                questionView?.showCorrectAnswer()
+            })
         }
     }
 
