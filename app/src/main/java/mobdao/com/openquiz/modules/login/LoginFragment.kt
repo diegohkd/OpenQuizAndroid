@@ -72,12 +72,9 @@ class LoginFragment : BaseFragment() {
 
     private fun setupObservers() = with(viewModel) {
         setupProgressBarObserver(progressBar)
+        setupGenericErrorObserver()
         setupSingleEventObserver(showHomeScreenEvent to {
             findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
-        })
-
-        setupSingleEventObserver(errorEvent to {
-            showDefaultErrorDialog()
         })
 
         setupSingleEventObserver(showGoogleSignInEvent to {

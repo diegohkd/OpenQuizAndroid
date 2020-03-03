@@ -10,8 +10,8 @@ import androidx.navigation.fragment.navArgs
 import kotlinx.android.synthetic.main.fragment_quiz.*
 import mobdao.com.openquiz.R
 import mobdao.com.openquiz.di.components.DaggerQuizComponent
+import mobdao.com.openquiz.models.Game
 import mobdao.com.openquiz.modules.base.BaseFragment
-import mobdao.com.openquiz.modules.quiz.resultsreport.ResultsReportFragmentDirections
 import mobdao.com.openquiz.uicomponents.adapters.QuestionsPagerAdapter
 import mobdao.com.openquiz.utils.extensions.setupObserver
 import mobdao.com.openquiz.utils.extensions.setupSingleEventObserver
@@ -43,7 +43,7 @@ class QuizFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         setupInjections()
         setupObservers()
-        viewModel.init(args.questions.toList())
+        initViewModel()
     }
 
     //endregion
@@ -58,7 +58,7 @@ class QuizFragment : BaseFragment() {
 
     private fun setupObservers() = with(viewModel) {
         setupObserver(questionsLiveData to { questions ->
-            fragmentManager?.let { fm ->
+            parentFragmentManager.let { fm ->
                 // TODO inject adapter
                 viewPager.adapter = QuestionsPagerAdapter(fm, fragmentFactory, questions)
             }
@@ -72,6 +72,11 @@ class QuizFragment : BaseFragment() {
             val action = QuizFragmentDirections.actionQuizFragmentToResultsReportFragment(resultsReport)
             findNavController().navigate(action)
         })
+    }
+
+    private fun initViewModel() {
+        val questions = args.questions.toList()
+        viewModel.init(Game(questions), questions)
     }
 
     //endregion

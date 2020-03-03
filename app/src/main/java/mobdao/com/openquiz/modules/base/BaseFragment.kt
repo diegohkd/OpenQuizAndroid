@@ -17,6 +17,14 @@ abstract class BaseFragment : Fragment() {
         })
     }
 
+    @Suppress("RedundantLambdaArrow")
+    protected fun setupGenericErrorObserver() = viewModel?.run {
+        setupObserver(genericErrorEvent to { _ ->
+            showDefaultErrorDialog()
+        })
+    }
+
+    @Suppress("MemberVisibilityCanBePrivate")
     fun showDefaultErrorDialog() {
         DialogHelper.buildDialog(
             context ?: return,

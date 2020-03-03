@@ -5,7 +5,6 @@ import android.content.Intent
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.common.api.ApiException
-import com.google.android.gms.tasks.Task
 import mobdao.com.openquiz.data.repositories.userauthrepository.UserAuthRepository
 import mobdao.com.openquiz.modules.base.BaseViewModel
 import mobdao.com.openquiz.utils.constants.RequestCodeConstants
@@ -17,7 +16,6 @@ class LoginViewModel @Inject constructor(
 ) : BaseViewModel() {
 
     val showHomeScreenEvent: SingleLiveEvent<Unit> = SingleLiveEvent()
-    val errorEvent: SingleLiveEvent<Unit> = SingleLiveEvent()
     val showGoogleSignInEvent: SingleLiveEvent<Unit> = SingleLiveEvent()
 
     fun onGoogleSignInClicked() {
@@ -27,37 +25,41 @@ class LoginViewModel @Inject constructor(
 
     fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == RequestCodeConstants.RC_SIGN_IN && resultCode == Activity.RESULT_OK) {
-            onBackFromGoogleSignIn(GoogleSignIn.getSignedInAccountFromIntent(data))
+            onBackFromGoogleSignIn(data)
+        } else {
+            onError()
         }
     }
 
     //region private
 
-    private fun onBackFromGoogleSignIn(googleSignInTask: Task<GoogleSignInAccount>) {
-        try {
+    private fun onBackFromGoogleSignIn(data: Intent?) {
+        val account = try {
+            val googleSignInTask = GoogleSignIn.getSignedInAccountFromIntent(data)
             googleSignInTask.getResult(ApiException::class.java)
         } catch (exception: ApiException) {
-            hideProgressBar()
-            errorEvent.call()
             null
-        }?.apply {
-            loginOnFirebase(this)
         }
+        account?.let(::loginOnFirebase) ?: onError()
     }
 
     private fun loginOnFirebase(account: GoogleSignInAccount) {
-        userAuthRepository.loginOnFirebase(
+            userAuthRepository.loginOnFirebase(
             account = account,
             success = {
                 hideProgressBar()
                 showHomeScreenEvent.call()
             },
             failure = { exception ->
-                hideProgressBar()
                 exception?.printStackTrace()
-                errorEvent.call()
+                onError()
             }
         )
+    }
+
+    private fun onError() {
+        hideProgressBar()
+        genericErrorEvent.call()
     }
 
     //endregion
