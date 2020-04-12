@@ -27,11 +27,11 @@ class OpenTriviaRepositoryImpl @Inject constructor(
                 Single.just(sessionToken.token.orEmpty())
             }
 
-    override fun fetchQuestions(nOfQuestions: Int): Single<List<Question>> =
-        retrofit.create(QuestionsService::class.java)
+    override fun fetchQuestions(nOfQuestions: Int): Single<List<Question>> {
+        val single = retrofit.create(QuestionsService::class.java)
             .fetchQuestions(nOfQuestions)
             .toSingle()
-            .flatMap { response ->
+            return single.flatMap { response ->
                 if (response.response_code != QuestionsResponseCode.SUCCESS.code) {
                     Exceptions.propagate(
                         QuestionsException(
@@ -42,4 +42,5 @@ class OpenTriviaRepositoryImpl @Inject constructor(
                 }
                 Single.just(questionServiceMapper.questionResponseToModel(response))
             }
+    }
 }
