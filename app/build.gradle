@@ -20,7 +20,7 @@ android {
         }
     }
 
-    buildToolsVersion "29.0.0"
+    buildToolsVersion "29.0.3"
     defaultConfig {
         applicationId "mobdao.com.openquiz"
         minSdkVersion 21
@@ -58,7 +58,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     // Test
-    testApi 'junit:junit:4.12'
+    testApi 'junit:junit:4.13'
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     testApi "com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0"
