@@ -13,7 +13,12 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+    }
 
+
+
+    override fun onStart() {
+        super.onStart()
         val initialScreenType = intent.extras?.getSerializable(INITIAL_SCREEN) as? InitialScreenType
         val navController = findNavController(R.id.nav_host_fragment)
         if (navController.currentDestination?.id != R.id.mainFragment) {
