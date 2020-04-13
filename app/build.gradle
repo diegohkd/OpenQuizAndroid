@@ -66,6 +66,7 @@ dependencies {
     testApi "com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0"
     testApi 'androidx.arch.core:core-testing:2.1.0'
     testApi "io.mockk:mockk:1.9.3"
+    debugImplementation 'androidx.fragment:fragment-testing:1.2.4'
 
     // Modules dependencies
     implementation project(path: ':data')

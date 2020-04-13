@@ -22,10 +22,10 @@ import mobdao.com.openquiz.utils.extensions.sharedViewModel
 import mobdao.com.openquiz.utils.extensions.visible
 import javax.inject.Inject
 
-class QuestionFragment : BaseFragment() {
+open class QuestionFragment : BaseFragment() {
 
     @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
+    open lateinit var viewModelFactory: ViewModelProvider.Factory
 
     override val viewModel: QuizViewModel by sharedViewModel { viewModelFactory }
     private var questionView: BaseQuestionView? = null
