@@ -5,10 +5,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 
 interface UserAuthRepository {
     fun isUserLoggedIn(): LiveData<Boolean>
-    fun loginOnFirebase(
-        account: GoogleSignInAccount,
-        success: () -> Unit,
-        failure: (Exception?) -> Unit
-    )
+    suspend fun loginOnFirebase(account: GoogleSignInAccount): Boolean
     fun logout()
 }
