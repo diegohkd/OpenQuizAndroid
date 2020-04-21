@@ -46,18 +46,19 @@ class LoginViewModel @Inject constructor(
     }
 
     private fun loginOnFirebase(account: GoogleSignInAccount) = viewModelScope.launch {
-        val success = userAuthRepository.loginOnFirebase(account)
-        if (success) {
+        runCatching {
+            userAuthRepository.loginOnFirebase(account)
+        }.onSuccess {
             hideProgressBar()
             showHomeScreenEvent.call()
-        } else {
+        }.onFailure {
             onError()
         }
     }
 
     private fun onError() {
         hideProgressBar()
-        genericErrorEvent.call()
+        genericErrorEvent.postValue(Unit)
     }
 
     //endregion

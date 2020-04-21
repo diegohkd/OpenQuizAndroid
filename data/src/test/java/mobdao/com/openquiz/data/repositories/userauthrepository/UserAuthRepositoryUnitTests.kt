@@ -77,7 +77,7 @@ class UserAuthRepositoryUnitTests {
     fun `Returns success when succeeded to login on Firebase`() {
         setupAuthCallWithSuccessCallback()
 
-        repository.loginOnFirebase(googleSignInAccount, successCallback, failureCallback)
+        repository.loginOnFirebase(googleSignInAccount)
 
         verify(successCallback)()
     }

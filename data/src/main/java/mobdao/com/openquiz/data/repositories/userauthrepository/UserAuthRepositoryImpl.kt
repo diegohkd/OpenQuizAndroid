@@ -19,10 +19,9 @@ class UserAuthRepositoryImpl @Inject constructor(
         postValue(firebaseAuth.getCurrentUser() != null)
     }
 
-    override suspend fun loginOnFirebase(account: GoogleSignInAccount): Boolean {
+    override suspend fun loginOnFirebase(account: GoogleSignInAccount) {
         val credential = googleAuthProvider.getCredential(account.idToken)
         firebaseAuth.signInWithCredential(credential).await()
-        return firebaseAuth.getCurrentUser() != null
     }
 
     override fun logout() {
