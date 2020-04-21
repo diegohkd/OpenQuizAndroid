@@ -29,5 +29,5 @@ internal fun <T> Call<T>.runService(
     })
 }
 
-internal fun <T> Call<T>.toSingle(): Single<T> =
+fun <T> Call<T>.toSingle(): Single<T> =
     SingleSingle(ActionCallAdapter(this))
