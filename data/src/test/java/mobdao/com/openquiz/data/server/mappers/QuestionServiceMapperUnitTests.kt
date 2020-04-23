@@ -8,10 +8,7 @@ import mobdao.com.openquiz.models.Difficulty
 import mobdao.com.openquiz.models.QuestionType
 import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.mockito.junit.MockitoJUnitRunner
 
-@RunWith(MockitoJUnitRunner::class)
 class QuestionServiceMapperUnitTests {
 
     private lateinit var questionServiceMapper: QuestionServiceMapper
