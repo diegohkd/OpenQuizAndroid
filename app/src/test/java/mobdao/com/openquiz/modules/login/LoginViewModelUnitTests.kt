@@ -10,33 +10,48 @@ import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import io.mockk.*
 import io.mockk.impl.annotations.MockK
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runBlockingTest
+import mobdao.com.CoroutineTestRule
 import mobdao.com.openquiz.data.repositories.userauthrepository.UserAuthRepository
 import mobdao.com.openquiz.utils.constants.RequestCodeConstants.RC_SIGN_IN
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
+@ExperimentalCoroutinesApi
 class LoginViewModelUnitTests {
 
     @get:Rule
     val taskExecutorRule = InstantTaskExecutorRule()
 
+    @get:Rule
+    val coroutineTestRule = CoroutineTestRule()
+
     @MockK
     private lateinit var userAuthRepository: UserAuthRepository
+
     @MockK
     private lateinit var showGoogleSignInObserver: Observer<Unit>
+
     @MockK
     private lateinit var showProgressBarObserver: Observer<Boolean>
+
     @MockK
     private lateinit var genericErrorObserver: Observer<Unit>
+
     @MockK
     private lateinit var showHomeScreenObserver: Observer<Unit>
+
     @MockK
     private lateinit var intent: Intent
+
     @MockK
     private lateinit var googleSignInTask: Task<GoogleSignInAccount>
+
     @MockK
     private lateinit var apiException: ApiException
+
     @MockK
     private lateinit var googleSignInAccount: GoogleSignInAccount
 
@@ -81,7 +96,7 @@ class LoginViewModelUnitTests {
     fun `Trigger error event when back from google sign in with unknown requestCode`() {
         loginViewModel.onActivityResult(unknownRequestCode, unexpectedResultCode, intent)
 
-        verify { genericErrorObserver.onChanged(null) }
+        verify { genericErrorObserver.onChanged(Unit) }
     }
 
     @Test
@@ -95,7 +110,7 @@ class LoginViewModelUnitTests {
     fun `Trigger error event when back from google sign in with resultCode other than RESULT_OK`() {
         loginViewModel.onActivityResult(RC_SIGN_IN, unexpectedResultCode, intent)
 
-        verify { genericErrorObserver.onChanged(null) }
+        verify { genericErrorObserver.onChanged(Unit) }
     }
 
     @Test
@@ -112,12 +127,12 @@ class LoginViewModelUnitTests {
     }
 
     @Test
-    fun `Delegate login to repository when valid google account is obtained`() {
+    fun `Delegate login to repository when valid google account is obtained`() = runBlockingTest {
         setupGoogleSignInAccount()
 
         loginViewModel.onActivityResult(RC_SIGN_IN, Activity.RESULT_OK, intent)
 
-        verify(exactly = 1) { userAuthRepository.loginOnFirebase(any(), any(), any()) }
+        coVerify(exactly = 1) { userAuthRepository.loginOnFirebase(any()) }
     }
 
     @Test
@@ -156,15 +171,11 @@ class LoginViewModelUnitTests {
 
     private fun setupSuccessSignIn() {
         setupGoogleSignInAccount()
-        every { userAuthRepository.loginOnFirebase(any(), any(), any()) }.answers {
-            secondArg<() -> Unit>().invoke()
-        }
+        coEvery { userAuthRepository.loginOnFirebase(any()) }.returns(Unit)
     }
 
     private fun setupFailureSignIn() {
         setupGoogleSignInAccount()
-        every { userAuthRepository.loginOnFirebase(any(), any(), any()) }.answers {
-            thirdArg<(Exception?) -> Unit>().invoke(null)
-        }
+        coEvery { userAuthRepository.loginOnFirebase(any()) }.throws(Exception())
     }
 }

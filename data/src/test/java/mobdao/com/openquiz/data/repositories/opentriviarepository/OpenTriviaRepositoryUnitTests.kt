@@ -12,7 +12,6 @@ import mobdao.com.openquiz.data.utils.exceptions.QuestionsException
 import mobdao.com.openquiz.models.Question
 import org.junit.Before
 import org.junit.Test
-import retrofit2.Call
 import retrofit2.Retrofit
 
 @ExperimentalCoroutinesApi
@@ -26,9 +25,6 @@ class OpenTriviaRepositoryUnitTests {
 
     @MockK
     private lateinit var service: QuestionsService
-
-    @MockK
-    private lateinit var call: Call<QuestionsResponse>
 
     @MockK
     private lateinit var questionResponse: QuestionsResponse
