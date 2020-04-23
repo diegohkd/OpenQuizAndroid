@@ -11,11 +11,7 @@ import mobdao.com.openquiz.data.repositories.userauthrepository.UserAuthReposito
 import mobdao.com.openquiz.data.server.mappers.QuestionServiceMapper
 import mobdao.com.openquiz.data.server.responses.QuestionsResponse
 import mobdao.com.openquiz.data.server.webservices.QuestionsService
-import mobdao.com.openquiz.data.utils.callbacks.Callback
-import mobdao.com.openquiz.data.utils.disposables.Disposable
 import mobdao.com.openquiz.data.utils.enums.QuestionsResponseCode
-import mobdao.com.openquiz.data.utils.extensions.toSingle
-import mobdao.com.openquiz.data.utils.singles.Single
 import mobdao.com.openquiz.models.Category
 import mobdao.com.openquiz.models.Difficulty
 import mobdao.com.openquiz.models.Question
@@ -23,7 +19,6 @@ import mobdao.com.openquiz.models.QuestionType
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import retrofit2.Call
 import retrofit2.Retrofit
 
 class HomeViewModelTest {
@@ -41,25 +36,10 @@ class HomeViewModelTest {
     private lateinit var service: QuestionsService
 
     @MockK
-    private lateinit var call: Call<QuestionsResponse>
-
-    @MockK
-    private lateinit var single: Single<QuestionsResponse>
-
-    @MockK
-    private lateinit var singleMap: Single<List<Question>>
-
-    @MockK
-    private lateinit var singleMappedResponse: Single<List<Question>>
-
-    @MockK
     private lateinit var questionResponse: QuestionsResponse
 
     @MockK
     private lateinit var startQuizObserver: Observer<List<Question>>
-
-    @MockK
-    private lateinit var disposable: Disposable
 
     private val nOfQuestions = 10
     private val questions = listOf(
@@ -88,8 +68,6 @@ class HomeViewModelTest {
     @Before
     fun setup() {
         MockKAnnotations.init(this, relaxUnitFun = true)
-        mockkStatic("mobdao.com.openquiz.data.utils.extensions.CallKt")
-        mockkObject(Single)
         userAuthRepository = UserAuthRepositoryImpl(mockk(), mockk())
         openTriviaRepository = OpenTriviaRepositoryImpl(retrofit, questionServiceMapper)
         homeViewModel = HomeViewModel(userAuthRepository, openTriviaRepository)
@@ -109,19 +87,9 @@ class HomeViewModelTest {
 
     private fun setupRequestWithSuccessResponseCode() {
         every { retrofit.create(QuestionsService::class.java) }.returns(service)
-        every { service.fetchQuestions(nOfQuestions) }.returns(call)
-        every { call.toSingle() }.returns(single)
-        every { single.flatMap<List<Question>>(any()) }.answers {
-            firstArg<(QuestionsResponse) -> Single<List<Question>>>().invoke(questionResponse)
-            singleMap
-        }
-        every { singleMap.subscribeBy(any()) }.answers {
-            firstArg<Callback<List<Question>>>().success?.invoke(questions)
-            disposable
-        }
+        coEvery { service.fetchQuestions(nOfQuestions) }.returns(questionResponse)
         every { questionResponse.response_code }.returns(QuestionsResponseCode.SUCCESS.code)
         every { questionServiceMapper.questionResponseToModel(any()) } returns questions
-        every { Single.just<List<Question>>(any()) } returns singleMappedResponse
     }
 
     // endregion

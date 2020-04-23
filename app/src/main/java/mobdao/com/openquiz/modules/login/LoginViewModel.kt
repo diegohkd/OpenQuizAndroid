@@ -2,9 +2,11 @@ package mobdao.com.openquiz.modules.login
 
 import android.app.Activity
 import android.content.Intent
+import androidx.lifecycle.viewModelScope
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.common.api.ApiException
+import kotlinx.coroutines.launch
 import mobdao.com.openquiz.data.repositories.userauthrepository.UserAuthRepository
 import mobdao.com.openquiz.modules.base.BaseViewModel
 import mobdao.com.openquiz.utils.constants.RequestCodeConstants
@@ -43,23 +45,20 @@ class LoginViewModel @Inject constructor(
         account?.let(::loginOnFirebase) ?: onError()
     }
 
-    private fun loginOnFirebase(account: GoogleSignInAccount) {
-            userAuthRepository.loginOnFirebase(
-            account = account,
-            success = {
-                hideProgressBar()
-                showHomeScreenEvent.call()
-            },
-            failure = { exception ->
-                exception?.printStackTrace()
-                onError()
-            }
-        )
+    private fun loginOnFirebase(account: GoogleSignInAccount) = viewModelScope.launch {
+        runCatching {
+            userAuthRepository.loginOnFirebase(account)
+        }.onSuccess {
+            hideProgressBar()
+            showHomeScreenEvent.call()
+        }.onFailure {
+            onError()
+        }
     }
 
     private fun onError() {
         hideProgressBar()
-        genericErrorEvent.call()
+        genericErrorEvent.postValue(Unit)
     }
 
     //endregion

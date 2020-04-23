@@ -2,15 +2,15 @@ package mobdao.com.openquiz.data.repositories.userauthrepository
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseUser
-import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.doAnswer
-import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.whenever
+import io.mockk.*
+import io.mockk.impl.annotations.MockK
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.test.runBlockingTest
 import mobdao.com.openquiz.data.utils.wrappers.firebaseauth.FirebaseAuth
 import mobdao.com.openquiz.data.utils.wrappers.googleauthprovider.GoogleAuthProvider
 import mobdao.com.openquiz.utils.extensions.orFalse
@@ -19,45 +19,46 @@ import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.mockito.Mock
-import org.mockito.junit.MockitoJUnitRunner
 
-@RunWith(MockitoJUnitRunner::class)
+@ExperimentalCoroutinesApi
 class UserAuthRepositoryUnitTests {
 
     @get:Rule
     val taskExecutorRule = InstantTaskExecutorRule()
 
-    @Mock
+    @MockK
     private lateinit var currentUser: FirebaseUser
-    @Mock
+
+    @MockK
     private lateinit var firebaseAuth: FirebaseAuth
-    @Mock
-    private lateinit var taskCallback: Task<Task<AuthResult>>
-    @Mock
+
+    @MockK
     private lateinit var signInTask: Task<AuthResult>
-    @Mock
+
+    @MockK
+    private lateinit var authResult: AuthResult
+
+    @MockK
     private lateinit var googleSignInAccount: GoogleSignInAccount
-    @Mock
-    private lateinit var successCallback: () -> Unit
-    @Mock
-    private lateinit var failureCallback: (Exception?) -> Unit
-    @Mock
+
+    @MockK
     private lateinit var authCredential: AuthCredential
-    @Mock
+
+    @MockK
     private lateinit var googleAuthProvider: GoogleAuthProvider
 
     private lateinit var repository: UserAuthRepository
 
     @Before
     fun setup() {
+        MockKAnnotations.init(this, relaxUnitFun = true)
+        mockkStatic("kotlinx.coroutines.tasks.TasksKt")
         repository = UserAuthRepositoryImpl(firebaseAuth, googleAuthProvider)
     }
 
     @Test
     fun `Returns true when user is logged in`() {
-        whenever(firebaseAuth.getCurrentUser()).thenReturn(currentUser)
+        every { firebaseAuth.getCurrentUser() }.returns(currentUser)
 
         val result = repository.isUserLoggedIn()
 
@@ -66,7 +67,7 @@ class UserAuthRepositoryUnitTests {
 
     @Test
     fun `Returns false when user is not logged in`() {
-        whenever(firebaseAuth.getCurrentUser()).thenReturn(null)
+        every { firebaseAuth.getCurrentUser() }.returns(null)
 
         val result = repository.isUserLoggedIn()
 
@@ -74,52 +75,56 @@ class UserAuthRepositoryUnitTests {
     }
 
     @Test
-    fun `Returns success when succeeded to login on Firebase`() {
+    fun `Returns success when succeeded to login on Firebase`() = runBlockingTest {
         setupAuthCallWithSuccessCallback()
 
-        repository.loginOnFirebase(googleSignInAccount, successCallback, failureCallback)
+        var result = false
+        runCatching {
+            repository.loginOnFirebase(googleSignInAccount)
+        }.onSuccess {
+            result = true
+        }
 
-        verify(successCallback)()
+        assert(result)
     }
 
     @Test
-    fun `Returns failure when failed to login on Firebase`() {
+    fun `Returns failure when failed to login on Firebase`() = runBlockingTest {
         setupAuthCallWithFailureCallback()
 
-        repository.loginOnFirebase(googleSignInAccount, successCallback, failureCallback)
+        var result = true
+        runCatching {
+            repository.loginOnFirebase(googleSignInAccount)
+        }.onFailure {
+            result = false
+        }
 
-        verify(failureCallback)(null)
+        assert(!result)
     }
 
     @Test
     fun `Delegate sign out to Firebase when user signs out`() {
         repository.logout()
 
-        verify(firebaseAuth).signOut()
+        verify(exactly = 1) { firebaseAuth.signOut() }
     }
 
     // region private
 
     private fun setupAuthCallWithSuccessCallback() {
         defaultAuthCallSetup()
-        whenever(taskCallback.isSuccessful).thenReturn(true)
+        coEvery { signInTask.await() } returns authResult
     }
 
     private fun setupAuthCallWithFailureCallback() {
         defaultAuthCallSetup()
-        whenever(taskCallback.exception).thenReturn(null)
-        whenever(taskCallback.isSuccessful).thenReturn(false)
+        coEvery { signInTask.await() } throws Exception()
     }
 
     private fun defaultAuthCallSetup() {
-        whenever(googleSignInAccount.idToken).thenReturn("")
-        whenever(googleAuthProvider.getCredential(any())).thenReturn(authCredential)
-        whenever(firebaseAuth.signInWithCredential(authCredential)).thenReturn(signInTask)
-        doAnswer {
-            val callback: OnCompleteListener<Task<AuthResult>> = it.getArgument(0)
-            callback.onComplete(taskCallback)
-            taskCallback
-        }.whenever(signInTask).addOnCompleteListener(any())
+        every { googleSignInAccount.idToken }.returns("")
+        every { googleAuthProvider.getCredential(any()) }.returns(authCredential)
+        every { firebaseAuth.signInWithCredential(authCredential) }.returns(signInTask)
     }
 
     // endregion

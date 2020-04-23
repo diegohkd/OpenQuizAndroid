@@ -2,37 +2,30 @@ package mobdao.com.openquiz.data.repositories.opentriviarepository
 
 import io.mockk.*
 import io.mockk.impl.annotations.MockK
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runBlockingTest
 import mobdao.com.openquiz.data.server.mappers.QuestionServiceMapper
 import mobdao.com.openquiz.data.server.responses.QuestionsResponse
 import mobdao.com.openquiz.data.server.webservices.QuestionsService
 import mobdao.com.openquiz.data.utils.enums.QuestionsResponseCode
-import mobdao.com.openquiz.data.utils.extensions.toSingle
-import mobdao.com.openquiz.data.utils.singles.Single
+import mobdao.com.openquiz.data.utils.exceptions.QuestionsException
 import mobdao.com.openquiz.models.Question
 import org.junit.Before
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.mockito.junit.MockitoJUnitRunner
-import retrofit2.Call
 import retrofit2.Retrofit
 
-@RunWith(MockitoJUnitRunner::class)
+@ExperimentalCoroutinesApi
 class OpenTriviaRepositoryUnitTests {
 
     @MockK
     private lateinit var retrofit: Retrofit
+
     @MockK
     private lateinit var questionServiceMapper: QuestionServiceMapper
+
     @MockK
     private lateinit var service: QuestionsService
-    @MockK
-    private lateinit var call: Call<QuestionsResponse>
-    @MockK
-    private lateinit var single: Single<QuestionsResponse>
-    @MockK
-    private lateinit var singleMap: Single<List<Question>>
-    @MockK
-    private lateinit var singleMappedResponse: Single<List<Question>>
+
     @MockK
     private lateinit var questionResponse: QuestionsResponse
 
@@ -43,28 +36,28 @@ class OpenTriviaRepositoryUnitTests {
     @Before
     fun setup() {
         MockKAnnotations.init(this, relaxUnitFun = true)
-        mockkStatic("mobdao.com.openquiz.data.utils.extensions.CallKt")
         openTriviaRepository = OpenTriviaRepositoryImpl(retrofit, questionServiceMapper)
     }
 
     @Test
-    fun `Passed correct number of questions to questions service`() {
-        setupServiceCall()
+    fun `Passed correct number of questions to questions service`() = runBlockingTest {
+        setupRequestWithSuccessResponseCode()
 
         openTriviaRepository.fetchQuestions(nOfQuestions)
 
-        verify(exactly = 1) { service.fetchQuestions(nOfQuestions) }
+        coVerify(exactly = 1) { service.fetchQuestions(nOfQuestions) }
     }
 
-    @Test(expected = RuntimeException::class)
-    fun `Propagate exception if returned response code other than success`() {
-        setupRequestWithFailureResponseCode()
+    @Test(expected = QuestionsException::class)
+    fun `Throws QuestionsException if returned response code other than success`() =
+        runBlockingTest {
+            setupRequestWithFailureResponseCode()
 
-        openTriviaRepository.fetchQuestions(nOfQuestions)
-    }
+            openTriviaRepository.fetchQuestions(nOfQuestions)
+        }
 
     @Test
-    fun `Response is passed to mapper if returned success response code`() {
+    fun `Response is passed to mapper if returned success response code`() = runBlockingTest {
         setupRequestWithSuccessResponseCode()
 
         openTriviaRepository.fetchQuestions(nOfQuestions)
@@ -72,42 +65,22 @@ class OpenTriviaRepositoryUnitTests {
         verify(exactly = 1) { questionServiceMapper.questionResponseToModel(questionResponse) }
     }
 
-    @Test
-    fun `Response mapper is passed to a Single just if returned success response code`() {
-        setupRequestWithSuccessResponseCode()
-
-        openTriviaRepository.fetchQuestions(nOfQuestions)
-
-        verify(exactly = 1) { Single.just(questions) }
-    }
-
     // region private
 
-    private fun setupServiceCall() {
+    private fun setupServiceCall() = runBlockingTest {
         every { retrofit.create(QuestionsService::class.java) }.returns(service)
-        every { service.fetchQuestions(nOfQuestions) }.returns(call)
-    }
-
-    private fun fetchQuestionBasicSetup() {
-        setupServiceCall()
-        every { call.toSingle() }.returns(single)
-        every { single.flatMap<List<Question>>(any()) }.answers {
-            firstArg<(QuestionsResponse) -> Single<List<Question>>>().invoke(questionResponse)
-            singleMap
-        }
+        coEvery { service.fetchQuestions(nOfQuestions) }.returns(questionResponse)
     }
 
     private fun setupRequestWithFailureResponseCode() {
-        fetchQuestionBasicSetup()
+        setupServiceCall()
         every { questionResponse.response_code }.returns(QuestionsResponseCode.NO_RESULTS.code)
     }
 
     private fun setupRequestWithSuccessResponseCode() {
-        fetchQuestionBasicSetup()
+        setupServiceCall()
         every { questionResponse.response_code }.returns(QuestionsResponseCode.SUCCESS.code)
-        mockkObject(Single)
         every { questionServiceMapper.questionResponseToModel(any()) } returns questions
-        every { Single.just<List<Question>>(any()) } returns singleMappedResponse
     }
 
     // endregion
