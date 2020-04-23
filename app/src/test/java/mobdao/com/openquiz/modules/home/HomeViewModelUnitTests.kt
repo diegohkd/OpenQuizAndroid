@@ -2,16 +2,15 @@ package mobdao.com.openquiz.modules.home
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
-import com.nhaarman.mockitokotlin2.any
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.MockK
 import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import mobdao.com.CoroutineTestRule
 import mobdao.com.openquiz.data.repositories.opentriviarepository.OpenTriviaRepository
 import mobdao.com.openquiz.data.repositories.userauthrepository.UserAuthRepository
 import mobdao.com.openquiz.models.Question
-import mobdao.com.CoroutineTestRule
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -117,7 +116,7 @@ class HomeViewModelUnitTests {
     // region private
 
     private fun setupFetchQuestions() {
-        coEvery { openTriviaRepository.fetchQuestions(any()) }.returns(any())
+        coEvery { openTriviaRepository.fetchQuestions(any()) }.returns(emptyList())
     }
 
     private fun setupFailureCall() {
