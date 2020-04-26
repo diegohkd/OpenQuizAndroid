@@ -1,15 +1,20 @@
 package mobdao.com.openquiz.modules.base
 
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import mobdao.com.openquiz.utils.livedata.LiveEvent
 
 abstract class BaseViewModel : ViewModel() {
-    val showProgressBarEvent: MutableLiveData<Boolean> by lazy { MutableLiveData<Boolean>() }
+
+    val progressBarVisibility: MutableLiveData<Int> by lazy {
+        MutableLiveData<Int>().apply { value = GONE }
+    }
 
     @Suppress("RemoveExplicitTypeArguments")
     val genericErrorEvent: LiveEvent<Unit> by lazy { LiveEvent<Unit>() }
 
-    protected fun showProgressBar() = showProgressBarEvent.postValue(true)
-    protected fun hideProgressBar() = showProgressBarEvent.postValue(false)
+    protected fun showProgressBar() = progressBarVisibility.postValue(VISIBLE)
+    protected fun hideProgressBar() = progressBarVisibility.postValue(GONE)
 }
