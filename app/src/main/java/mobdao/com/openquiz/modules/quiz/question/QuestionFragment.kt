@@ -12,14 +12,10 @@ import mobdao.com.openquiz.models.Question
 import mobdao.com.openquiz.models.QuestionType.MULTIPLE_CHOICE
 import mobdao.com.openquiz.modules.base.BaseFragment
 import mobdao.com.openquiz.modules.quiz.QuizViewModel
-import mobdao.com.openquiz.uicomponents.customviews.question.BaseQuestionView
-import mobdao.com.openquiz.uicomponents.customviews.question.MultipleChoiceQuestionView
-import mobdao.com.openquiz.uicomponents.customviews.question.TrueFalseQuestionView
+import mobdao.com.openquiz.modules.quiz.question.answers.MultipleChoiceAnswersFragment
+import mobdao.com.openquiz.modules.quiz.question.answers.TrueFalseAnswersFragment
 import mobdao.com.openquiz.utils.constants.IntentConstants.QUESTION
-import mobdao.com.openquiz.utils.extensions.gone
-import mobdao.com.openquiz.utils.extensions.setupSingleEventObserver
-import mobdao.com.openquiz.utils.extensions.sharedViewModel
-import mobdao.com.openquiz.utils.extensions.visible
+import mobdao.com.openquiz.utils.extensions.*
 import javax.inject.Inject
 
 open class QuestionFragment : BaseFragment() {
@@ -28,7 +24,7 @@ open class QuestionFragment : BaseFragment() {
     open lateinit var viewModelFactory: ViewModelProvider.Factory
 
     override val viewModel: QuizViewModel by sharedViewModel { viewModelFactory }
-    private var questionView: BaseQuestionView? = null
+    lateinit var question: Question
 
     //region Lifecycle
 
@@ -36,8 +32,7 @@ open class QuestionFragment : BaseFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? =
-        inflater.inflate(R.layout.fragment_question, container, false)
+    ): View? = inflater.inflate(R.layout.fragment_question, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -65,38 +60,41 @@ open class QuestionFragment : BaseFragment() {
 
     private fun setupView() {
         confirmButton.setOnClickListener {
-            questionView?.run {
-                val question = question ?: return@setOnClickListener
-                val answer = getSelectedAnswer()
-                viewModel.onConfirmAnswerClicked(question, answer)
-            }
+            viewModel.onConfirmAnswerClicked(question)
         }
-
         nextButton.setOnClickListener {
             viewModel.onNextClicked()
         }
     }
 
     private fun setupObservers() = with(viewModel) {
-        questionView?.question?.let(::getShowCorrectAnswerEvent)?.let { showCorrectAnswerEvent ->
+        getSelectedAnswerEvent(question)?.let { showCorrectAnswerEvent ->
+            setupSingleEventObserver(showCorrectAnswerEvent to {
+                confirmButton.isEnabled = true
+            })
+        }
+        getShowCorrectAnswerEvent(question)?.let { showCorrectAnswerEvent ->
             setupSingleEventObserver(showCorrectAnswerEvent to {
                 confirmButton.gone()
                 nextButton.visible()
-                questionView?.showCorrectAnswer()
             })
         }
     }
 
     private fun bindQuestion(question: Question) = with(question) {
-        questionView =
-            if (type == MULTIPLE_CHOICE) MultipleChoiceQuestionView(requireContext())
-            else TrueFalseQuestionView(requireContext())
+        this@QuestionFragment.question = question
+        questionTextView.text = question.question.fromHtml()
+        bindAnswersFragment(question)
+    }
 
-        questionContainer.addView(questionView)
-
-        questionView?.bind(this) {
-            confirmButton.isEnabled = true
+    private fun bindAnswersFragment(question: Question) {
+        val fragment = if (question.type == MULTIPLE_CHOICE) {
+            MultipleChoiceAnswersFragment()
+        } else {
+            TrueFalseAnswersFragment()
         }
+        fragment.arguments = Bundle().apply { putParcelable(QUESTION, question) }
+        childFragmentManager.showFragmentOnContainer(R.id.answersContainer, fragment)
     }
 
     //endregion
