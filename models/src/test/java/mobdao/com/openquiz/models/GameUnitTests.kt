@@ -24,7 +24,15 @@ class GameUnitTests {
         correctAnswer,
         listOf(incorrectAnswer)
     )
-    private val questions = listOf(question)
+    private var question2 = Question(
+        Category.ART,
+        QuestionType.MULTIPLE_CHOICE,
+        Difficulty.EASY,
+        "question",
+        correctAnswer,
+        listOf(incorrectAnswer)
+    )
+    private val questions = listOf(question, question2)
 
     @Before
     fun setup() {
@@ -36,11 +44,12 @@ class GameUnitTests {
     fun `When getting next question should return it`() {
         val nextQuestion = game.nextQuestion()
 
-        Assert.assertSame(questions.first(), nextQuestion)
+        Assert.assertSame(question2, nextQuestion)
     }
 
     @Test
     fun `When getting next question without more questions should return null`() {
+        game.nextQuestion()
         game.nextQuestion()
         val nextQuestion = game.nextQuestion()
 
