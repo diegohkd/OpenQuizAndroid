@@ -4,6 +4,16 @@
 
     <data>
 
+<!--        <import type="android.graphics.Color" />-->
+
+<!--        <variable-->
+<!--            name="isTrue"-->
+<!--            type="Boolean" />-->
+
+<!--        <variable-->
+<!--            name="fragment"-->
+<!--            type="mobdao.com.openquiz.modules.quiz.question.answers.TrueFalseAnswersFragment" />-->
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

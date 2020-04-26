@@ -3,7 +3,6 @@ package mobdao.com.openquiz.modules.quiz.question.answers
 import android.graphics.Color
 import android.view.View
 import android.widget.ToggleButton
-import kotlinx.android.synthetic.main.fragment_true_false_question.*
 import mobdao.com.openquiz.R
 import mobdao.com.openquiz.databinding.FragmentTrueFalseQuestionBinding
 import mobdao.com.openquiz.models.Question
@@ -13,6 +12,8 @@ class TrueFalseAnswersFragment : BaseAnswersFragment() {
     override val layout: Int = R.layout.fragment_true_false_question
 
     private lateinit var binding: FragmentTrueFalseQuestionBinding
+    private val falseButton: ToggleButton get() = binding.falseButton
+    private val trueButton: ToggleButton get() = binding.trueButton
     private val selectedButton: ToggleButton?
         get() = when {
             falseButton.isChecked -> falseButton
@@ -40,23 +41,22 @@ class TrueFalseAnswersFragment : BaseAnswersFragment() {
     override fun showCorrectAnswer() {
         selectedButton?.setTextColor(Color.RED)
 
-        val correctButton =
-            if (falseButton.textOff == question.correctAnswer) falseButton else trueButton
-        correctButton?.setTextColor(Color.GREEN)
+        getCorrectButton().setTextColor(Color.GREEN)
     }
 
     // region private
 
-    private fun setupToggleButton(
-        button: ToggleButton,
-        otherToggleButton: ToggleButton
-    ) {
+    private fun setupToggleButton(button: ToggleButton, otherToggleButton: ToggleButton) {
         button.setOnClickListener {
             if (button.isChecked) otherToggleButton.isChecked = false
             else button.isChecked = true
             viewModel.onAnswerClicked(question)
         }
     }
+
+    private fun getCorrectButton(): ToggleButton =
+        if (falseButton.textOff == question.correctAnswer) falseButton
+        else trueButton
 
     // endregion
 }
