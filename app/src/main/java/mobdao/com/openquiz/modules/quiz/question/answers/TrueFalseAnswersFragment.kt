@@ -1,21 +1,29 @@
 package mobdao.com.openquiz.modules.quiz.question.answers
 
 import android.graphics.Color
+import android.view.View
 import android.widget.ToggleButton
 import kotlinx.android.synthetic.main.fragment_true_false_question.*
 import mobdao.com.openquiz.R
+import mobdao.com.openquiz.databinding.FragmentTrueFalseQuestionBinding
 import mobdao.com.openquiz.models.Question
 
 class TrueFalseAnswersFragment : BaseAnswersFragment() {
 
     override val layout: Int = R.layout.fragment_true_false_question
 
+    private lateinit var binding: FragmentTrueFalseQuestionBinding
     private val selectedButton: ToggleButton?
         get() = when {
             falseButton.isChecked -> falseButton
             trueButton.isChecked -> trueButton
             else -> null
         }
+
+    override fun onCreateView(): View? =
+        FragmentTrueFalseQuestionBinding.inflate(layoutInflater).apply {
+            binding = this
+        }.root
 
     override fun bind(question: Question) {
         this.question = question

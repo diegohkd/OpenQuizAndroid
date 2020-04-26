@@ -24,5 +24,5 @@ fun bindAnswersFragment(
         TrueFalseAnswersFragment()
     }
     fragment.arguments = Bundle().apply { putParcelable(IntentConstants.QUESTION, question) }
-    fragmentManager.showFragmentOnContainer(R.id.answersContainer, fragment)
+    fragmentManager.showFragmentOnContainer(frameLayout.id, fragment)
 }

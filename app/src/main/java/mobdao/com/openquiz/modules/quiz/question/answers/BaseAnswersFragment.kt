@@ -28,18 +28,18 @@ abstract class BaseAnswersFragment : BaseFragment() {
 
     // region lifecycle
 
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? = onCreateView()
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupInjections()
         handleArguments()
         setupObservers()
     }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? = inflater.inflate(layout, container, false)
 
     // endregion
 
@@ -72,6 +72,7 @@ abstract class BaseAnswersFragment : BaseFragment() {
 
     // region private
 
+    protected abstract fun onCreateView(): View?
     protected abstract fun bind(question: Question)
     protected abstract fun getSelectedAnswer(): String
     protected abstract fun showCorrectAnswer()
