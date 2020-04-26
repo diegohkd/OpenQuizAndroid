@@ -1,4 +1,4 @@
-package mobdao.com.openquiz.utils.databinding
+package mobdao.com.openquiz.modules.login
 
 import androidx.databinding.BindingAdapter
 import com.google.android.gms.common.SignInButton

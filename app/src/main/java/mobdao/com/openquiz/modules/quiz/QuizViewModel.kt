@@ -15,8 +15,8 @@ class QuizViewModel @Inject constructor() : BaseViewModel() {
     var questionsLiveData: MutableLiveData<List<Question>> = MutableLiveData()
     var showNextQuestionEvent: SingleLiveEvent<Unit> = SingleLiveEvent()
     var showResultsReportEvent: SingleLiveEvent<ResultsReport> = SingleLiveEvent()
-    private var showCorrectAnswerEvents = mutableMapOf<Question, LiveEvent<Unit>>()
-    private var selectedAnswerEvents = mutableMapOf<Question, LiveEvent<Unit>>()
+    private var showCorrectAnswerEvents = mutableMapOf<Question, MutableLiveData<Boolean>>()
+    private var selectedAnswerEvents = mutableMapOf<Question, MutableLiveData<Boolean>>()
     private var confirmAnswerEvents = mutableMapOf<Question, LiveEvent<Unit>>()
 
     var game: Game? = null
@@ -29,7 +29,7 @@ class QuizViewModel @Inject constructor() : BaseViewModel() {
     }
 
     fun onAnswerClicked(question: Question) {
-        selectedAnswerEvents[question]?.call()
+        selectedAnswerEvents[question]?.value = true
     }
 
     fun onConfirmAnswerClicked(question: Question) {
@@ -38,7 +38,7 @@ class QuizViewModel @Inject constructor() : BaseViewModel() {
 
     fun onConfirmAnswer(question: Question, answer: String) {
         game?.answer(question, answer)
-        showCorrectAnswerEvents[question]?.call()
+        showCorrectAnswerEvents[question]?.value = true
     }
 
     fun onNextClicked() {
@@ -51,10 +51,10 @@ class QuizViewModel @Inject constructor() : BaseViewModel() {
         }
     }
 
-    fun getShowCorrectAnswerEvent(question: Question): LiveEvent<Unit>? =
+    fun getShowCorrectAnswerEvent(question: Question): MutableLiveData<Boolean>? =
         showCorrectAnswerEvents[question]
 
-    fun getSelectedAnswerEvent(question: Question): LiveEvent<Unit>? =
+    fun getSelectedAnswerEvent(question: Question): MutableLiveData<Boolean>? =
         selectedAnswerEvents[question]
 
     fun getConfirmAnswerEvent(question: Question): LiveEvent<Unit>? =

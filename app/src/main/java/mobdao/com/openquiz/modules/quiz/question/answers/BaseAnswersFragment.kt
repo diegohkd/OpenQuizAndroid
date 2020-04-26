@@ -11,6 +11,7 @@ import mobdao.com.openquiz.modules.base.BaseFragment
 import mobdao.com.openquiz.modules.quiz.QuizViewModel
 import mobdao.com.openquiz.utils.constants.IntentConstants.QUESTION
 import mobdao.com.openquiz.utils.extensions.safeGetParcelable
+import mobdao.com.openquiz.utils.extensions.setupObserver
 import mobdao.com.openquiz.utils.extensions.setupSingleEventObserver
 import mobdao.com.openquiz.utils.extensions.sharedViewModel
 import javax.inject.Inject
@@ -56,7 +57,7 @@ abstract class BaseAnswersFragment : BaseFragment() {
 
     private fun setupObservers() = with(viewModel) {
         getShowCorrectAnswerEvent(question)?.let { showCorrectAnswerEvent ->
-            setupSingleEventObserver(showCorrectAnswerEvent to {
+            setupObserver(showCorrectAnswerEvent to { _ ->
                 showCorrectAnswer()
             })
         }
