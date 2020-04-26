@@ -10,9 +10,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import kotlinx.android.synthetic.main.fragment_login.*
 import mobdao.com.openquiz.R
 import mobdao.com.openquiz.data.di.components.DaggerDataComponent
+import mobdao.com.openquiz.databinding.FragmentLoginBinding
 import mobdao.com.openquiz.di.components.DaggerLoginComponent
 import mobdao.com.openquiz.modules.base.BaseFragment
 import mobdao.com.openquiz.utils.constants.RequestCodeConstants.RC_SIGN_IN
@@ -24,6 +24,7 @@ class LoginFragment : BaseFragment() {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
+    private lateinit var binding: FragmentLoginBinding
     override val viewModel: LoginViewModel by viewModels { viewModelFactory }
 
     //region Lifecycle
@@ -32,15 +33,16 @@ class LoginFragment : BaseFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_login, container, false)
-    }
+    ): View? = FragmentLoginBinding.inflate(layoutInflater).apply {
+        binding = this
+        binding.lifecycleOwner = viewLifecycleOwner
+    }.root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupInjections()
-        setupView()
         setupObservers()
+        binding.viewmodel = viewModel
     }
 
     //endregion
@@ -64,14 +66,7 @@ class LoginFragment : BaseFragment() {
             .inject(this)
     }
 
-    private fun setupView() {
-        googleSignInButton.setOnClickListener {
-            viewModel.onGoogleSignInClicked()
-        }
-    }
-
     private fun setupObservers() = with(viewModel) {
-        setupProgressBarObserver(progressBar)
         setupGenericErrorObserver()
         setupSingleEventObserver(showHomeScreenEvent to {
             findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
