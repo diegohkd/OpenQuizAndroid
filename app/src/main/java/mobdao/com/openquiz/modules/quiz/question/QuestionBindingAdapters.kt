@@ -1,4 +1,4 @@
-package mobdao.com.openquiz.modules.quiz
+package mobdao.com.openquiz.modules.quiz.question
 
 import android.os.Bundle
 import android.widget.FrameLayout
