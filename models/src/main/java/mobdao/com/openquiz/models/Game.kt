@@ -2,7 +2,7 @@ package mobdao.com.openquiz.models
 
 class Game(private val questions: List<Question>) {
 
-    private var questionIndex = -1
+    private var questionIndex = 0
     private var questionsAnsweredIncorrectly = 0
 
     var score: Int = 0

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+<!--        <import type="android.graphics.Color" />-->
+
+<!--        <variable-->
+<!--            name="isTrue"-->
+<!--            type="Boolean" />-->
+
+<!--        <variable-->
+<!--            name="fragment"-->
+<!--            type="mobdao.com.openquiz.modules.quiz.question.answers.TrueFalseAnswersFragment" />-->
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ToggleButton
+            android:id="@+id/falseButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:textOff="@string/false_string"
+            android:textOn="@string/false_string"
+            app:layout_constraintEnd_toStartOf="@id/trueButton"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ToggleButton
+            android:id="@+id/trueButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:textOff="@string/true_string"
+            android:textOn="@string/true_string"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/falseButton"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

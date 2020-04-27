@@ -7,14 +7,11 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import kotlinx.android.synthetic.main.fragment_quiz.*
-import mobdao.com.openquiz.R
+import mobdao.com.openquiz.databinding.FragmentQuizBinding
 import mobdao.com.openquiz.di.components.DaggerQuizComponent
 import mobdao.com.openquiz.models.Game
 import mobdao.com.openquiz.modules.base.BaseFragment
-import mobdao.com.openquiz.uicomponents.adapters.QuestionsPagerAdapter
 import mobdao.com.openquiz.utils.extensions.setupObserver
-import mobdao.com.openquiz.utils.extensions.setupSingleEventObserver
 import mobdao.com.openquiz.utils.extensions.sharedViewModel
 import mobdao.com.openquiz.utils.factories.FragmentFactory
 import javax.inject.Inject
@@ -27,8 +24,9 @@ class QuizFragment : BaseFragment() {
     @Inject
     lateinit var fragmentFactory: FragmentFactory
 
-    override val viewModel: QuizViewModel by sharedViewModel { viewModelFactory }
     private val args: QuizFragmentArgs by navArgs()
+    private lateinit var binding: FragmentQuizBinding
+    override val viewModel: QuizViewModel by sharedViewModel { viewModelFactory }
 
     //region Lifecycle
 
@@ -36,14 +34,19 @@ class QuizFragment : BaseFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? =
-        inflater.inflate(R.layout.fragment_quiz, container, false)
+    ): View? = FragmentQuizBinding.inflate(layoutInflater).apply {
+        binding = this
+        binding.lifecycleOwner = viewLifecycleOwner
+        binding.fragmentManager = parentFragmentManager
+    }.root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupInjections()
         setupObservers()
         initViewModel()
+        binding.viewModel = viewModel
+        binding.fragmentFactory = fragmentFactory
     }
 
     //endregion
@@ -57,19 +60,9 @@ class QuizFragment : BaseFragment() {
     }
 
     private fun setupObservers() = with(viewModel) {
-        setupObserver(questionsLiveData to { questions ->
-            parentFragmentManager.let { fm ->
-                // TODO inject adapter
-                viewPager.adapter = QuestionsPagerAdapter(fm, fragmentFactory, questions)
-            }
-        })
-
-        setupSingleEventObserver(showNextQuestionEvent to {
-            viewPager.setCurrentItem(viewPager.currentItem + 1, true)
-        })
-
         setupObserver(showResultsReportEvent to { resultsReport ->
-            val action = QuizFragmentDirections.actionQuizFragmentToResultsReportFragment(resultsReport)
+            val action =
+                QuizFragmentDirections.actionQuizFragmentToResultsReportFragment(resultsReport)
             findNavController().navigate(action)
         })
     }

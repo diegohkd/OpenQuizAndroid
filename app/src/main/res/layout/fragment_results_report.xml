@@ -1,66 +1,84 @@
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="16dp"
-    tools:context="mobdao.com.openquiz.modules.quiz.resultsreport.ResultsReportFragment">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <TextView
-        android:id="@+id/correctTitleTextView"
+    <data>
+
+        <variable
+            name="fragment"
+            type="mobdao.com.openquiz.modules.quiz.resultsreport.ResultsReportFragment" />
+
+        <variable
+            name="resultsReport"
+            type="mobdao.com.openquiz.utils.pokos.ResultsReport" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:text="@string/correct_answers"
-        app:layout_constraintBottom_toTopOf="@+id/correctValueTextView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_chainStyle="packed" />
+        android:layout_height="match_parent"
+        android:padding="16dp"
+        tools:context="mobdao.com.openquiz.modules.quiz.resultsreport.ResultsReportFragment">
 
-    <TextView
-        android:id="@+id/correctValueTextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:textColor="@color/lightGreenA700"
-        app:layout_constraintBottom_toTopOf="@+id/wrongTitleTextView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/correctTitleTextView"
-        tools:text="7" />
+        <TextView
+            android:id="@+id/correctTitleTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="@string/correct_answers"
+            app:layout_constraintBottom_toTopOf="@+id/correctValueTextView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed" />
 
-    <TextView
-        android:id="@+id/wrongTitleTextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:gravity="center_horizontal"
-        android:text="@string/wrong_answers"
-        app:layout_constraintBottom_toTopOf="@+id/wrongValueTextView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/correctValueTextView" />
+        <TextView
+            android:id="@+id/correctValueTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="@{Integer.toString(resultsReport.correctAnswers)}"
+            android:textColor="@color/lightGreenA700"
+            app:layout_constraintBottom_toTopOf="@+id/wrongTitleTextView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/correctTitleTextView"
+            tools:text="7" />
 
-    <TextView
-        android:id="@+id/wrongValueTextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:textColor="@color/redA700"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/wrongTitleTextView"
-        tools:text="3" />
+        <TextView
+            android:id="@+id/wrongTitleTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center_horizontal"
+            android:text="@string/wrong_answers"
+            app:layout_constraintBottom_toTopOf="@+id/wrongValueTextView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/correctValueTextView" />
 
-    <Button
-        android:id="@+id/okButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/ok"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        <TextView
+            android:id="@+id/wrongValueTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="@{Integer.toString(resultsReport.wrongAnswers)}"
+            android:textColor="@color/redA700"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/wrongTitleTextView"
+            tools:text="3" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <Button
+            android:id="@+id/okButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="@{() -> fragment.onOkClicked()}"
+            android:text="@string/ok"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

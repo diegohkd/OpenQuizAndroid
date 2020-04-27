@@ -7,9 +7,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import kotlinx.android.synthetic.main.fragment_home.*
 import mobdao.com.openquiz.R
 import mobdao.com.openquiz.data.di.components.DaggerDataComponent
+import mobdao.com.openquiz.databinding.FragmentHomeBinding
 import mobdao.com.openquiz.di.components.DaggerHomeComponent
 import mobdao.com.openquiz.modules.base.BaseFragment
 import mobdao.com.openquiz.utils.extensions.setupObserver
@@ -21,6 +21,7 @@ class HomeFragment : BaseFragment() {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
+    private lateinit var binding: FragmentHomeBinding
     override val viewModel: HomeViewModel by viewModels { viewModelFactory }
 
     //region Lifecycle
@@ -29,14 +30,15 @@ class HomeFragment : BaseFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_home, container, false)
-    }
+    ): View? = FragmentHomeBinding.inflate(layoutInflater).apply {
+        binding = this
+        binding.lifecycleOwner = viewLifecycleOwner
+    }.root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupInjections()
-        setupView()
+        binding.viewmodel = viewModel
         setupObservers()
     }
 
@@ -52,18 +54,7 @@ class HomeFragment : BaseFragment() {
             .inject(this)
     }
 
-    private fun setupView() {
-        startQuizButton.setOnClickListener {
-            viewModel.onStartQuizClicked()
-        }
-
-        signOutButton.setOnClickListener {
-            viewModel.onSignOutClicked()
-        }
-    }
-
     private fun setupObservers() = with(viewModel) {
-        setupProgressBarObserver(progressBar)
         setupGenericErrorObserver()
 
         setupSingleEventObserver(signOutEvent to {

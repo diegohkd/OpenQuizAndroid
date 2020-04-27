@@ -15,8 +15,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
     }
 
-
-
     override fun onStart() {
         super.onStart()
         val initialScreenType = intent.extras?.getSerializable(INITIAL_SCREEN) as? InitialScreenType

@@ -5,6 +5,7 @@ import mobdao.com.openquiz.models.Game
 import mobdao.com.openquiz.models.Question
 import mobdao.com.openquiz.modules.base.BaseViewModel
 import mobdao.com.openquiz.utils.extensions.orZero
+import mobdao.com.openquiz.utils.livedata.LiveEvent
 import mobdao.com.openquiz.utils.livedata.SingleLiveEvent
 import mobdao.com.openquiz.utils.pokos.ResultsReport
 import javax.inject.Inject
@@ -14,7 +15,9 @@ class QuizViewModel @Inject constructor() : BaseViewModel() {
     var questionsLiveData: MutableLiveData<List<Question>> = MutableLiveData()
     var showNextQuestionEvent: SingleLiveEvent<Unit> = SingleLiveEvent()
     var showResultsReportEvent: SingleLiveEvent<ResultsReport> = SingleLiveEvent()
-    private var showCorrectAnswerEvents = mutableMapOf<Question, SingleLiveEvent<Unit>>()
+    private var showCorrectAnswerEvents = mutableMapOf<Question, MutableLiveData<Boolean>>()
+    private var selectedAnswerEvents = mutableMapOf<Question, MutableLiveData<Boolean>>()
+    private var confirmAnswerEvents = mutableMapOf<Question, LiveEvent<Unit>>()
 
     var game: Game? = null
         private set
@@ -25,9 +28,17 @@ class QuizViewModel @Inject constructor() : BaseViewModel() {
         questionsLiveData.postValue(questions)
     }
 
-    fun onConfirmAnswerClicked(question: Question, answer: String) {
+    fun onAnswerClicked(question: Question) {
+        selectedAnswerEvents[question]?.value = true
+    }
+
+    fun onConfirmAnswerClicked(question: Question) {
+        confirmAnswerEvents[question]?.call()
+    }
+
+    fun onConfirmAnswer(question: Question, answer: String) {
         game?.answer(question, answer)
-        showCorrectAnswerEvents[question]?.call()
+        showCorrectAnswerEvents[question]?.value = true
     }
 
     fun onNextClicked() {
@@ -40,13 +51,23 @@ class QuizViewModel @Inject constructor() : BaseViewModel() {
         }
     }
 
-    fun getShowCorrectAnswerEvent(question: Question): SingleLiveEvent<Unit>? =
+    fun getShowCorrectAnswerEvent(question: Question): MutableLiveData<Boolean>? =
         showCorrectAnswerEvents[question]
+
+    fun getSelectedAnswerEvent(question: Question): MutableLiveData<Boolean>? =
+        selectedAnswerEvents[question]
+
+    fun getConfirmAnswerEvent(question: Question): LiveEvent<Unit>? =
+        confirmAnswerEvents[question]
 
     //region private
 
     private fun setupCorrectAnswerEvents(questions: List<Question>) {
-        questions.forEach { question -> showCorrectAnswerEvents[question] = SingleLiveEvent() }
+        questions.forEach { question ->
+            showCorrectAnswerEvents[question] = LiveEvent()
+            selectedAnswerEvents[question] = LiveEvent()
+            confirmAnswerEvents[question] = LiveEvent()
+        }
     }
 
     private fun showFinalResult() {

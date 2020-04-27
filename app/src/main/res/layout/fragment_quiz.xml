@@ -1,5 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<mobdao.com.openquiz.uicomponents.customviews.NonSwipeableViewPager xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/viewPager"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" />
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="mobdao.com.openquiz.modules.quiz.QuizViewModel" />
+
+        <variable
+            name="fragmentManager"
+            type="androidx.fragment.app.FragmentManager" />
+
+        <variable
+            name="fragmentFactory"
+            type="mobdao.com.openquiz.utils.factories.FragmentFactory" />
+
+    </data>
+
+    <mobdao.com.openquiz.uicomponents.customviews.NonSwipeableViewPager
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        bind:fragmentFactory="@{fragmentFactory}"
+        bind:fragmentManager="@{fragmentManager}"
+        bind:questions="@{viewModel.questionsLiveData}"
+        bind:showNextPage="@{viewModel.showNextQuestionEvent}" />
+</layout>
