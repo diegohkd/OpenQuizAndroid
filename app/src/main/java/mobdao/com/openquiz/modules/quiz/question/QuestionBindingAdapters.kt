@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.widget.FrameLayout
 import androidx.databinding.BindingAdapter
 import androidx.fragment.app.FragmentManager
-import mobdao.com.openquiz.R
 import mobdao.com.openquiz.models.Question
 import mobdao.com.openquiz.models.QuestionType
 import mobdao.com.openquiz.modules.quiz.question.answers.MultipleChoiceAnswersFragment
