@@ -10,14 +10,14 @@ import kotlinx.coroutines.launch
 import mobdao.com.openquiz.data.repositories.userauthrepository.UserAuthRepository
 import mobdao.com.openquiz.modules.base.BaseViewModel
 import mobdao.com.openquiz.utils.constants.RequestCodeConstants
-import mobdao.com.openquiz.utils.livedata.SingleLiveEvent
+import mobdao.com.openquiz.utils.livedata.LiveEvent
 
 class LoginViewModel(
     private val userAuthRepository: UserAuthRepository
 ) : BaseViewModel() {
 
-    val showHomeScreenEvent: SingleLiveEvent<Unit> = SingleLiveEvent()
-    val showGoogleSignInEvent: SingleLiveEvent<Unit> = SingleLiveEvent()
+    val showHomeScreenEvent: LiveEvent<Unit> = LiveEvent()
+    val showGoogleSignInEvent: LiveEvent<Unit> = LiveEvent()
 
     fun onGoogleSignInClicked() {
         showProgressBar()

@@ -6,14 +6,13 @@ import mobdao.com.openquiz.models.Question
 import mobdao.com.openquiz.modules.base.BaseViewModel
 import mobdao.com.openquiz.utils.extensions.orZero
 import mobdao.com.openquiz.utils.livedata.LiveEvent
-import mobdao.com.openquiz.utils.livedata.SingleLiveEvent
 import mobdao.com.openquiz.utils.pokos.ResultsReport
 
 class QuizViewModel : BaseViewModel() {
 
     var questionsLiveData: MutableLiveData<List<Question>> = MutableLiveData()
-    var showNextQuestionEvent: SingleLiveEvent<Unit> = SingleLiveEvent()
-    var showResultsReportEvent: SingleLiveEvent<ResultsReport> = SingleLiveEvent()
+    var showNextQuestionEvent: LiveEvent<Unit> = LiveEvent()
+    var showResultsReportEvent: LiveEvent<ResultsReport> = LiveEvent()
     private var showCorrectAnswerEvents = mutableMapOf<Question, MutableLiveData<Boolean>>()
     private var selectedAnswerEvents = mutableMapOf<Question, MutableLiveData<Boolean>>()
     private var confirmAnswerEvents = mutableMapOf<Question, LiveEvent<Unit>>()
