@@ -4,8 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.ViewModelProvider
-import mobdao.com.openquiz.di.components.DaggerQuestionComponent
 import mobdao.com.openquiz.models.Question
 import mobdao.com.openquiz.modules.base.BaseFragment
 import mobdao.com.openquiz.modules.quiz.QuizViewModel
@@ -13,18 +11,13 @@ import mobdao.com.openquiz.utils.constants.IntentConstants.QUESTION
 import mobdao.com.openquiz.utils.extensions.safeGetParcelable
 import mobdao.com.openquiz.utils.extensions.setupObserver
 import mobdao.com.openquiz.utils.extensions.setupSingleEventObserver
-import mobdao.com.openquiz.utils.extensions.sharedViewModel
-import javax.inject.Inject
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 abstract class BaseAnswersFragment : BaseFragment() {
 
-    @Inject
-    open lateinit var viewModelFactory: ViewModelProvider.Factory
-
-    protected lateinit var question: Question
     protected abstract val layout: Int
-
-    override val viewModel: QuizViewModel by sharedViewModel { viewModelFactory }
+    protected lateinit var question: Question
+    override val viewModel: QuizViewModel by sharedViewModel()
 
     // region lifecycle
 
@@ -36,7 +29,6 @@ abstract class BaseAnswersFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupInjections()
         handleArguments()
         setupObservers()
     }
@@ -45,16 +37,11 @@ abstract class BaseAnswersFragment : BaseFragment() {
 
     // region private
 
-    private fun setupInjections() {
-        DaggerQuestionComponent
-            .create()
-            .inject(this)
-    }
-
     private fun handleArguments() {
         arguments?.safeGetParcelable<Question>(QUESTION)?.let(::bind)
     }
 
+    @Suppress("RedundantLambdaArrow")
     private fun setupObservers() = with(viewModel) {
         getShowCorrectAnswerEvent(question)?.let { showCorrectAnswerEvent ->
             setupObserver(showCorrectAnswerEvent to { _ ->

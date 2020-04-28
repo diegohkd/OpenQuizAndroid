@@ -5,27 +5,20 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import mobdao.com.openquiz.R
-import mobdao.com.openquiz.data.di.components.DaggerDataComponent
 import mobdao.com.openquiz.databinding.FragmentLoginBinding
-import mobdao.com.openquiz.di.components.DaggerLoginComponent
 import mobdao.com.openquiz.modules.base.BaseFragment
 import mobdao.com.openquiz.utils.constants.RequestCodeConstants.RC_SIGN_IN
 import mobdao.com.openquiz.utils.extensions.setupSingleEventObserver
-import javax.inject.Inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class LoginFragment : BaseFragment() {
 
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
-
     private lateinit var binding: FragmentLoginBinding
-    override val viewModel: LoginViewModel by viewModels { viewModelFactory }
+    override val viewModel: LoginViewModel by viewModel()
 
     //region Lifecycle
 
@@ -40,7 +33,6 @@ class LoginFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupInjections()
         setupObservers()
         binding.viewmodel = viewModel
     }
@@ -57,14 +49,6 @@ class LoginFragment : BaseFragment() {
     //endregion
 
     //region private
-
-    private fun setupInjections() {
-        DaggerLoginComponent
-            .builder()
-            .dataComponent(DaggerDataComponent.create())
-            .build()
-            .inject(this)
-    }
 
     private fun setupObservers() = with(viewModel) {
         setupGenericErrorObserver()

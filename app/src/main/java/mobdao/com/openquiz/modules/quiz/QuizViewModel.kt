@@ -8,9 +8,8 @@ import mobdao.com.openquiz.utils.extensions.orZero
 import mobdao.com.openquiz.utils.livedata.LiveEvent
 import mobdao.com.openquiz.utils.livedata.SingleLiveEvent
 import mobdao.com.openquiz.utils.pokos.ResultsReport
-import javax.inject.Inject
 
-class QuizViewModel @Inject constructor() : BaseViewModel() {
+class QuizViewModel : BaseViewModel() {
 
     var questionsLiveData: MutableLiveData<List<Question>> = MutableLiveData()
     var showNextQuestionEvent: SingleLiveEvent<Unit> = SingleLiveEvent()
@@ -19,8 +18,7 @@ class QuizViewModel @Inject constructor() : BaseViewModel() {
     private var selectedAnswerEvents = mutableMapOf<Question, MutableLiveData<Boolean>>()
     private var confirmAnswerEvents = mutableMapOf<Question, LiveEvent<Unit>>()
 
-    var game: Game? = null
-        private set
+    private var game: Game? = null
 
     fun init(game: Game, questions: List<Question>) {
         this.game = game

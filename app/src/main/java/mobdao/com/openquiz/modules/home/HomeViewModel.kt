@@ -8,9 +8,8 @@ import mobdao.com.openquiz.data.repositories.userauthrepository.UserAuthReposito
 import mobdao.com.openquiz.models.Question
 import mobdao.com.openquiz.modules.base.BaseViewModel
 import mobdao.com.openquiz.utils.livedata.SingleLiveEvent
-import javax.inject.Inject
 
-class HomeViewModel @Inject constructor(
+class HomeViewModel(
     private val userAuthRepository: UserAuthRepository,
     private val openTriviaRepository: OpenTriviaRepository
 ) : BaseViewModel() {

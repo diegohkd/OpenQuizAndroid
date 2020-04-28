@@ -4,25 +4,18 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import mobdao.com.openquiz.R
-import mobdao.com.openquiz.data.di.components.DaggerDataComponent
 import mobdao.com.openquiz.databinding.FragmentHomeBinding
-import mobdao.com.openquiz.di.components.DaggerHomeComponent
 import mobdao.com.openquiz.modules.base.BaseFragment
 import mobdao.com.openquiz.utils.extensions.setupObserver
 import mobdao.com.openquiz.utils.extensions.setupSingleEventObserver
-import javax.inject.Inject
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class HomeFragment : BaseFragment() {
 
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
-
     private lateinit var binding: FragmentHomeBinding
-    override val viewModel: HomeViewModel by viewModels { viewModelFactory }
+    override val viewModel: HomeViewModel by viewModel()
 
     //region Lifecycle
 
@@ -37,7 +30,6 @@ class HomeFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupInjections()
         binding.viewmodel = viewModel
         setupObservers()
     }
@@ -45,14 +37,6 @@ class HomeFragment : BaseFragment() {
     //endregion
 
     //region private
-
-    private fun setupInjections() {
-        DaggerHomeComponent
-            .builder()
-            .dataComponent(DaggerDataComponent.create())
-            .build()
-            .inject(this)
-    }
 
     private fun setupObservers() = with(viewModel) {
         setupGenericErrorObserver()

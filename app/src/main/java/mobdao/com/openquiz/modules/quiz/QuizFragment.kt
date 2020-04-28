@@ -4,29 +4,22 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import mobdao.com.openquiz.databinding.FragmentQuizBinding
-import mobdao.com.openquiz.di.components.DaggerQuizComponent
 import mobdao.com.openquiz.models.Game
 import mobdao.com.openquiz.modules.base.BaseFragment
 import mobdao.com.openquiz.utils.extensions.setupObserver
-import mobdao.com.openquiz.utils.extensions.sharedViewModel
 import mobdao.com.openquiz.utils.factories.FragmentFactory
-import javax.inject.Inject
+import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class QuizFragment : BaseFragment() {
 
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
-
-    @Inject
-    lateinit var fragmentFactory: FragmentFactory
-
+    private val fragmentFactory: FragmentFactory by inject()
     private val args: QuizFragmentArgs by navArgs()
     private lateinit var binding: FragmentQuizBinding
-    override val viewModel: QuizViewModel by sharedViewModel { viewModelFactory }
+    override val viewModel: QuizViewModel by sharedViewModel()
 
     //region Lifecycle
 
@@ -42,7 +35,6 @@ class QuizFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupInjections()
         setupObservers()
         initViewModel()
         binding.viewModel = viewModel
@@ -52,12 +44,6 @@ class QuizFragment : BaseFragment() {
     //endregion
 
     //region private
-
-    private fun setupInjections() {
-        DaggerQuizComponent
-            .create()
-            .inject(this)
-    }
 
     private fun setupObservers() = with(viewModel) {
         setupObserver(showResultsReportEvent to { resultsReport ->
