@@ -29,7 +29,9 @@ class QuizViewModelUnitTests {
     @MockK
     private lateinit var questionsObserver: Observer<List<Question>>
     @MockK
-    private lateinit var showCorrectAnswerObserver: Observer<Unit>
+    private lateinit var confirmAnswerObserver: Observer<Unit>
+    @MockK
+    private lateinit var showCorrectAnswerObserver: Observer<Boolean>
     @MockK
     private lateinit var showNextQuestionObserver: Observer<Unit>
     @MockK
@@ -46,6 +48,7 @@ class QuizViewModelUnitTests {
         quizViewModel.init(game, questions)
 
         quizViewModel.questionsLiveData.observeForever(questionsObserver)
+        quizViewModel.getConfirmAnswerEvent(question1)?.observeForever(confirmAnswerObserver)
         quizViewModel.getShowCorrectAnswerEvent(question1)?.observeForever(showCorrectAnswerObserver)
         quizViewModel.showNextQuestionEvent.observeForever(showNextQuestionObserver)
         quizViewModel.showResultsReportEvent.observeForever(showResultsReportObserver)
@@ -68,17 +71,24 @@ class QuizViewModelUnitTests {
     }
 
     @Test
-    fun `Delegate answer to game when clicked to confirm answer`() {
-        quizViewModel.onConfirmAnswerClicked(question1, "answer")
+    fun `Trigger to confirm answer when clicked to confirm answer`() {
+        quizViewModel.onConfirmAnswerClicked(question1)
+
+        verify { confirmAnswerObserver.onChanged(null) }
+    }
+
+    @Test
+    fun `Delegate answer to game when confirming answer`() {
+        quizViewModel.onConfirmAnswer(question1, "answer")
 
         verify { game.answer(any(), any()) }
     }
 
     @Test
-    fun `Trigger to show correct answer when clicked to confirm answer`() {
-        quizViewModel.onConfirmAnswerClicked(question1, "answer")
+    fun `Trigger to show correct answer when confirming answer`() {
+        quizViewModel.onConfirmAnswer(question1, "answer")
 
-        verify { showCorrectAnswerObserver.onChanged(null) }
+        verify { showCorrectAnswerObserver.onChanged(true) }
     }
 
     @Test

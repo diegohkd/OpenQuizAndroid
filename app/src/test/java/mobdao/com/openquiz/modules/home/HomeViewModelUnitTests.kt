@@ -1,5 +1,8 @@
 package mobdao.com.openquiz.modules.home
 
+import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import io.mockk.MockKAnnotations
@@ -31,7 +34,7 @@ class HomeViewModelUnitTests {
     private lateinit var openTriviaRepository: OpenTriviaRepository
 
     @MockK
-    private lateinit var showProgressBarObserver: Observer<Boolean>
+    private lateinit var progressBarObserver: Observer<Int>
 
     @MockK
     private lateinit var genericErrorObserver: Observer<Unit>
@@ -48,7 +51,7 @@ class HomeViewModelUnitTests {
     fun setup() {
         MockKAnnotations.init(this, relaxUnitFun = true)
         homeViewModel = HomeViewModel(userAuthRepository, openTriviaRepository)
-        homeViewModel.showProgressBarEvent.observeForever(showProgressBarObserver)
+        homeViewModel.progressBarVisibility.observeForever(progressBarObserver)
         homeViewModel.genericErrorEvent.observeForever(genericErrorObserver)
         homeViewModel.startQuizEvent.observeForever(startQuizObserver)
         homeViewModel.signOutEvent.observeForever(signOutObserver)
@@ -60,7 +63,7 @@ class HomeViewModelUnitTests {
 
         homeViewModel.onStartQuizClicked()
 
-        verify { showProgressBarObserver.onChanged(true) }
+        verify { progressBarObserver.onChanged(VISIBLE) }
     }
 
     @Test
@@ -69,7 +72,7 @@ class HomeViewModelUnitTests {
 
         homeViewModel.onStartQuizClicked()
 
-        verify { showProgressBarObserver.onChanged(false) }
+        verify { progressBarObserver.onChanged(GONE) }
     }
 
     @Test
@@ -87,7 +90,7 @@ class HomeViewModelUnitTests {
 
         homeViewModel.onStartQuizClicked()
 
-        verify { showProgressBarObserver.onChanged(false) }
+        verify { progressBarObserver.onChanged(GONE) }
     }
 
     @Test

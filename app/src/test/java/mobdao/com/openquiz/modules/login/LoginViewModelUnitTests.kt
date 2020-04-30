@@ -2,6 +2,8 @@ package mobdao.com.openquiz.modules.login
 
 import android.app.Activity
 import android.content.Intent
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -35,7 +37,7 @@ class LoginViewModelUnitTests {
     private lateinit var showGoogleSignInObserver: Observer<Unit>
 
     @MockK
-    private lateinit var showProgressBarObserver: Observer<Boolean>
+    private lateinit var progressBarVisibilityObserver: Observer<Int>
 
     @MockK
     private lateinit var genericErrorObserver: Observer<Unit>
@@ -66,7 +68,7 @@ class LoginViewModelUnitTests {
         loginViewModel = LoginViewModel(userAuthRepository)
 
         loginViewModel.showGoogleSignInEvent.observeForever(showGoogleSignInObserver)
-        loginViewModel.showProgressBarEvent.observeForever(showProgressBarObserver)
+        loginViewModel.progressBarVisibility.observeForever(progressBarVisibilityObserver)
         loginViewModel.genericErrorEvent.observeForever(genericErrorObserver)
         loginViewModel.showHomeScreenEvent.observeForever(showHomeScreenObserver)
     }
@@ -75,7 +77,7 @@ class LoginViewModelUnitTests {
     fun `Show progress bar when clicked on google sign in`() {
         loginViewModel.onGoogleSignInClicked()
 
-        verify { showProgressBarObserver.onChanged(true) }
+        verify { progressBarVisibilityObserver.onChanged(VISIBLE) }
     }
 
     @Test
@@ -89,7 +91,7 @@ class LoginViewModelUnitTests {
     fun `Hide progress bar when back from google sign in with unknown requestCode`() {
         loginViewModel.onActivityResult(unknownRequestCode, unexpectedResultCode, intent)
 
-        verify { showProgressBarObserver.onChanged(false) }
+        verify { progressBarVisibilityObserver.onChanged(GONE) }
     }
 
     @Test
@@ -103,7 +105,7 @@ class LoginViewModelUnitTests {
     fun `Hide progress bar when back from google sign in with resultCode other than RESULT_OK`() {
         loginViewModel.onActivityResult(RC_SIGN_IN, unexpectedResultCode, intent)
 
-        verify { showProgressBarObserver.onChanged(false) }
+        verify { progressBarVisibilityObserver.onChanged(GONE) }
     }
 
     @Test
@@ -152,7 +154,7 @@ class LoginViewModelUnitTests {
 
         loginViewModel.onActivityResult(RC_SIGN_IN, Activity.RESULT_OK, intent)
 
-        verify { showProgressBarObserver.onChanged(false) }
+        verify { progressBarVisibilityObserver.onChanged(GONE) }
     }
 
     @Test
