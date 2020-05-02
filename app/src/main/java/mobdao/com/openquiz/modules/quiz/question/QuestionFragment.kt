@@ -4,24 +4,18 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.ViewModelProvider
 import mobdao.com.openquiz.databinding.FragmentQuestionBinding
-import mobdao.com.openquiz.di.components.DaggerQuestionComponent
 import mobdao.com.openquiz.models.Question
 import mobdao.com.openquiz.modules.base.BaseFragment
 import mobdao.com.openquiz.modules.quiz.QuizViewModel
 import mobdao.com.openquiz.utils.constants.IntentConstants.QUESTION
 import mobdao.com.openquiz.utils.extensions.safeGetParcelable
-import mobdao.com.openquiz.utils.extensions.sharedViewModel
-import javax.inject.Inject
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 open class QuestionFragment : BaseFragment() {
 
-    @Inject
-    open lateinit var viewModelFactory: ViewModelProvider.Factory
-
     private lateinit var binding: FragmentQuestionBinding
-    override val viewModel: QuizViewModel by sharedViewModel { viewModelFactory }
+    override val viewModel: QuizViewModel by sharedViewModel()
 
     //region Lifecycle
 
@@ -36,7 +30,6 @@ open class QuestionFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupInjections()
         handleArguments()
         binding.viewModel = viewModel
     }
@@ -44,12 +37,6 @@ open class QuestionFragment : BaseFragment() {
     //endregion
 
     //region private
-
-    private fun setupInjections() {
-        DaggerQuestionComponent
-            .create()
-            .inject(this)
-    }
 
     private fun handleArguments() {
         arguments?.safeGetParcelable<Question>(QUESTION)?.let(::bindQuestion)

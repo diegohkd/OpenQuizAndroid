@@ -10,15 +10,13 @@ import kotlinx.coroutines.launch
 import mobdao.com.openquiz.data.repositories.userauthrepository.UserAuthRepository
 import mobdao.com.openquiz.modules.base.BaseViewModel
 import mobdao.com.openquiz.utils.constants.RequestCodeConstants
-import mobdao.com.openquiz.utils.livedata.SingleLiveEvent
-import javax.inject.Inject
+import mobdao.com.openquiz.utils.livedata.LiveEvent
 
-class LoginViewModel @Inject constructor(
+class LoginViewModel(
     private val userAuthRepository: UserAuthRepository
 ) : BaseViewModel() {
 
-    val showHomeScreenEvent: SingleLiveEvent<Unit> = SingleLiveEvent()
-    val showGoogleSignInEvent: SingleLiveEvent<Unit> = SingleLiveEvent()
+    val showGoogleSignInEvent: LiveEvent<Unit> = LiveEvent()
 
     fun onGoogleSignInClicked() {
         showProgressBar()
@@ -50,7 +48,7 @@ class LoginViewModel @Inject constructor(
             userAuthRepository.loginOnFirebase(account)
         }.onSuccess {
             hideProgressBar()
-            showHomeScreenEvent.call()
+            routeEvent.value = LoginFragmentDirections.toHomeFragment()
         }.onFailure {
             onError()
         }

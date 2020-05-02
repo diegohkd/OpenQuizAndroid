@@ -2,11 +2,10 @@ package mobdao.com.openquiz.modules.quiz
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
-import io.mockk.MockKAnnotations
-import io.mockk.every
+import androidx.navigation.NavDirections
+import io.mockk.*
 import io.mockk.impl.annotations.MockK
-import io.mockk.mockk
-import io.mockk.verify
+import mobdao.com.openquiz.R
 import mobdao.com.openquiz.models.Game
 import mobdao.com.openquiz.models.Question
 import mobdao.com.openquiz.utils.pokos.ResultsReport
@@ -22,18 +21,27 @@ class QuizViewModelUnitTests {
 
     @MockK
     private lateinit var game: Game
+
     @MockK
     private lateinit var question1: Question
+
     @MockK
     private lateinit var question2: Question
+
     @MockK
     private lateinit var questionsObserver: Observer<List<Question>>
+
     @MockK
-    private lateinit var showCorrectAnswerObserver: Observer<Unit>
+    private lateinit var confirmAnswerObserver: Observer<Unit>
+
+    @MockK
+    private lateinit var showCorrectAnswerObserver: Observer<Boolean>
+
     @MockK
     private lateinit var showNextQuestionObserver: Observer<Unit>
+
     @MockK
-    private lateinit var showResultsReportObserver: Observer<ResultsReport>
+    private lateinit var routeObserver: Observer<NavDirections>
 
     private val questions: List<Question> by lazy { listOf(question1, question2) }
 
@@ -46,9 +54,11 @@ class QuizViewModelUnitTests {
         quizViewModel.init(game, questions)
 
         quizViewModel.questionsLiveData.observeForever(questionsObserver)
-        quizViewModel.getShowCorrectAnswerEvent(question1)?.observeForever(showCorrectAnswerObserver)
+        quizViewModel.getConfirmAnswerEvent(question1)?.observeForever(confirmAnswerObserver)
+        quizViewModel.getShowCorrectAnswerEvent(question1)
+            ?.observeForever(showCorrectAnswerObserver)
         quizViewModel.showNextQuestionEvent.observeForever(showNextQuestionObserver)
-        quizViewModel.showResultsReportEvent.observeForever(showResultsReportObserver)
+        quizViewModel.routeEvent.observeForever(routeObserver)
     }
 
     @Test
@@ -68,17 +78,24 @@ class QuizViewModelUnitTests {
     }
 
     @Test
-    fun `Delegate answer to game when clicked to confirm answer`() {
-        quizViewModel.onConfirmAnswerClicked(question1, "answer")
+    fun `Trigger to confirm answer when clicked to confirm answer`() {
+        quizViewModel.onConfirmAnswerClicked(question1)
+
+        verify { confirmAnswerObserver.onChanged(null) }
+    }
+
+    @Test
+    fun `Delegate answer to game when confirming answer`() {
+        quizViewModel.onConfirmAnswer(question1, "answer")
 
         verify { game.answer(any(), any()) }
     }
 
     @Test
-    fun `Trigger to show correct answer when clicked to confirm answer`() {
-        quizViewModel.onConfirmAnswerClicked(question1, "answer")
+    fun `Trigger to show correct answer when confirming answer`() {
+        quizViewModel.onConfirmAnswer(question1, "answer")
 
-        verify { showCorrectAnswerObserver.onChanged(null) }
+        verify { showCorrectAnswerObserver.onChanged(true) }
     }
 
     @Test
@@ -95,13 +112,18 @@ class QuizViewModelUnitTests {
         every { game.nextQuestion() }.returns(null)
         every { game.getNumberOfCorrectAnswers() }.returns(1)
         every { game.getNumberOfIncorrectAnswers() }.returns(0)
+        mockkObject(QuizFragmentDirections.Companion)
 
         quizViewModel.onNextClicked()
 
-        val resultsReport = quizViewModel.showResultsReportEvent.value
-        assertEquals(1, resultsReport?.correctAnswers)
-        assertEquals(0, resultsReport?.wrongAnswers)
-        verify { showResultsReportObserver.onChanged(any()) }
+        val slotResultsReport = slot<ResultsReport>()
+        verify { QuizFragmentDirections.Companion.toResultsReportFragment(capture(slotResultsReport)) }
+        val resultsReport = slotResultsReport.captured
+        val slotNavDirection = slot<NavDirections>()
+        verify { routeObserver.onChanged(capture(slotNavDirection)) }
+        assertEquals(1, resultsReport.correctAnswers)
+        assertEquals(0, resultsReport.wrongAnswers)
+        assertEquals(R.id.to_resultsReportFragment, slotNavDirection.captured.actionId)
     }
 
     @Test

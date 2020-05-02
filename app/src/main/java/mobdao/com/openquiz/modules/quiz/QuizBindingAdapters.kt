@@ -21,6 +21,7 @@ fun bindAnswersFragment(
     viewPager.adapter = QuestionsPagerAdapter(fragmentManager, fragmentFactory, questions)
 }
 
+@Suppress("UNUSED_PARAMETER")
 @BindingAdapter("bind:showNextPage")
 fun bindNextItem(viewPager: ViewPager, showNextPage: Unit?) {
     viewPager.setCurrentItem(viewPager.currentItem + 1, true)

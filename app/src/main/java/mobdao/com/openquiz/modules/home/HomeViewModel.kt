@@ -5,18 +5,12 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import mobdao.com.openquiz.data.repositories.opentriviarepository.OpenTriviaRepository
 import mobdao.com.openquiz.data.repositories.userauthrepository.UserAuthRepository
-import mobdao.com.openquiz.models.Question
 import mobdao.com.openquiz.modules.base.BaseViewModel
-import mobdao.com.openquiz.utils.livedata.SingleLiveEvent
-import javax.inject.Inject
 
-class HomeViewModel @Inject constructor(
+class HomeViewModel(
     private val userAuthRepository: UserAuthRepository,
     private val openTriviaRepository: OpenTriviaRepository
 ) : BaseViewModel() {
-
-    val startQuizEvent: SingleLiveEvent<List<Question>> = SingleLiveEvent()
-    val signOutEvent: SingleLiveEvent<Unit> = SingleLiveEvent()
 
     private var nOfQuestions = 10
 
@@ -26,7 +20,9 @@ class HomeViewModel @Inject constructor(
             openTriviaRepository.fetchQuestions(nOfQuestions)
         }.onSuccess { questions ->
             hideProgressBar()
-            startQuizEvent.postValue(questions)
+            routeEvent.value = HomeFragmentDirections.toQuizFragment(
+                questions.toTypedArray()
+            )
         }.onFailure {
             hideProgressBar()
             genericErrorEvent.call()
@@ -36,6 +32,6 @@ class HomeViewModel @Inject constructor(
     fun onSignOutClicked() {
         viewModelScope.cancel()
         userAuthRepository.logout()
-        signOutEvent.call()
+        routeEvent.value = HomeFragmentDirections.toLoginFragment()
     }
 }

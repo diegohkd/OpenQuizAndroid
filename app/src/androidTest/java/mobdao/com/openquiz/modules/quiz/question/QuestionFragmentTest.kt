@@ -5,18 +5,15 @@ import android.view.View
 import android.widget.RadioButton
 import androidx.core.os.bundleOf
 import androidx.fragment.app.testing.launchFragmentInContainer
-import androidx.lifecycle.ViewModelProvider
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.BoundedMatcher
 import androidx.test.espresso.matcher.ViewMatchers.*
-import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import io.mockk.MockKAnnotations
-import io.mockk.every
-import io.mockk.impl.annotations.MockK
+import mobdao.com.openquiz.DataBindingIdlingResourceRule
 import mobdao.com.openquiz.R
-import mobdao.com.openquiz.di.factories.ViewModelFactory
+import mobdao.com.openquiz.TaskExecutorWithIdlingResourceRule
 import mobdao.com.openquiz.models.*
 import mobdao.com.openquiz.modules.quiz.QuizViewModel
 import mobdao.com.openquiz.utils.constants.IntentConstants.QUESTION
@@ -24,15 +21,26 @@ import org.hamcrest.CoreMatchers.not
 import org.hamcrest.Description
 import org.hamcrest.Matcher
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
-import org.junit.runner.RunWith
+import org.koin.dsl.module
+import org.koin.test.KoinTest
+import org.koin.test.KoinTestRule
 
+class QuestionFragmentTest : KoinTest {
 
-@RunWith(AndroidJUnit4ClassRunner::class)
-class QuestionFragmentTest {
+    @get:Rule
+    val executorRule = TaskExecutorWithIdlingResourceRule() // this doesn't seem necessary
 
-    @MockK
-    lateinit var viewModelFactoryMock: ViewModelFactory
+    @get:Rule
+    val dataBindingIdlingResourceRule = DataBindingIdlingResourceRule()
+
+    @get:Rule
+    val koinTestRule = KoinTestRule.create {
+        modules(quizTestModule)
+    }
+
+    private val quizTestModule = module { factory { viewModel } }
 
     lateinit var viewModel: QuizViewModel
 
@@ -53,18 +61,8 @@ class QuestionFragmentTest {
     @Before
     fun setup() {
         MockKAnnotations.init(this, relaxUnitFun = true)
-        viewModel = QuizViewModel()
-        every { viewModelFactoryMock.create(QuizViewModel::class.java) }.returns(viewModel)
-        viewModel.init(game, questions)
-
-        launchFragmentInContainer(
-            fragmentArgs = bundleOf(QUESTION to question),
-            instantiate = {
-                val fragment = TestQuestionFragment()
-                fragment.fakeViewModelFactory = viewModelFactoryMock
-                fragment
-            }
-        )
+        setupViewModel()
+        setupFragment()
     }
 
     @Test
@@ -107,16 +105,25 @@ class QuestionFragmentTest {
             .check(matches(not(withTextColor(Color.RED))))
     }
 
-    class TestQuestionFragment : QuestionFragment() {
+    // region private
 
-        lateinit var fakeViewModelFactory: ViewModelFactory
-
-        override var viewModelFactory: ViewModelProvider.Factory
-            get() = fakeViewModelFactory
-            set(value) {}
+    private fun setupViewModel() {
+        viewModel = QuizViewModel()
+        viewModel.init(game, questions)
     }
 
-    fun withTextColor(expectedColor: Int): Matcher<View?>? {
+    private fun setupFragment() {
+        val fragment = QuestionFragment()
+        val scenario = launchFragmentInContainer(
+            fragmentArgs = bundleOf(QUESTION to question),
+            instantiate = {
+                fragment
+            }
+        )
+        dataBindingIdlingResourceRule.monitorFragment(scenario)
+    }
+
+    private fun withTextColor(expectedColor: Int): Matcher<View?>? {
         return object : BoundedMatcher<View?, RadioButton>(RadioButton::class.java) {
             override fun matchesSafely(radioButton: RadioButton): Boolean {
                 return radioButton.currentTextColor == expectedColor
@@ -128,5 +135,7 @@ class QuestionFragmentTest {
             }
         }
     }
+
+    // endregion private
 
 }
