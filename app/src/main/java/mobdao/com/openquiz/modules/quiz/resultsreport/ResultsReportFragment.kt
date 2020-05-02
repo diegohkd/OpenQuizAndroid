@@ -27,7 +27,7 @@ class ResultsReportFragment : BaseFragment() {
     }
 
     fun onOkClicked() {
-        val action = ResultsReportFragmentDirections.actionResultsReportFragmentToHomeFragment()
+        val action = ResultsReportFragmentDirections.toHomeFragment()
         findNavController().navigate(action)
     }
 

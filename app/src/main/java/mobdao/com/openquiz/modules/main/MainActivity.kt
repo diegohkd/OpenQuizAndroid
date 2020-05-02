@@ -24,9 +24,9 @@ class MainActivity : AppCompatActivity() {
         }
 
         if (initialScreenType == HOME) {
-            navController.navigate(R.id.action_mainFragment_to_homeFragment)
+            navController.navigate(R.id.to_homeFragment)
         } else {
-            navController.navigate(R.id.action_mainFragment_to_loginFragment)
+            navController.navigate(R.id.to_loginFragment)
         }
     }
 

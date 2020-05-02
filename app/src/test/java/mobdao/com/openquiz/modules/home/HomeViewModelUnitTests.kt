@@ -1,19 +1,21 @@
 package mobdao.com.openquiz.modules.home
 
-import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
+import androidx.navigation.NavDirections
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.impl.annotations.MockK
+import io.mockk.slot
 import io.mockk.verify
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import mobdao.com.CoroutineTestRule
+import mobdao.com.openquiz.R
 import mobdao.com.openquiz.data.repositories.opentriviarepository.OpenTriviaRepository
 import mobdao.com.openquiz.data.repositories.userauthrepository.UserAuthRepository
-import mobdao.com.openquiz.models.Question
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -40,10 +42,7 @@ class HomeViewModelUnitTests {
     private lateinit var genericErrorObserver: Observer<Unit>
 
     @MockK
-    private lateinit var startQuizObserver: Observer<List<Question>>
-
-    @MockK
-    private lateinit var signOutObserver: Observer<Unit>
+    private lateinit var routeObserver: Observer<NavDirections>
 
     private lateinit var homeViewModel: HomeViewModel
 
@@ -53,8 +52,7 @@ class HomeViewModelUnitTests {
         homeViewModel = HomeViewModel(userAuthRepository, openTriviaRepository)
         homeViewModel.progressBarVisibility.observeForever(progressBarObserver)
         homeViewModel.genericErrorEvent.observeForever(genericErrorObserver)
-        homeViewModel.startQuizEvent.observeForever(startQuizObserver)
-        homeViewModel.signOutEvent.observeForever(signOutObserver)
+        homeViewModel.routeEvent.observeForever(routeObserver)
     }
 
     @Test
@@ -99,7 +97,9 @@ class HomeViewModelUnitTests {
 
         homeViewModel.onStartQuizClicked()
 
-        verify { startQuizObserver.onChanged(any()) }
+        val slot = slot<NavDirections>()
+        verify { routeObserver.onChanged(capture(slot)) }
+        assertEquals(R.id.to_quizFragment, slot.captured.actionId)
     }
 
     @Test
@@ -113,7 +113,9 @@ class HomeViewModelUnitTests {
     fun `Trigger sign out event when clicked to sign out`() {
         homeViewModel.onSignOutClicked()
 
-        verify { signOutObserver.onChanged(null) }
+        val slot = slot<NavDirections>()
+        verify { routeObserver.onChanged(capture(slot)) }
+        assertEquals(R.id.to_loginFragment, slot.captured.actionId)
     }
 
     // region private

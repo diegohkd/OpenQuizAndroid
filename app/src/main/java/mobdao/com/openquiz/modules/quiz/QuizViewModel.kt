@@ -12,7 +12,6 @@ class QuizViewModel : BaseViewModel() {
 
     var questionsLiveData: MutableLiveData<List<Question>> = MutableLiveData()
     var showNextQuestionEvent: LiveEvent<Unit> = LiveEvent()
-    var showResultsReportEvent: LiveEvent<ResultsReport> = LiveEvent()
     private var showCorrectAnswerEvents = mutableMapOf<Question, MutableLiveData<Boolean>>()
     private var selectedAnswerEvents = mutableMapOf<Question, MutableLiveData<Boolean>>()
     private var confirmAnswerEvents = mutableMapOf<Question, LiveEvent<Unit>>()
@@ -71,7 +70,9 @@ class QuizViewModel : BaseViewModel() {
         val correctAnswers = game?.getNumberOfCorrectAnswers().orZero()
         val wrongAnswers = game?.getNumberOfIncorrectAnswers().orZero()
         val resultsReport = ResultsReport(correctAnswers, wrongAnswers)
-        showResultsReportEvent.postValue(resultsReport)
+        routeEvent.value = QuizFragmentDirections.toResultsReportFragment(
+            resultsReport
+        )
     }
 
     //endregion
