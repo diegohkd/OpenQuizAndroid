@@ -16,7 +16,6 @@ class LoginViewModel(
     private val userAuthRepository: UserAuthRepository
 ) : BaseViewModel() {
 
-    val showHomeScreenEvent: LiveEvent<Unit> = LiveEvent()
     val showGoogleSignInEvent: LiveEvent<Unit> = LiveEvent()
 
     fun onGoogleSignInClicked() {
@@ -49,7 +48,7 @@ class LoginViewModel(
             userAuthRepository.loginOnFirebase(account)
         }.onSuccess {
             hideProgressBar()
-            showHomeScreenEvent.call()
+            routeEvent.value = LoginFragmentDirections.toHomeFragment()
         }.onFailure {
             onError()
         }
