@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.fragment.findNavController
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import mobdao.com.openquiz.R
@@ -52,10 +51,7 @@ class LoginFragment : BaseFragment() {
 
     private fun setupObservers() = with(viewModel) {
         setupGenericErrorObserver()
-        setupSingleEventObserver(showHomeScreenEvent to {
-            findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
-        })
-
+        setupNavigationObserver()
         setupSingleEventObserver(showGoogleSignInEvent to {
             showGoogleSignIn()
         })
