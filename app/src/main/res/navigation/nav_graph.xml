@@ -11,13 +11,13 @@
         android:label="MainFragment">
 
         <action
-            android:id="@+id/action_mainFragment_to_loginFragment"
+            android:id="@+id/to_loginFragment"
             app:destination="@id/loginFragment"
             app:popUpTo="@id/mainFragment"
             app:popUpToInclusive="true" />
 
         <action
-            android:id="@+id/action_mainFragment_to_homeFragment"
+            android:id="@+id/to_homeFragment"
             app:destination="@id/homeFragment"
             app:popUpTo="@id/mainFragment"
             app:popUpToInclusive="true" />
@@ -31,7 +31,7 @@
         tools:layout="@layout/fragment_login">
 
         <action
-            android:id="@+id/action_loginFragment_to_homeFragment"
+            android:id="@+id/to_homeFragment"
             app:destination="@id/homeFragment"
             app:popUpTo="@id/loginFragment"
             app:popUpToInclusive="true" />
@@ -45,13 +45,13 @@
         tools:layout="@layout/fragment_home">
 
         <action
-            android:id="@+id/action_homeFragment_to_loginFragment"
+            android:id="@+id/to_loginFragment"
             app:destination="@id/loginFragment"
             app:popUpTo="@id/homeFragment"
             app:popUpToInclusive="true" />
 
         <action
-            android:id="@+id/action_homeFragment_to_quizFragment"
+            android:id="@+id/to_quizFragment"
             app:destination="@id/quizFragment">
 
             <argument
@@ -72,7 +72,7 @@
             app:argType="mobdao.com.openquiz.models.Question[]" />
 
         <action
-            android:id="@+id/action_quizFragment_to_resultsReportFragment"
+            android:id="@+id/to_resultsReportFragment"
             app:destination="@id/resultsReportFragment">
 
             <argument
@@ -93,7 +93,7 @@
             app:argType="mobdao.com.openquiz.utils.pokos.ResultsReport" />
 
         <action
-            android:id="@+id/action_resultsReportFragment_to_homeFragment"
+            android:id="@+id/to_homeFragment"
             app:destination="@id/homeFragment" />
 
     </fragment>

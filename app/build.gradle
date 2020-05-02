@@ -27,7 +27,7 @@ android {
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "mobdao.com.openquiz.OpenQuizTestRunner"
         signingConfig signingConfigs.release
     }
     buildTypes {
@@ -71,6 +71,7 @@ dependencies {
     testImplementation "io.mockk:mockk:1.9.3"
     debugImplementation 'androidx.fragment:fragment-testing:1.2.4'
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_version"
+    androidTestImplementation "org.koin:koin-test:$koin_version"
 
     // Modules dependencies
     implementation project(path: ':data')
@@ -82,8 +83,4 @@ dependencies {
     implementation "org.koin:koin-androidx-scope:$koin_version"
     implementation "org.koin:koin-androidx-viewmodel:$koin_version"
     implementation "org.koin:koin-androidx-fragment:$koin_version"
-
-    // Navigation Component
-    implementation "androidx.navigation:navigation-fragment-ktx:$navigation_version"
-    implementation "androidx.navigation:navigation-ui-ktx:$navigation_version"
 }

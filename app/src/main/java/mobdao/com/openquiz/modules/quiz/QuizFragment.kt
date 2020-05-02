@@ -4,12 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import mobdao.com.openquiz.databinding.FragmentQuizBinding
 import mobdao.com.openquiz.models.Game
 import mobdao.com.openquiz.modules.base.BaseFragment
-import mobdao.com.openquiz.utils.extensions.setupObserver
 import mobdao.com.openquiz.utils.factories.FragmentFactory
 import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -45,12 +43,8 @@ class QuizFragment : BaseFragment() {
 
     //region private
 
-    private fun setupObservers() = with(viewModel) {
-        setupObserver(showResultsReportEvent to { resultsReport ->
-            val action =
-                QuizFragmentDirections.actionQuizFragmentToResultsReportFragment(resultsReport)
-            findNavController().navigate(action)
-        })
+    private fun setupObservers() {
+        setupNavigationObserver()
     }
 
     private fun initViewModel() {
