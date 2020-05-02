@@ -20,6 +20,7 @@ class OpenQuizApplication : Application() {
             androidContext(this@OpenQuizApplication)
             modules(
                 retrofitModule,
+                okHttpClientModule,
                 questionServiceMapperModule,
                 openTriviaRepositoryModule,
                 firebaseAuthModule,
