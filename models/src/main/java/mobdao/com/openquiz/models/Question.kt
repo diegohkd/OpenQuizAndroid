@@ -19,8 +19,8 @@ data class Question(
     var answeredOption: String? = null
         private set
 
-    fun answer(option: String): Boolean {
-        if (option != correctAnswer && !incorrectAnswers.contains(option))
+    fun answer(option: String?): Boolean {
+        if (option != null && option != correctAnswer && !incorrectAnswers.contains(option))
             throw IllegalArgumentException("Not a valid option")
 
         answeredOption = option

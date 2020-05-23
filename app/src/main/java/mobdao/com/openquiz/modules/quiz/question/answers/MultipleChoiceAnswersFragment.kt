@@ -42,6 +42,15 @@ class MultipleChoiceAnswersFragment : BaseAnswersFragment() {
         getCorrectRadioButton()?.setTextColor(Color.GREEN)
     }
 
+    override fun showUnansweredQuestion(): Unit = with(binding.radioGroup) {
+        selectedRadioButton?.isChecked = false
+        children.forEach {
+            it.isClickable = false
+            (it as? RadioButton)?.setTextColor(Color.RED)
+        }
+        getCorrectRadioButton()?.setTextColor(Color.GREEN)
+    }
+
     //region private
 
     private fun selectedAnswerIndex(): Int = with(binding.radioGroup) {
