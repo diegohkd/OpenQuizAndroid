@@ -9,15 +9,23 @@ import mobdao.com.openquiz.databinding.FragmentQuizBinding
 import mobdao.com.openquiz.models.Game
 import mobdao.com.openquiz.modules.base.BaseFragment
 import mobdao.com.openquiz.utils.factories.FragmentFactory
+import org.koin.android.ext.android.getKoin
 import org.koin.android.ext.android.inject
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import org.koin.androidx.viewmodel.scope.getViewModel
+import org.koin.core.qualifier.named
 
 class QuizFragment : BaseFragment() {
 
     private val fragmentFactory: FragmentFactory by inject()
     private val args: QuizFragmentArgs by navArgs()
     private lateinit var binding: FragmentQuizBinding
-    override val viewModel: QuizViewModel by sharedViewModel()
+
+    private val scope = getKoin().getOrCreateScope(scopeId, named(scopeName))
+
+    @Suppress("RemoveExplicitTypeArguments")
+    override val viewModel: QuizViewModel by lazy {
+        scope.getViewModel<QuizViewModel>(this)
+    }
 
     //region Lifecycle
 
@@ -28,7 +36,7 @@ class QuizFragment : BaseFragment() {
     ): View? = FragmentQuizBinding.inflate(layoutInflater).apply {
         binding = this
         binding.lifecycleOwner = viewLifecycleOwner
-        binding.fragmentManager = parentFragmentManager
+        binding.fragmentManager = childFragmentManager
     }.root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -53,4 +61,9 @@ class QuizFragment : BaseFragment() {
     }
 
     //endregion
+
+    companion object {
+        internal const val scopeId = "QuizFragment"
+        internal const val scopeName = "QuizFragment"
+    }
 }

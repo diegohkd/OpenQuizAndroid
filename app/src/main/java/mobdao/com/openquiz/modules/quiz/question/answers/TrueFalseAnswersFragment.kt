@@ -44,6 +44,15 @@ class TrueFalseAnswersFragment : BaseAnswersFragment() {
         getCorrectButton().setTextColor(Color.GREEN)
     }
 
+    override fun showUnansweredQuestion() {
+        selectedButton?.isChecked = false
+        falseButton.setTextColor(Color.RED)
+        falseButton.isClickable = false
+        trueButton.setTextColor(Color.RED)
+        trueButton.isClickable = false
+        getCorrectButton().setTextColor(Color.GREEN)
+    }
+
     // region private
 
     private fun setupToggleButton(button: ToggleButton, otherToggleButton: ToggleButton) {

@@ -46,4 +46,7 @@ dependencies {
     // Navigation Component
     api "androidx.navigation:navigation-fragment-ktx:$navigation_version"
     api "androidx.navigation:navigation-ui-ktx:$navigation_version"
+
+    // Koin
+    implementation "org.koin:koin-androidx-scope:$koin_version"
 }

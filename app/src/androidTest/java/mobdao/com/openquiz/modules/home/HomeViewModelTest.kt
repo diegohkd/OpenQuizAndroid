@@ -2,8 +2,10 @@ package mobdao.com.openquiz.modules.home
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
+import androidx.navigation.NavDirections
 import io.mockk.*
 import io.mockk.impl.annotations.MockK
+import mobdao.com.openquiz.R
 import mobdao.com.openquiz.data.repositories.opentriviarepository.OpenTriviaRepository
 import mobdao.com.openquiz.data.repositories.opentriviarepository.OpenTriviaRepositoryImpl
 import mobdao.com.openquiz.data.repositories.userauthrepository.UserAuthRepository
@@ -16,6 +18,7 @@ import mobdao.com.openquiz.models.Category
 import mobdao.com.openquiz.models.Difficulty
 import mobdao.com.openquiz.models.Question
 import mobdao.com.openquiz.models.QuestionType
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -39,7 +42,7 @@ class HomeViewModelTest {
     private lateinit var questionResponse: QuestionsResponse
 
     @MockK
-    private lateinit var startQuizObserver: Observer<List<Question>>
+    private lateinit var routeObserver: Observer<NavDirections>
 
     private val nOfQuestions = 10
     private val questions = listOf(
@@ -71,7 +74,7 @@ class HomeViewModelTest {
         userAuthRepository = UserAuthRepositoryImpl(mockk(), mockk())
         openTriviaRepository = OpenTriviaRepositoryImpl(retrofit, questionServiceMapper)
         homeViewModel = HomeViewModel(userAuthRepository, openTriviaRepository)
-        homeViewModel.startQuizEvent.observeForever(startQuizObserver)
+        homeViewModel.routeEvent.observeForever(routeObserver)
     }
 
     @Test
@@ -80,7 +83,10 @@ class HomeViewModelTest {
 
         homeViewModel.onStartQuizClicked()
 
-        verify { startQuizObserver.onChanged(questions) }
+        val slot = slot<NavDirections>()
+        verify { routeObserver.onChanged(capture(slot)) }
+        assertEquals(R.id.to_quizFragment, slot.captured.actionId)
+        assertEquals(questions, slot.captured.arguments.getParcelableArray("questions")!!.toList())
     }
 
     // region private

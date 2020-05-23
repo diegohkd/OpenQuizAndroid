@@ -4,20 +4,35 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.ViewModelStoreOwner
 import mobdao.com.openquiz.models.Question
 import mobdao.com.openquiz.modules.base.BaseFragment
+import mobdao.com.openquiz.modules.quiz.QuizFragment.Companion.scopeId
+import mobdao.com.openquiz.modules.quiz.QuizFragment.Companion.scopeName
 import mobdao.com.openquiz.modules.quiz.QuizViewModel
 import mobdao.com.openquiz.utils.constants.IntentConstants.QUESTION
+import mobdao.com.openquiz.utils.extensions.injectOrNull
 import mobdao.com.openquiz.utils.extensions.safeGetParcelable
 import mobdao.com.openquiz.utils.extensions.setupObserver
 import mobdao.com.openquiz.utils.extensions.setupSingleEventObserver
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import org.koin.android.ext.android.getKoin
+import org.koin.androidx.viewmodel.scope.getViewModel
+import org.koin.core.qualifier.named
 
 abstract class BaseAnswersFragment : BaseFragment() {
 
     protected abstract val layout: Int
     protected lateinit var question: Question
-    override val viewModel: QuizViewModel by sharedViewModel()
+
+    private val scope = getKoin().getOrCreateScope(scopeId, named(scopeName))
+    private val viewModelScopeOwner: ViewModelStoreOwner? by injectOrNull(scope)
+
+    @Suppress("RemoveExplicitTypeArguments")
+    override val viewModel: QuizViewModel by lazy {
+        scope.getViewModel<QuizViewModel>(
+            viewModelScopeOwner ?: requireParentFragment().requireParentFragment()
+        )
+    }
 
     // region lifecycle
 
@@ -48,6 +63,11 @@ abstract class BaseAnswersFragment : BaseFragment() {
                 showCorrectAnswer()
             })
         }
+        getShowUnansweredQuestionEvent(question)?.let { showUnansweredQuestionEvent ->
+            setupObserver(showUnansweredQuestionEvent to { _ ->
+                showUnansweredQuestion()
+            })
+        }
         getConfirmAnswerEvent(question)?.let { confirmAnswerEvent ->
             setupSingleEventObserver(confirmAnswerEvent to {
                 viewModel.onConfirmAnswer(question, getSelectedAnswer())
@@ -63,6 +83,7 @@ abstract class BaseAnswersFragment : BaseFragment() {
     protected abstract fun bind(question: Question)
     protected abstract fun getSelectedAnswer(): String
     protected abstract fun showCorrectAnswer()
+    protected abstract fun showUnansweredQuestion()
 
     // endregion
 }

@@ -5,6 +5,7 @@ import android.view.View
 import android.widget.RadioButton
 import androidx.core.os.bundleOf
 import androidx.fragment.app.testing.launchFragmentInContainer
+import androidx.lifecycle.ViewModelStoreOwner
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
@@ -15,6 +16,7 @@ import mobdao.com.openquiz.DataBindingIdlingResourceRule
 import mobdao.com.openquiz.R
 import mobdao.com.openquiz.TaskExecutorWithIdlingResourceRule
 import mobdao.com.openquiz.models.*
+import mobdao.com.openquiz.modules.quiz.QuizFragment
 import mobdao.com.openquiz.modules.quiz.QuizViewModel
 import mobdao.com.openquiz.utils.constants.IntentConstants.QUESTION
 import org.hamcrest.CoreMatchers.not
@@ -23,6 +25,8 @@ import org.hamcrest.Matcher
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.koin.androidx.viewmodel.dsl.viewModel
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import org.koin.test.KoinTest
 import org.koin.test.KoinTestRule
@@ -40,7 +44,12 @@ class QuestionFragmentTest : KoinTest {
         modules(quizTestModule)
     }
 
-    private val quizTestModule = module { factory { viewModel } }
+    private val quizTestModule = module {
+        scope(named(QuizFragment.scopeName)) {
+            factory<ViewModelStoreOwner> { questionFragment }
+            viewModel { viewModel }
+        }
+    }
 
     lateinit var viewModel: QuizViewModel
 
@@ -58,8 +67,11 @@ class QuestionFragmentTest : KoinTest {
     private val questions = listOf(question)
     private val game = Game(listOf(question))
 
+    private lateinit var questionFragment: QuestionFragment
+
     @Before
     fun setup() {
+        getKoin().getOrCreateScope(QuizFragment.scopeId, named(QuizFragment.scopeName))
         MockKAnnotations.init(this, relaxUnitFun = true)
         setupViewModel()
         setupFragment()
@@ -113,11 +125,11 @@ class QuestionFragmentTest : KoinTest {
     }
 
     private fun setupFragment() {
-        val fragment = QuestionFragment()
+        questionFragment = QuestionFragment()
         val scenario = launchFragmentInContainer(
             fragmentArgs = bundleOf(QUESTION to question),
             instantiate = {
-                fragment
+                questionFragment
             }
         )
         dataBindingIdlingResourceRule.monitorFragment(scenario)
