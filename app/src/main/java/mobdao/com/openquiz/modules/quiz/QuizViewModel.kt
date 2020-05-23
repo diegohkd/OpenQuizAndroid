@@ -13,6 +13,9 @@ class QuizViewModel : BaseViewModel() {
     var questionsLiveData: MutableLiveData<List<Question>> = MutableLiveData()
     var showNextQuestionEvent: LiveEvent<Unit> = LiveEvent()
     private var showCorrectAnswerEvents = mutableMapOf<Question, MutableLiveData<Boolean>>()
+    private var showNextButtonEvents = mutableMapOf<Question, MutableLiveData<Boolean>>()
+    private var showUnansweredQuestionEvents = mutableMapOf<Question, MutableLiveData<Boolean>>()
+    private var runCountdownTimerEvents = mutableMapOf<Question, MutableLiveData<Boolean>>()
     private var selectedAnswerEvents = mutableMapOf<Question, MutableLiveData<Boolean>>()
     private var confirmAnswerEvents = mutableMapOf<Question, LiveEvent<Unit>>()
 
@@ -22,6 +25,10 @@ class QuizViewModel : BaseViewModel() {
         this.game = game
         setupCorrectAnswerEvents(questions)
         questionsLiveData.postValue(questions)
+    }
+
+    fun onResume(question: Question) {
+        runCountdownTimerEvents[question]?.value = true
     }
 
     fun onAnswerClicked(question: Question) {
@@ -35,6 +42,14 @@ class QuizViewModel : BaseViewModel() {
     fun onConfirmAnswer(question: Question, answer: String) {
         game?.answer(question, answer)
         showCorrectAnswerEvents[question]?.value = true
+        showNextButtonEvents[question]?.value = true
+        runCountdownTimerEvents[question]?.value = false
+    }
+
+    fun onCountdownFinished(question: Question) {
+        game?.answer(question, null)
+        showUnansweredQuestionEvents[question]?.value = true
+        showNextButtonEvents[question]?.value = true
     }
 
     fun onNextClicked() {
@@ -50,6 +65,15 @@ class QuizViewModel : BaseViewModel() {
     fun getShowCorrectAnswerEvent(question: Question): MutableLiveData<Boolean>? =
         showCorrectAnswerEvents[question]
 
+    fun getShowNextButtonEvents(question: Question): MutableLiveData<Boolean>? =
+        showNextButtonEvents[question]
+
+    fun getShowUnansweredQuestionEvent(question: Question): MutableLiveData<Boolean>? =
+        showUnansweredQuestionEvents[question]
+
+    fun getRunCountdownTimerEvent(question: Question): MutableLiveData<Boolean>? =
+        runCountdownTimerEvents[question]
+
     fun getSelectedAnswerEvent(question: Question): MutableLiveData<Boolean>? =
         selectedAnswerEvents[question]
 
@@ -61,6 +85,9 @@ class QuizViewModel : BaseViewModel() {
     private fun setupCorrectAnswerEvents(questions: List<Question>) {
         questions.forEach { question ->
             showCorrectAnswerEvents[question] = LiveEvent()
+            showNextButtonEvents[question] = LiveEvent()
+            showUnansweredQuestionEvents[question] = LiveEvent()
+            runCountdownTimerEvents[question] = LiveEvent()
             selectedAnswerEvents[question] = LiveEvent()
             confirmAnswerEvents[question] = LiveEvent()
         }

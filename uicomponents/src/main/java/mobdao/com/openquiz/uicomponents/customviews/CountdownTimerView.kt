@@ -46,7 +46,7 @@ class CountdownTimerView(context: Context, attrs: AttributeSet? = null) : View(c
     private var isExecuting = false
     private var initialTime = -1
     private var currentTime = -1
-    
+
     var countdownFinishedCallback: (() -> Unit)? = null
 
     init {
@@ -132,7 +132,14 @@ class CountdownTimerView(context: Context, attrs: AttributeSet? = null) : View(c
         canvas.drawText(displayedCount, textX, textY, numberPaint)
     }
 
-    fun start() {
+    fun setState(running: Boolean) {
+        if (running) start()
+        else stop()
+    }
+
+    // region private
+
+    private fun start() {
         if (isExecuting) return
         isExecuting = true
         countDownTimer = object : CountDownTimer(currentTime * 1000L, 1000) {
@@ -148,11 +155,9 @@ class CountdownTimerView(context: Context, attrs: AttributeSet? = null) : View(c
         }.start()
     }
 
-    fun pause() {
+    private fun stop() {
         countDownTimer?.cancel()
     }
-
-    // region private
 
     private fun decrementTime() {
         currentTime--

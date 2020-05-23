@@ -15,7 +15,7 @@ class Game(private val questions: List<Question>) {
         return null
     }
 
-    fun answer(question: Question, option: String) {
+    fun answer(question: Question, option: String?) {
         val isCorrectAnswer = question.answer(option)
         if (isCorrectAnswer) {
             score++

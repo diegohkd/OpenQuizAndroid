@@ -63,6 +63,11 @@ abstract class BaseAnswersFragment : BaseFragment() {
                 showCorrectAnswer()
             })
         }
+        getShowUnansweredQuestionEvent(question)?.let { showUnansweredQuestionEvent ->
+            setupObserver(showUnansweredQuestionEvent to { _ ->
+                showUnansweredQuestion()
+            })
+        }
         getConfirmAnswerEvent(question)?.let { confirmAnswerEvent ->
             setupSingleEventObserver(confirmAnswerEvent to {
                 viewModel.onConfirmAnswer(question, getSelectedAnswer())
@@ -78,6 +83,7 @@ abstract class BaseAnswersFragment : BaseFragment() {
     protected abstract fun bind(question: Question)
     protected abstract fun getSelectedAnswer(): String
     protected abstract fun showCorrectAnswer()
+    protected abstract fun showUnansweredQuestion()
 
     // endregion
 }

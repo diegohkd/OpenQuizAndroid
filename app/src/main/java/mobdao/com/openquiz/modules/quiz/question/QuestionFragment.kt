@@ -49,7 +49,7 @@ open class QuestionFragment : BaseFragment() {
 
     override fun onResume() {
         super.onResume()
-        binding.countdownTimerView.start()
+        binding.question?.let(viewModel::onResume)
     }
 
     //endregion
