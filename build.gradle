@@ -27,6 +27,8 @@ subprojects {
     apply plugin: "org.jlleitschuh.gradle.ktlint"
 }
 
+apply plugin: "org.jlleitschuh.gradle.ktlint"
+
 allprojects {
     repositories {
         google()
@@ -39,4 +41,10 @@ task clean(type: Delete) {
     delete rootProject.buildDir
 }
 
-apply plugin: "org.jlleitschuh.gradle.ktlint"
+task installGitHook(type: Copy) {
+    from new File(rootProject.rootDir, 'pre-commit')
+    into { new File(rootProject.rootDir, '.git/hooks') }
+    fileMode 0777
+}
+tasks.getByPath(':app:preBuild').dependsOn installGitHook
+
