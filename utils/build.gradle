@@ -29,9 +29,7 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     // Test
-    testImplementation 'junit:junit:4.13'
-    androidTestImplementation 'androidx.test:runner:1.2.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    testImplementation 'junit:junit:4.13.1'
 
     // Kotlin
     api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
@@ -40,8 +38,8 @@ dependencies {
     api 'androidx.lifecycle:lifecycle-extensions:2.2.0'
 
     // Android
-    api 'androidx.appcompat:appcompat:1.1.0'
-    api 'androidx.fragment:fragment-ktx:1.2.4'
+    api 'androidx.appcompat:appcompat:1.2.0'
+    api 'androidx.fragment:fragment-ktx:1.2.5'
 
     // Navigation Component
     api "androidx.navigation:navigation-fragment-ktx:$navigation_version"
