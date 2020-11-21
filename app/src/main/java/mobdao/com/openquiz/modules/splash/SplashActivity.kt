@@ -29,10 +29,12 @@ class SplashActivity : AppCompatActivity() {
     //region private
 
     private fun setupObservers() = with(viewModel) {
-        setupObserver(isUserLoggedInLiveData to { isUserLoggedIn ->
-            val initialScreenType = if (isUserLoggedIn) HOME else LOGIN
-            showMain(initialScreenType)
-        })
+        setupObserver(
+            isUserLoggedInLiveData to { isUserLoggedIn ->
+                val initialScreenType = if (isUserLoggedIn) HOME else LOGIN
+                showMain(initialScreenType)
+            }
+        )
     }
 
     private fun showMain(initialScreenType: InitialScreenType) {
@@ -44,5 +46,4 @@ class SplashActivity : AppCompatActivity() {
     }
 
     //endregion
-
 }

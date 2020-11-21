@@ -14,12 +14,14 @@ class QuestionsPagerAdapter(
 ) : FragmentStatePagerAdapter(fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
     override fun getItem(position: Int) =
-        fragmentFactory.createFragment(Bundle().apply {
-            putParcelable(
-                QUESTION,
-                questions[position]
-            )
-        })
+        fragmentFactory.createFragment(
+            Bundle().apply {
+                putParcelable(
+                    QUESTION,
+                    questions[position]
+                )
+            }
+        )
 
     override fun getCount() = questions.size
 }

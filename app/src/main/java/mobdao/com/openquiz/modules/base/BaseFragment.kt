@@ -12,15 +12,19 @@ abstract class BaseFragment : Fragment() {
 
     @Suppress("RedundantLambdaArrow")
     protected fun setupGenericErrorObserver() = viewModel?.run {
-        setupObserver(genericErrorEvent to { _ ->
-            showDefaultErrorDialog()
-        })
+        setupObserver(
+            genericErrorEvent to { _ ->
+                showDefaultErrorDialog()
+            }
+        )
     }
 
     protected fun setupNavigationObserver() = viewModel?.run {
-        setupObserver(routeEvent to { direction ->
-            navigate(direction)
-        })
+        setupObserver(
+            routeEvent to { direction ->
+                navigate(direction)
+            }
+        )
     }
 
     // region private

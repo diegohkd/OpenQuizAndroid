@@ -10,12 +10,19 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.BoundedMatcher
-import androidx.test.espresso.matcher.ViewMatchers.*
+import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.isEnabled
+import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.espresso.matcher.ViewMatchers.withText
 import io.mockk.MockKAnnotations
 import mobdao.com.openquiz.DataBindingIdlingResourceRule
 import mobdao.com.openquiz.R
 import mobdao.com.openquiz.TaskExecutorWithIdlingResourceRule
-import mobdao.com.openquiz.models.*
+import mobdao.com.openquiz.models.Category
+import mobdao.com.openquiz.models.Difficulty
+import mobdao.com.openquiz.models.Game
+import mobdao.com.openquiz.models.Question
+import mobdao.com.openquiz.models.QuestionType
 import mobdao.com.openquiz.modules.quiz.QuizFragment
 import mobdao.com.openquiz.modules.quiz.QuizViewModel
 import mobdao.com.openquiz.utils.constants.IntentConstants.QUESTION
@@ -51,7 +58,7 @@ class QuestionFragmentTest : KoinTest {
         }
     }
 
-    lateinit var viewModel: QuizViewModel
+    private lateinit var viewModel: QuizViewModel
 
     private val correctAnswer = "correctAnswer"
     private val incorrectAnswer1 = "incorrectAnswer1"
@@ -149,5 +156,4 @@ class QuestionFragmentTest : KoinTest {
     }
 
     // endregion private
-
 }

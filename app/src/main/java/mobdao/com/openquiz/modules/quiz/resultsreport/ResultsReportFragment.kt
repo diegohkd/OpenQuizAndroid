@@ -15,7 +15,8 @@ class ResultsReportFragment : BaseFragment() {
     private val args: ResultsReportFragmentArgs by navArgs()
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? = FragmentResultsReportBinding.inflate(layoutInflater).apply {
         binding = this

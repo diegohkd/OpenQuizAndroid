@@ -17,7 +17,6 @@ class OpenTriviaRepositoryImpl(
         .create(SessionTokenService::class.java)
         .fetchSessionToken().token.orEmpty()
 
-
     override suspend fun fetchQuestions(nOfQuestions: Int): List<Question> = retrofit
         .create(QuestionsService::class.java)
         .fetchQuestions(nOfQuestions).run {

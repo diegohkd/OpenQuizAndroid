@@ -3,8 +3,13 @@ package mobdao.com.openquiz.modules.home
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.Observer
 import androidx.navigation.NavDirections
-import io.mockk.*
+import io.mockk.MockKAnnotations
+import io.mockk.coEvery
+import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.mockk
+import io.mockk.slot
+import io.mockk.verify
 import mobdao.com.openquiz.R
 import mobdao.com.openquiz.data.repositories.opentriviarepository.OpenTriviaRepository
 import mobdao.com.openquiz.data.repositories.opentriviarepository.OpenTriviaRepositoryImpl

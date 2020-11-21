@@ -7,11 +7,13 @@ import org.koin.dsl.module
 
 val okHttpClientModule = module {
     single {
-        HttpLoggingInterceptor(object : HttpLoggingInterceptor.Logger {
-            override fun log(message: String) {
-                Log.d("HttpLoggingInterceptor", message)
+        HttpLoggingInterceptor(
+            object : HttpLoggingInterceptor.Logger {
+                override fun log(message: String) {
+                    Log.d("HttpLoggingInterceptor", message)
+                }
             }
-        }).apply {
+        ).apply {
             level = HttpLoggingInterceptor.Level.BODY
         }
     }

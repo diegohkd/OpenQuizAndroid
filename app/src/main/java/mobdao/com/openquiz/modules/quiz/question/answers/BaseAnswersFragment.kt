@@ -59,19 +59,25 @@ abstract class BaseAnswersFragment : BaseFragment() {
     @Suppress("RedundantLambdaArrow")
     private fun setupObservers() = with(viewModel) {
         getShowCorrectAnswerEvent(question)?.let { showCorrectAnswerEvent ->
-            setupObserver(showCorrectAnswerEvent to { _ ->
-                showCorrectAnswer()
-            })
+            setupObserver(
+                showCorrectAnswerEvent to { _ ->
+                    showCorrectAnswer()
+                }
+            )
         }
         getShowUnansweredQuestionEvent(question)?.let { showUnansweredQuestionEvent ->
-            setupObserver(showUnansweredQuestionEvent to { _ ->
-                showUnansweredQuestion()
-            })
+            setupObserver(
+                showUnansweredQuestionEvent to { _ ->
+                    showUnansweredQuestion()
+                }
+            )
         }
         getConfirmAnswerEvent(question)?.let { confirmAnswerEvent ->
-            setupSingleEventObserver(confirmAnswerEvent to {
-                viewModel.onConfirmAnswer(question, getSelectedAnswer())
-            })
+            setupSingleEventObserver(
+                confirmAnswerEvent to {
+                    viewModel.onConfirmAnswer(question, getSelectedAnswer())
+                }
+            )
         }
     }
 

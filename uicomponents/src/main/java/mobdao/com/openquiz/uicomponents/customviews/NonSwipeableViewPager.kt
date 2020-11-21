@@ -8,7 +8,9 @@ import androidx.viewpager.widget.ViewPager
 
 @Suppress("UNUSED_PARAMETER")
 class NonSwipeableViewPager @JvmOverloads constructor(
-    context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
 ) : ViewPager(context, attrs) {
 
     override fun onInterceptTouchEvent(event: MotionEvent): Boolean = false
