@@ -1,11 +1,11 @@
 package mobdao.com.openquiz.data.server.mappers
 
-import org.junit.Assert.assertEquals
 import mobdao.com.openquiz.data.server.responses.QuestionResponse
 import mobdao.com.openquiz.data.server.responses.QuestionsResponse
 import mobdao.com.openquiz.models.Category
 import mobdao.com.openquiz.models.Difficulty
 import mobdao.com.openquiz.models.QuestionType
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 

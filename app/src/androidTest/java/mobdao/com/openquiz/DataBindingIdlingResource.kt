@@ -8,7 +8,7 @@ import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.testing.FragmentScenario
 import androidx.test.espresso.IdlingResource
-import java.util.*
+import java.util.UUID
 
 /**
  * An espresso idling resource implementation that reports idle status for all data binding
@@ -54,11 +54,14 @@ class DataBindingIdlingResource : IdlingResource {
             wasNotIdle = true
             // check next frame
             scenario.onFragment { fragment ->
-                fragment.view?.postDelayed({
-                    if (fragment.view != null) {
-                        isIdleNow
-                    }
-                }, 16)
+                fragment.view?.postDelayed(
+                    {
+                        if (fragment.view != null) {
+                            isIdleNow
+                        }
+                    },
+                    16
+                )
             }
         }
         return idle
@@ -75,7 +78,7 @@ class DataBindingIdlingResource : IdlingResource {
         lateinit var bindings: List<ViewDataBinding>
         scenario.onFragment { fragment ->
             bindings = fragment.requireView().flattenHierarchy().mapNotNull { view ->
-                DataBindingUtil.getBinding<ViewDataBinding>(view)
+                DataBindingUtil.getBinding(view)
             }
         }
         return bindings

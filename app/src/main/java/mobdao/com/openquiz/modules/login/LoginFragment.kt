@@ -52,9 +52,11 @@ class LoginFragment : BaseFragment() {
     private fun setupObservers() = with(viewModel) {
         setupGenericErrorObserver()
         setupNavigationObserver()
-        setupSingleEventObserver(showGoogleSignInEvent to {
-            showGoogleSignIn()
-        })
+        setupSingleEventObserver(
+            showGoogleSignInEvent to {
+                showGoogleSignIn()
+            }
+        )
     }
 
     private fun showGoogleSignIn() {

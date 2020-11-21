@@ -10,6 +10,7 @@ buildscript {
     repositories {
         google()
         maven { url "https://maven.google.com" }
+        maven { url "https://plugins.gradle.org/m2/" }
         jcenter()
 
     }
@@ -18,7 +19,12 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath 'com.google.gms:google-services:4.3.4'
         classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$navigation_version"
+        classpath "org.jlleitschuh.gradle:ktlint-gradle:9.4.1"
     }
+}
+
+subprojects {
+    apply plugin: "org.jlleitschuh.gradle.ktlint"
 }
 
 allprojects {
@@ -32,3 +38,5 @@ allprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+
+apply plugin: "org.jlleitschuh.gradle.ktlint"

@@ -66,5 +66,4 @@ open class QuestionFragment : BaseFragment() {
     }
 
     //endregion
-
 }

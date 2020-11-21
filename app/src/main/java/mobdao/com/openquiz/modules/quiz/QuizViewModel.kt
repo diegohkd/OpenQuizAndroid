@@ -103,5 +103,4 @@ class QuizViewModel : BaseViewModel() {
     }
 
     //endregion
-
 }

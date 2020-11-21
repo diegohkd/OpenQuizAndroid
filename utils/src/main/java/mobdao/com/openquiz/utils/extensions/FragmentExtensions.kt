@@ -9,11 +9,11 @@ import androidx.navigation.fragment.findNavController
 
 fun <T> Fragment.setupObserver(
     pair: Pair<LiveData<T>, (T) -> Unit>
-) = pair.first.observe(viewLifecycleOwner, Observer { it?.let(pair.second) })
+) = pair.first.observe(viewLifecycleOwner, { it?.let(pair.second) })
 
 fun Fragment.setupSingleEventObserver(
     pair: Pair<MutableLiveData<Unit>, () -> Unit?>
-) = pair.first.observe(viewLifecycleOwner, Observer { pair.second() })
+) = pair.first.observe(viewLifecycleOwner, { pair.second() })
 
 fun Fragment.navigate(direction: NavDirections) {
     findNavController().navigate(direction)

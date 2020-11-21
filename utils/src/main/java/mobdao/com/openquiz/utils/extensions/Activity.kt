@@ -6,4 +6,4 @@ import androidx.lifecycle.Observer
 
 fun <T> AppCompatActivity.setupObserver(
     pair: Pair<LiveData<T>, (T) -> Unit>
-) = pair.first.observe(this, Observer { it?.let(pair.second) })
+) = pair.first.observe(this, { it?.let(pair.second) })
