@@ -8,7 +8,7 @@
 
         <import
             alias="StringExtensions"
-            type="mobdao.com.openquiz.utils.extensions.StringKt" />
+            type="mobdao.com.openquiz.utils.extensions.StringExtensionsKt" />
 
         <import type="android.view.View" />
 
