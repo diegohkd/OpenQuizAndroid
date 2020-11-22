@@ -25,14 +25,9 @@ jobs:
 
       - name: Decode google-services.json for Debug
         env:
-          GOOGLE_SERVICES_DEBUG: ${{ secrets.GOOGLE_SERVICES_DEBUG }}
+        GOOGLE_SERVICES_DEBUG: ${{ secrets.GOOGLE_SERVICES_DEBUG }}
         run: echo $GOOGLE_SERVICES_DEBUG > data/src/debug/google-services.json
-
-      - name: Decode google-services.json for Release
-          env:
-            GOOGLE_SERVICES_RELEASE: ${{ secrets.GOOGLE_SERVICES_RELEASE }}
-          run: echo $GOOGLE_SERVICES_RELEASE > data/src/release/google-services.json
-
+        
       - name: ktlint
         run: ./gradlew ktlintCheck
 
