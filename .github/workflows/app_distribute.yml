@@ -1,8 +1,7 @@
 name: Distribute
 
 on:
-  push:
-    branches: [ qa ]
+  pull_request:
 
 jobs:
   distribute:
