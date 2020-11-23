@@ -64,7 +64,7 @@ fastlane/readme.md
 
 # keys
 *.jks
-/keys
+keystore.properties
 
 # misc
 app/debug/
