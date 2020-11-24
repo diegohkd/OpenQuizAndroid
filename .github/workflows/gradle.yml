@@ -5,10 +5,11 @@ name: CI
 
 on:
   push:
-    branches: [ dev, master, release/*, hotfix/* ]
     paths-ignore:
-    - README.md
-    - ".github/**"
+    - 'README.md'
+    - '.github/workflows/gradle.yml'
+    - '.github/workflows/app_distribute.yml'
+    branches: [ dev, master, release/*, hotfix/* ]
   pull_request:
 
 jobs:
