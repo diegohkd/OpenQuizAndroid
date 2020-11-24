@@ -6,6 +6,9 @@ name: CI
 on:
   push:
     branches: [ dev, master, release/*, hotfix/* ]
+    paths-ignore:
+    - README.md
+    - ".github/**"
   pull_request:
 
 jobs:
