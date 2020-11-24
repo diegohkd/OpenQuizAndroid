@@ -3,6 +3,9 @@ name: Distribute
 on:
   push:
     branches: [ qa ]
+    paths-ignore:
+    - README.md
+    - ".github/**"
 
 jobs:
   distribute:
