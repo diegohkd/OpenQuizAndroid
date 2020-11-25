@@ -96,7 +96,9 @@
 
         <action
             android:id="@+id/to_homeFragment"
-            app:destination="@id/homeFragment" />
+            app:destination="@id/homeFragment"
+            app:popUpTo="@id/quizFragment"
+            app:popUpToInclusive="true" />
 
     </fragment>
 

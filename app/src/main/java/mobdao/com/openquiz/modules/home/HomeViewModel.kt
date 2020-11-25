@@ -12,7 +12,7 @@ class HomeViewModel(
     private val openTriviaRepository: OpenTriviaRepository
 ) : BaseViewModel() {
 
-    private var nOfQuestions = 10
+    private var nOfQuestions = 1
 
     fun onStartQuizClicked() = viewModelScope.launch {
         showProgressBar()

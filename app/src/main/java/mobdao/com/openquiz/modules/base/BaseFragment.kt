@@ -1,6 +1,8 @@
 package mobdao.com.openquiz.modules.base
 
 import androidx.activity.OnBackPressedCallback
+import androidx.annotation.StringRes
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import mobdao.com.openquiz.R
 import mobdao.com.openquiz.utils.extensions.navigate
@@ -38,6 +40,37 @@ abstract class BaseFragment : Fragment() {
             }
         )
     }
+
+    protected fun showAlertDialog(
+        title: String? = null,
+        message: String? = null,
+        @StringRes positiveButtonText: Int? = android.R.string.ok,
+        @StringRes negativeButtonText: Int? = null,
+        positiveCallback: (() -> Unit)? = null,
+        negativeCallback: (() -> Unit)? = null,
+        dismissCallback: (() -> Unit)? = null,
+        cancelable: Boolean = true,
+    ) {
+        AlertDialog.Builder(requireContext()).apply {
+            title?.let(::setTitle)
+            message?.let(::setMessage)
+            dismissCallback?.run { setOnDismissListener { invoke() } }
+            positiveButtonText?.let {
+                setPositiveButton(positiveButtonText) { dialog, _ ->
+                    dialog.dismiss()
+                    positiveCallback?.invoke()
+                }
+            }
+            negativeButtonText?.let {
+                setNegativeButton(negativeButtonText) { dialog, _ ->
+                    dialog.dismiss()
+                    negativeCallback?.invoke()
+                }
+            }
+            setCancelable(cancelable)
+        }.create().show()
+    }
+
     // region private
 
     private fun showDefaultErrorDialog() {

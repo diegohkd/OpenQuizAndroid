@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import mobdao.com.openquiz.R
 import mobdao.com.openquiz.databinding.FragmentHomeBinding
 import mobdao.com.openquiz.modules.base.BaseFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -14,6 +15,18 @@ class HomeFragment : BaseFragment() {
     override val viewModel: HomeViewModel by viewModel()
 
     //region Lifecycle
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        onBackPressed {
+            showAlertDialog(
+                title = getString(R.string.exit_the_app),
+                positiveButtonText = R.string.yes,
+                negativeButtonText = R.string.no,
+                positiveCallback = { requireActivity().finish() }
+            )
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
