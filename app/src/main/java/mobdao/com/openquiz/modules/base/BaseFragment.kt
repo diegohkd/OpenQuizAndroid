@@ -1,5 +1,6 @@
 package mobdao.com.openquiz.modules.base
 
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import mobdao.com.openquiz.R
 import mobdao.com.openquiz.utils.extensions.navigate
@@ -27,6 +28,16 @@ abstract class BaseFragment : Fragment() {
         )
     }
 
+    protected fun onBackPressed(callback: () -> Unit) {
+        requireActivity().onBackPressedDispatcher.addCallback(
+            this,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    callback()
+                }
+            }
+        )
+    }
     // region private
 
     private fun showDefaultErrorDialog() {

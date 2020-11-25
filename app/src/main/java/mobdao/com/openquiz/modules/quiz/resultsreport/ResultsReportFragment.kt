@@ -14,6 +14,11 @@ class ResultsReportFragment : BaseFragment() {
     private lateinit var binding: FragmentResultsReportBinding
     private val args: ResultsReportFragmentArgs by navArgs()
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        onBackPressed { /* prevent going back to quiz */ }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
