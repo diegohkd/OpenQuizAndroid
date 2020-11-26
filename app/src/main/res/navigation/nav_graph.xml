@@ -2,6 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
     app:startDestination="@id/mainFragment"
     tools:ignore="UnusedNavigation">
 
@@ -27,7 +28,7 @@
     <fragment
         android:id="@+id/loginFragment"
         android:name="mobdao.com.openquiz.modules.login.LoginFragment"
-        android:label="HomeFragment"
+        android:label="LoginFragment"
         tools:layout="@layout/fragment_login">
 
         <action
@@ -41,13 +42,14 @@
     <fragment
         android:id="@+id/homeFragment"
         android:name="mobdao.com.openquiz.modules.home.HomeFragment"
-        android:label="ForecastFragment"
+        android:label="HomeFragment"
         tools:layout="@layout/fragment_home">
 
         <action
             android:id="@+id/to_loginFragment"
             app:destination="@id/loginFragment"
-            app:popUpTo="@id/homeFragment"
+            app:launchSingleTop="true"
+            app:popUpTo="@id/nav_graph"
             app:popUpToInclusive="true" />
 
         <action
