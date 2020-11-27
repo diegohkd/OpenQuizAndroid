@@ -2,6 +2,10 @@ name: Distribute
 
 on:
   push:
+    paths-ignore:
+    - 'README.md'
+    - '.github/workflows/gradle.yml'
+    - '.github/workflows/app_distribute.yml'
     branches: [ qa ]
 
 jobs:
