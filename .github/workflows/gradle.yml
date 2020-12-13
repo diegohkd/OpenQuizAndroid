@@ -53,8 +53,8 @@ jobs:
         env:
           GOOGLE_SERVICES_RELEASE: ${{ secrets.GOOGLE_SERVICES_RELEASE }}
         run: |
-          echo $GOOGLE_SERVICES_RELEASE > app/src/release/google-services.json
           mkdir app/src/release/
+          echo $GOOGLE_SERVICES_RELEASE > app/src/release/google-services.json
 
       - name: ktlint
         run: ./gradlew ktlintCheck
