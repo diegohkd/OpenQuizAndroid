@@ -41,7 +41,7 @@ keyPassword=<fill out>
 keyAlias=<fill out>
 storeFile=<fill out>
 ```
-- Add `google.services.json` inside `data/src/` folder.
+- Add `google.services.json` inside `app/src/` folder.
 - Build/Run using Android Studio or gradlew.
 
 ## What's next
