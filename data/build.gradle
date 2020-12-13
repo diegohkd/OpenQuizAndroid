@@ -56,3 +56,5 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:$coroutines_play_services_version"
 }
+
+apply plugin: 'com.google.gms.google-services'
