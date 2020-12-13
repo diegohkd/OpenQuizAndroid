@@ -71,19 +71,6 @@ jobs:
           GOOGLE_SERVICES_RELEASE: ${{ secrets.GOOGLE_SERVICES_RELEASE }}
         run: echo $GOOGLE_SERVICES_RELEASE > data/src/release/google-services.json
 
-      - name: ktlint
-        run: ./gradlew ktlintCheck
-
-      - name: Unit Tests
-        run: ./gradlew test
-
-      - name: Create Firebase Service Credentials file
-        run: |
-          echo "$FIREBASE_APP_DISTRIBUTION_CREDENTIALS" > firebase_app_distribution_credentials.json.b64
-          base64 -d -i firebase_app_distribution_credentials.json.b64 > firebase_app_distribution_credentials.json
-        env:
-          FIREBASE_APP_DISTRIBUTION_CREDENTIALS: ${{ secrets.FIREBASE_APP_DISTRIBUTION_CREDENTIALS }}
-
       - name: Decode app google-services.json for Debug
         env:
           GOOGLE_SERVICES_APP_DEBUG: ${{ secrets.GOOGLE_SERVICES_APP_DEBUG }}
@@ -97,6 +84,19 @@ jobs:
         run: |
           mkdir app/src/debug/
           echo $GOOGLE_SERVICES_APP_RELEASE > app/src/release/google-services.json
+
+      - name: ktlint
+        run: ./gradlew ktlintCheck
+
+      - name: Unit Tests
+        run: ./gradlew test
+
+      - name: Create Firebase Service Credentials file
+        run: |
+          echo "$FIREBASE_APP_DISTRIBUTION_CREDENTIALS" > firebase_app_distribution_credentials.json.b64
+          base64 -d -i firebase_app_distribution_credentials.json.b64 > firebase_app_distribution_credentials.json
+        env:
+          FIREBASE_APP_DISTRIBUTION_CREDENTIALS: ${{ secrets.FIREBASE_APP_DISTRIBUTION_CREDENTIALS }}
 
       - name: Distribute app with 🔥 App Distribution 🚀
         run: bundle exec fastlane distribute
