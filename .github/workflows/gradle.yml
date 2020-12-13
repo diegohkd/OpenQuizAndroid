@@ -46,6 +46,7 @@ jobs:
         env:
           GOOGLE_SERVICES_DEBUG: ${{ secrets.GOOGLE_SERVICES_DEBUG }}
         run: |
+          mkdir app/src/debug/
           echo $GOOGLE_SERVICES_DEBUG > app/src/debug/google-services.json
           cat app/src/debug/google-services.json
 
