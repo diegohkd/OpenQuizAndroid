@@ -32,7 +32,7 @@ class HomeFragment : BaseFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? = FragmentHomeBinding.inflate(layoutInflater).apply {
+    ): View = FragmentHomeBinding.inflate(layoutInflater).apply {
         binding = this
         binding.lifecycleOwner = viewLifecycleOwner
     }.root

@@ -13,11 +13,11 @@ val retrofitModule = module {
     }
     single<Retrofit> {
         val converterFactory: GsonConverterFactory = get()
-        val okHttpClient: OkHttpClient? = getOrNull()
+        val okHttpClient: OkHttpClient? = getOrNull() // inject logging interceptor only in Debug
         Retrofit.Builder()
             .baseUrl(BASE_OPEN_TRIVIA_URL)
             .addConverterFactory(converterFactory).apply {
-                okHttpClient?.let(::client) // add logging interceptor
+                okHttpClient?.let(::client)
             }
             .build()
     }
