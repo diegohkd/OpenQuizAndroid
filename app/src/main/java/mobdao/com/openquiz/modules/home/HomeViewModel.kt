@@ -12,20 +12,20 @@ class HomeViewModel(
     private val openTriviaRepository: OpenTriviaRepository
 ) : BaseViewModel() {
 
-    private var nOfQuestions = 10
+    private var totalOfQuestions = 10
 
-    fun onStartQuizClicked() = viewModelScope.launch {
-        showProgressBar()
-        runCatching {
-            openTriviaRepository.fetchQuestions(nOfQuestions)
-        }.onSuccess { questions ->
-            hideProgressBar()
-            routeEvent.value = HomeFragmentDirections.toQuizFragment(
-                questions.toTypedArray()
-            )
-        }.onFailure {
-            hideProgressBar()
-            genericErrorEvent.call()
+    fun onStartQuizClicked() {
+        viewModelScope.launch {
+            showProgressBar()
+            runCatching {
+                openTriviaRepository.fetchQuestions(totalOfQuestions)
+            }.onSuccess { questions ->
+                hideProgressBar()
+                routeEvent.value = HomeFragmentDirections.toQuizFragment(questions.toTypedArray())
+            }.onFailure {
+                hideProgressBar()
+                genericErrorEvent.call()
+            }
         }
     }
 
