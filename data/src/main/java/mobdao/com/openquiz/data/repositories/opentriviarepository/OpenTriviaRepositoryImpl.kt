@@ -17,15 +17,16 @@ class OpenTriviaRepositoryImpl(
         .create(SessionTokenService::class.java)
         .fetchSessionToken().token.orEmpty()
 
-    override suspend fun fetchQuestions(nOfQuestions: Int): List<Question> = retrofit
-        .create(QuestionsService::class.java)
-        .fetchQuestions(nOfQuestions).run {
-            if (response_code != QuestionsResponseCode.SUCCESS.code) {
-                throw QuestionsException(
-                    "Failed to fetch questions",
-                    QuestionsResponseCode.from(response_code)
-                )
-            }
-            questionServiceMapper.questionResponseToModel(this)
+    override suspend fun fetchQuestions(nOfQuestions: Int): List<Question> {
+        val response = retrofit
+            .create(QuestionsService::class.java)
+            .fetchQuestions(nOfQuestions)
+        if (response.response_code != QuestionsResponseCode.SUCCESS.code) {
+            throw QuestionsException(
+                "Failed to fetch questions",
+                QuestionsResponseCode.from(response.response_code)
+            )
         }
+        return questionServiceMapper.questionResponseToModel(response)
+    }
 }
