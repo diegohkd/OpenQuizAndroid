@@ -1,8 +1,13 @@
 package mobdao.com.openquiz.data.di
 
+import dagger.Module
+import dagger.Provides
 import okhttp3.OkHttpClient
-import org.koin.dsl.module
 
-val okHttpClientModule = module {
-    single<OkHttpClient?> { null }
+@Module
+abstract class OkHttpClientModule {
+    companion object {
+        @Provides
+        fun okHttpClient(): OkHttpClient? = null
+    }
 }

@@ -11,8 +11,9 @@ import mobdao.com.openquiz.data.repositories.userauthrepository.UserAuthReposito
 import mobdao.com.openquiz.modules.base.BaseViewModel
 import mobdao.com.openquiz.utils.constants.RequestCodeConstants
 import mobdao.com.openquiz.utils.livedata.LiveEvent
+import javax.inject.Inject
 
-class LoginViewModel(
+class LoginViewModel @Inject constructor(
     private val userAuthRepository: UserAuthRepository
 ) : BaseViewModel() {
 
