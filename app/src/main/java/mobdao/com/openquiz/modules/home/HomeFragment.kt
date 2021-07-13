@@ -4,15 +4,20 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import mobdao.com.openquiz.OpenQuizApplication
 import mobdao.com.openquiz.R
 import mobdao.com.openquiz.databinding.FragmentHomeBinding
+import mobdao.com.openquiz.di.components.HomeComponent
 import mobdao.com.openquiz.modules.base.BaseFragment
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import javax.inject.Inject
 
 class HomeFragment : BaseFragment() {
 
     private lateinit var binding: FragmentHomeBinding
-    override val viewModel: HomeViewModel by viewModel()
+    private lateinit var homeComponent: HomeComponent
+
+    @Inject
+    override lateinit var viewModel: HomeViewModel
 
     //region Lifecycle
 
@@ -39,6 +44,7 @@ class HomeFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        injectDependencies()
         binding.viewmodel = viewModel
         setupObservers()
     }
@@ -46,6 +52,15 @@ class HomeFragment : BaseFragment() {
     //endregion
 
     //region private
+
+    private fun injectDependencies() {
+        homeComponent = (requireActivity().applicationContext as OpenQuizApplication)
+            .appComponent
+            .homeComponent()
+            .create()
+
+        homeComponent.inject(this)
+    }
 
     private fun setupObservers() = with(viewModel) {
         setupGenericErrorObserver()

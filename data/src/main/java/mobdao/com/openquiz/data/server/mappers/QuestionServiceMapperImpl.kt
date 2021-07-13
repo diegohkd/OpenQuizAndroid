@@ -2,8 +2,9 @@ package mobdao.com.openquiz.data.server.mappers
 
 import mobdao.com.openquiz.data.server.responses.QuestionsResponse
 import mobdao.com.openquiz.models.Question
+import javax.inject.Inject
 
-class QuestionServiceMapperImpl : QuestionServiceMapper {
+class QuestionServiceMapperImpl @Inject constructor() : QuestionServiceMapper {
 
     override fun questionResponseToModel(questionsResponse: QuestionsResponse): List<Question> =
         questionsResponse.results.map {

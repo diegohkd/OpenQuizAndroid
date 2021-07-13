@@ -21,14 +21,14 @@ android {
         }
     }
 
-    buildToolsVersion "29.0.3"
+    buildToolsVersion "30.0.3"
     defaultConfig {
         applicationId "mobdao.com.openquiz"
         minSdkVersion 21
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "mobdao.com.openquiz.OpenQuizTestRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         signingConfig signingConfigs.release
     }
     buildTypes {
@@ -67,12 +67,11 @@ dependencies {
     testImplementation 'junit:junit:4.13.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     androidTestImplementation "androidx.arch.core:core-testing:2.1.0"
-    androidTestImplementation "io.mockk:mockk-android:1.9.3"
+    androidTestImplementation "io.mockk:mockk-android:1.11.0"
     testImplementation 'androidx.arch.core:core-testing:2.1.0'
-    testImplementation "io.mockk:mockk:1.9.3"
+    testImplementation "io.mockk:mockk:1.11.0"
     debugImplementation 'androidx.fragment:fragment-testing:1.2.5'
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_version"
-    androidTestImplementation "org.koin:koin-test:$koin_version"
 
     // Modules dependencies
     implementation project(path: ':data')
@@ -80,10 +79,9 @@ dependencies {
     implementation project(path: ':uicomponents')
     implementation project(path: ':models')
 
-    // Koin
-    implementation "org.koin:koin-androidx-scope:$koin_version"
-    implementation "org.koin:koin-androidx-viewmodel:$koin_version"
-    implementation "org.koin:koin-androidx-fragment:$koin_version"
+    // Dagger2
+    implementation 'com.google.dagger:dagger:2.37'
+    kapt 'com.google.dagger:dagger-compiler:2.37'
 
     // Firebase
     api 'com.google.firebase:firebase-analytics:18.0.0'

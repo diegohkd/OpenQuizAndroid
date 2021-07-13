@@ -7,17 +7,22 @@ import android.view.View
 import android.view.ViewGroup
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import mobdao.com.openquiz.OpenQuizApplication
 import mobdao.com.openquiz.R
 import mobdao.com.openquiz.databinding.FragmentLoginBinding
+import mobdao.com.openquiz.di.components.LoginComponent
 import mobdao.com.openquiz.modules.base.BaseFragment
 import mobdao.com.openquiz.utils.constants.RequestCodeConstants.RC_SIGN_IN
 import mobdao.com.openquiz.utils.extensions.setupSingleEventObserver
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import javax.inject.Inject
 
 class LoginFragment : BaseFragment() {
 
     private lateinit var binding: FragmentLoginBinding
-    override val viewModel: LoginViewModel by viewModel()
+    private lateinit var loginComponent: LoginComponent
+
+    @Inject
+    override lateinit var viewModel: LoginViewModel
 
     //region Lifecycle
 
@@ -25,13 +30,14 @@ class LoginFragment : BaseFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? = FragmentLoginBinding.inflate(layoutInflater).apply {
+    ): View = FragmentLoginBinding.inflate(layoutInflater).apply {
         binding = this
         binding.lifecycleOwner = viewLifecycleOwner
     }.root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        injectDependencies()
         setupObservers()
         binding.viewmodel = viewModel
     }
@@ -48,6 +54,15 @@ class LoginFragment : BaseFragment() {
     //endregion
 
     //region private
+
+    private fun injectDependencies() {
+        loginComponent = (requireActivity().applicationContext as OpenQuizApplication)
+            .appComponent
+            .loginComponent()
+            .create()
+
+        loginComponent.inject(this)
+    }
 
     private fun setupObservers() = with(viewModel) {
         setupGenericErrorObserver()
