@@ -4,12 +4,14 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
+import dagger.hilt.android.AndroidEntryPoint
 import mobdao.com.openquiz.R
 import mobdao.com.openquiz.modules.login.LoginViewModel
 import mobdao.com.openquiz.utils.constants.IntentConstants.INITIAL_SCREEN
 import mobdao.com.openquiz.utils.enums.InitialScreenType
 import mobdao.com.openquiz.utils.enums.InitialScreenType.HOME
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     val viewModel: LoginViewModel by viewModels()

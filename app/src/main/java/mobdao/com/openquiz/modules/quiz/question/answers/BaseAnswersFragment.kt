@@ -1,27 +1,26 @@
 package mobdao.com.openquiz.modules.quiz.question.answers
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
+import dagger.hilt.android.AndroidEntryPoint
 import mobdao.com.openquiz.models.Question
 import mobdao.com.openquiz.modules.base.BaseFragment
-import mobdao.com.openquiz.modules.quiz.QuizFragment
 import mobdao.com.openquiz.modules.quiz.QuizViewModel
 import mobdao.com.openquiz.utils.constants.IntentConstants.QUESTION
 import mobdao.com.openquiz.utils.extensions.safeGetParcelable
 import mobdao.com.openquiz.utils.extensions.setupObserver
 import mobdao.com.openquiz.utils.extensions.setupSingleEventObserver
-import javax.inject.Inject
 
+@AndroidEntryPoint
 abstract class BaseAnswersFragment : BaseFragment() {
 
     protected abstract val layout: Int
     protected lateinit var question: Question
 
-    @Inject
-    override lateinit var viewModel: QuizViewModel
+    override val viewModel: QuizViewModel by activityViewModels()
 
     // region lifecycle
 
@@ -37,20 +36,9 @@ abstract class BaseAnswersFragment : BaseFragment() {
         setupObservers()
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        injectDependencies()
-    }
-
     // endregion
 
     // region private
-
-    private fun injectDependencies() {
-        (requireParentFragment().requireParentFragment() as QuizFragment)
-            .quizComponent
-            .inject(this)
-    }
 
     private fun handleArguments() {
         arguments?.safeGetParcelable<Question>(QUESTION)?.let(::bind)

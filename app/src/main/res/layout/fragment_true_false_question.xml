@@ -2,20 +2,6 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <data>
-
-<!--        <import type="android.graphics.Color" />-->
-
-<!--        <variable-->
-<!--            name="isTrue"-->
-<!--            type="Boolean" />-->
-
-<!--        <variable-->
-<!--            name="fragment"-->
-<!--            type="mobdao.com.openquiz.modules.quiz.question.answers.TrueFalseAnswersFragment" />-->
-
-    </data>
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
