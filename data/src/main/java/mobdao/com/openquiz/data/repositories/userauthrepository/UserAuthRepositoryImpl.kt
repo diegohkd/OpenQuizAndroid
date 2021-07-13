@@ -6,8 +6,11 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import kotlinx.coroutines.tasks.await
 import mobdao.com.openquiz.data.utils.wrappers.firebaseauth.FirebaseAuth
 import mobdao.com.openquiz.data.utils.wrappers.googleauthprovider.GoogleAuthProvider
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class UserAuthRepositoryImpl(
+@Singleton
+class UserAuthRepositoryImpl @Inject constructor(
     private val firebaseAuth: FirebaseAuth,
     private val googleAuthProvider: GoogleAuthProvider
 ) : UserAuthRepository {

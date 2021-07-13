@@ -18,7 +18,7 @@ This project is not intended to be published. I have it only for studying purpos
     - Unit tests, Integration tests and Instrumentation tests, but mainly Unit tests.
     - Mockk + Espresso frameworks.
 - Dependency injection:
-    - Koin.
+    - Dagger.
 - Navigation:
     - Single Activity with multiple Fragments using Navigation component. 
 - User Authentication:

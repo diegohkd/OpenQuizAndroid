@@ -1,14 +1,17 @@
 package mobdao.com.openquiz.modules.quiz
 
 import androidx.lifecycle.MutableLiveData
+import mobdao.com.openquiz.di.scopes.FragmentScope
 import mobdao.com.openquiz.models.Game
 import mobdao.com.openquiz.models.Question
 import mobdao.com.openquiz.modules.base.BaseViewModel
 import mobdao.com.openquiz.utils.extensions.orZero
 import mobdao.com.openquiz.utils.livedata.LiveEvent
 import mobdao.com.openquiz.utils.pokos.ResultsReport
+import javax.inject.Inject
 
-class QuizViewModel : BaseViewModel() {
+@FragmentScope
+class QuizViewModel @Inject constructor() : BaseViewModel() {
 
     var questionsLiveData: MutableLiveData<List<Question>> = MutableLiveData()
     var showNextQuestionEvent: LiveEvent<Unit> = LiveEvent()

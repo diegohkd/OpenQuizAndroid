@@ -5,27 +5,26 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.navArgs
+import mobdao.com.openquiz.OpenQuizApplication
 import mobdao.com.openquiz.databinding.FragmentQuizBinding
+import mobdao.com.openquiz.di.components.QuizComponent
 import mobdao.com.openquiz.models.Game
 import mobdao.com.openquiz.modules.base.BaseFragment
 import mobdao.com.openquiz.utils.factories.FragmentFactory
-import org.koin.android.ext.android.getKoin
-import org.koin.android.ext.android.inject
-import org.koin.androidx.viewmodel.scope.getViewModel
-import org.koin.core.qualifier.named
+import javax.inject.Inject
 
 class QuizFragment : BaseFragment() {
 
-    private val fragmentFactory: FragmentFactory by inject()
+    lateinit var quizComponent: QuizComponent
+
+    @Inject
+    lateinit var fragmentFactory: FragmentFactory
+
+    @Inject
+    override lateinit var viewModel: QuizViewModel
+
     private val args: QuizFragmentArgs by navArgs()
     private lateinit var binding: FragmentQuizBinding
-
-    private val scope = getKoin().getOrCreateScope(scopeId, named(scopeName))
-
-    @Suppress("RemoveExplicitTypeArguments")
-    override val viewModel: QuizViewModel by lazy {
-        scope.getViewModel<QuizViewModel>(this)
-    }
 
     //region Lifecycle
 
@@ -33,7 +32,7 @@ class QuizFragment : BaseFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? = FragmentQuizBinding.inflate(layoutInflater).apply {
+    ): View = FragmentQuizBinding.inflate(layoutInflater).apply {
         binding = this
         binding.lifecycleOwner = viewLifecycleOwner
         binding.fragmentManager = childFragmentManager
@@ -41,6 +40,7 @@ class QuizFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        injectDependencies()
         setupObservers()
         initViewModel()
         binding.viewModel = viewModel
@@ -50,6 +50,14 @@ class QuizFragment : BaseFragment() {
     //endregion
 
     //region private
+
+    private fun injectDependencies() {
+        quizComponent = (requireActivity().applicationContext as OpenQuizApplication)
+            .appComponent
+            .quizComponent()
+            .create()
+        quizComponent.inject(this)
+    }
 
     private fun setupObservers() {
         setupNavigationObserver()
@@ -61,9 +69,4 @@ class QuizFragment : BaseFragment() {
     }
 
     //endregion
-
-    companion object {
-        internal const val scopeId = "QuizFragment"
-        internal const val scopeName = "QuizFragment"
-    }
 }
