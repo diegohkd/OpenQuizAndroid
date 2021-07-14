@@ -23,7 +23,7 @@ class ResultsReportFragment : BaseFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? = FragmentResultsReportBinding.inflate(layoutInflater).apply {
+    ): View = FragmentResultsReportBinding.inflate(layoutInflater).apply {
         binding = this
     }.root
 

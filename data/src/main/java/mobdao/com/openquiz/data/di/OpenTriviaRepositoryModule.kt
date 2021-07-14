@@ -1,8 +1,13 @@
 package mobdao.com.openquiz.data.di
 
 import com.google.gson.GsonBuilder
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
+import mobdao.com.openquiz.data.repositories.opentriviarepository.OpenTriviaRepository
+import mobdao.com.openquiz.data.repositories.opentriviarepository.OpenTriviaRepositoryImpl
 import mobdao.com.openquiz.data.server.mappers.QuestionServiceMapper
 import mobdao.com.openquiz.data.server.mappers.QuestionServiceMapperImpl
 import mobdao.com.openquiz.data.utils.constants.Constants.BASE_OPEN_TRIVIA_URL
@@ -12,7 +17,12 @@ import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
 @Module
+@InstallIn(SingletonComponent::class)
 abstract class OpenTriviaRepositoryModule {
+
+    @Binds
+    @Singleton
+    abstract fun openTriviaRepository(impl: OpenTriviaRepositoryImpl): OpenTriviaRepository
 
     companion object {
         @Singleton

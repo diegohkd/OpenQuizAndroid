@@ -1,25 +1,24 @@
 package mobdao.com.openquiz.modules.quiz.question
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
+import dagger.hilt.android.AndroidEntryPoint
 import mobdao.com.openquiz.databinding.FragmentQuestionBinding
 import mobdao.com.openquiz.models.Question
 import mobdao.com.openquiz.modules.base.BaseFragment
-import mobdao.com.openquiz.modules.quiz.QuizFragment
 import mobdao.com.openquiz.modules.quiz.QuizViewModel
 import mobdao.com.openquiz.utils.constants.IntentConstants.QUESTION
 import mobdao.com.openquiz.utils.extensions.safeGetParcelable
-import javax.inject.Inject
 
-open class QuestionFragment : BaseFragment() {
+@AndroidEntryPoint
+class QuestionFragment : BaseFragment() {
 
     private lateinit var binding: FragmentQuestionBinding
 
-    @Inject
-    override lateinit var viewModel: QuizViewModel
+    override val viewModel: QuizViewModel by activityViewModels()
 
     //region Lifecycle
 
@@ -27,7 +26,7 @@ open class QuestionFragment : BaseFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? = FragmentQuestionBinding.inflate(layoutInflater).apply {
+    ): View = FragmentQuestionBinding.inflate(layoutInflater).apply {
         binding = this
         binding.lifecycleOwner = viewLifecycleOwner
     }.root
@@ -35,13 +34,7 @@ open class QuestionFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         handleArguments()
-        childFragmentManager
         binding.viewModel = viewModel
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        injectDependencies()
     }
 
     override fun onResume() {
@@ -52,10 +45,6 @@ open class QuestionFragment : BaseFragment() {
     //endregion
 
     //region private
-
-    private fun injectDependencies() {
-        (requireParentFragment() as QuizFragment).quizComponent.inject(this)
-    }
 
     private fun handleArguments() {
         arguments?.safeGetParcelable<Question>(QUESTION)?.let(::bindQuestion)

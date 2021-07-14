@@ -1,7 +1,9 @@
 package mobdao.com.openquiz
 
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.testing.FragmentScenario
+import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.IdlingRegistry
 import org.junit.rules.TestWatcher
 import org.junit.runner.Description
@@ -14,6 +16,10 @@ class DataBindingIdlingResourceRule : TestWatcher() {
 
     fun monitorFragment(fragmentScenario: FragmentScenario<out Fragment>) {
         idlingResource.monitorFragment(fragmentScenario)
+    }
+
+    fun monitorActivity(activityScenario: ActivityScenario<out AppCompatActivity>) {
+        idlingResource.monitorActivity(activityScenario)
     }
 
     override fun finished(description: Description?) {
