@@ -1,6 +1,7 @@
 package mobdao.com.openquiz.modules.home
 
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import mobdao.com.openquiz.data.repositories.opentriviarepository.OpenTriviaRepository
@@ -8,6 +9,7 @@ import mobdao.com.openquiz.data.repositories.userauthrepository.UserAuthReposito
 import mobdao.com.openquiz.modules.base.BaseViewModel
 import javax.inject.Inject
 
+@HiltViewModel
 class HomeViewModel @Inject constructor(
     private val userAuthRepository: UserAuthRepository,
     private val openTriviaRepository: OpenTriviaRepository

@@ -7,9 +7,7 @@ import kotlinx.coroutines.tasks.await
 import mobdao.com.openquiz.data.utils.wrappers.firebaseauth.FirebaseAuth
 import mobdao.com.openquiz.data.utils.wrappers.googleauthprovider.GoogleAuthProvider
 import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
 class UserAuthRepositoryImpl @Inject constructor(
     private val firebaseAuth: FirebaseAuth,
     private val googleAuthProvider: GoogleAuthProvider
