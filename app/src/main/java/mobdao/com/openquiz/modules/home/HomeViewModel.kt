@@ -6,8 +6,9 @@ import kotlinx.coroutines.launch
 import mobdao.com.openquiz.data.repositories.opentriviarepository.OpenTriviaRepository
 import mobdao.com.openquiz.data.repositories.userauthrepository.UserAuthRepository
 import mobdao.com.openquiz.modules.base.BaseViewModel
+import javax.inject.Inject
 
-class HomeViewModel(
+class HomeViewModel @Inject constructor(
     private val userAuthRepository: UserAuthRepository,
     private val openTriviaRepository: OpenTriviaRepository
 ) : BaseViewModel() {
