@@ -1,9 +1,20 @@
 package mobdao.com.openquiz.data.di
 
-import mobdao.com.openquiz.data.repositories.userauthrepository.UserAuthRepository
-import mobdao.com.openquiz.data.repositories.userauthrepository.UserAuthRepositoryImpl
-import org.koin.dsl.module
+import dagger.Module
+import dagger.Provides
+import mobdao.com.openquiz.data.utils.wrappers.firebaseauth.FirebaseAuth
+import mobdao.com.openquiz.data.utils.wrappers.firebaseauth.FirebaseAuthImpl
+import mobdao.com.openquiz.data.utils.wrappers.googleauthprovider.GoogleAuthProvider
+import mobdao.com.openquiz.data.utils.wrappers.googleauthprovider.GoogleAuthProviderImpl
 
-val userAuthRepositoryModule = module {
-    single<UserAuthRepository> { UserAuthRepositoryImpl(get(), get()) }
+@Module
+abstract class UserAuthRepositoryModule {
+
+    companion object {
+        @Provides
+        fun firebaseAuth(): FirebaseAuth = FirebaseAuthImpl()
+
+        @Provides
+        fun googleAuthProvider(): GoogleAuthProvider = GoogleAuthProviderImpl()
+    }
 }
