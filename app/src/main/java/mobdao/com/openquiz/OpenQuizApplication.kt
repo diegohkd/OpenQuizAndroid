@@ -1,11 +1,7 @@
 package mobdao.com.openquiz
 
 import android.app.Application
-import mobdao.com.openquiz.di.components.ApplicationComponent
-import mobdao.com.openquiz.di.components.DaggerApplicationComponent
+import dagger.hilt.android.HiltAndroidApp
 
-@Suppress("unused")
-class OpenQuizApplication : Application() {
-
-    val appComponent: ApplicationComponent = DaggerApplicationComponent.create()
-}
+@HiltAndroidApp
+class OpenQuizApplication : Application()

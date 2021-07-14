@@ -4,24 +4,22 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.navArgs
-import mobdao.com.openquiz.OpenQuizApplication
+import dagger.hilt.android.AndroidEntryPoint
 import mobdao.com.openquiz.databinding.FragmentQuizBinding
-import mobdao.com.openquiz.di.components.QuizComponent
 import mobdao.com.openquiz.models.Game
 import mobdao.com.openquiz.modules.base.BaseFragment
 import mobdao.com.openquiz.utils.factories.FragmentFactory
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class QuizFragment : BaseFragment() {
-
-    lateinit var quizComponent: QuizComponent
 
     @Inject
     lateinit var fragmentFactory: FragmentFactory
 
-    @Inject
-    override lateinit var viewModel: QuizViewModel
+    override val viewModel: QuizViewModel by activityViewModels()
 
     private val args: QuizFragmentArgs by navArgs()
     private lateinit var binding: FragmentQuizBinding
@@ -40,7 +38,6 @@ class QuizFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        injectDependencies()
         setupObservers()
         initViewModel()
         binding.viewModel = viewModel
@@ -50,14 +47,6 @@ class QuizFragment : BaseFragment() {
     //endregion
 
     //region private
-
-    private fun injectDependencies() {
-        quizComponent = (requireActivity().applicationContext as OpenQuizApplication)
-            .appComponent
-            .quizComponent()
-            .create()
-        quizComponent.inject(this)
-    }
 
     private fun setupObservers() {
         setupNavigationObserver()

@@ -18,7 +18,7 @@ class MultipleChoiceAnswersFragment : BaseAnswersFragment() {
     private lateinit var binding: FragmentMultipleChoiceQuestionBinding
     private val answersOptions: List<String> by lazy { question.getOptions() }
 
-    override fun onCreateView(): View? =
+    override fun onCreateView(): View =
         FragmentMultipleChoiceQuestionBinding.inflate(layoutInflater).apply {
             binding = this
         }.root

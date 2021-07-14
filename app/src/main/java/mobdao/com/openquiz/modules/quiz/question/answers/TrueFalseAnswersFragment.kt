@@ -21,7 +21,7 @@ class TrueFalseAnswersFragment : BaseAnswersFragment() {
             else -> null
         }
 
-    override fun onCreateView(): View? =
+    override fun onCreateView(): View =
         FragmentTrueFalseQuestionBinding.inflate(layoutInflater).apply {
             binding = this
         }.root
